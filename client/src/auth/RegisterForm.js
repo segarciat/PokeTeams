@@ -4,10 +4,13 @@ export default class RegisterForm extends AuthForm {
   constructor() {
     super([
       {
-        type: 'email',
-        name: 'email',
-        placeholder: 'myemail@domain.com',
-        labelText: 'Email',
+        type: 'text',
+        name: 'username',
+        placeholder: 'ash-ketchum',
+        labelText: 'Username',
+        pattern: '^([a-zA-Z0-9_.-]+)$',
+        minlength: '8',
+        maxlength: '32',
         required: '',
       },
       {

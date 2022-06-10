@@ -18,12 +18,15 @@ export default class DetailsForm {
     label.textContent = 'Trainer Name';
     group.append(label);
 
-    // 50 characters max on input.
+    // 8-32 characters on input.
     let input = document.createElement('input');
     input.classList = 'form-control mr-2';
     input.setAttribute('type', 'text');
     input.setAttribute('name', 'trainerName');
-    input.setAttribute('maxlength', '50');
+    input.setAttribute('pattern', '^([a-zA-Z0-9_.-]+)$');
+    input.setAttribute('minlength', '8');
+    input.setAttribute('maxlength', '32');
+
     input.setAttribute('required', '');
     input.value = name;
     group.append(input);

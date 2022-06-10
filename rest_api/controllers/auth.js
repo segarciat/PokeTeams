@@ -10,77 +10,46 @@ const asyncHandler = require('../utils/async');
 // @route   POST /api/v1/auth/register
 // @access  Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
-
-  const user = await User.create({
-    name: email,
-    email,
-    password,
-  });
-  const emailToken = user.getEmailVerifyToken();
-  await user.save();
-
-  // const verifyUrl = `${req.protocol}://${req.get(
-  //   'origin'
-  // )}/auth.html?emailtoken=${emailToken}`;
-  const verifyUrl = `${req.get('origin')}/auth.html?emailtoken=${emailToken}`;
-
-  const message = `Hello,\n\nYou are receiving this email because you (or someone else) have decided to create a PokeTeams account. Please click on the following link to confirm your email before you can start using your account:\n\n${verifyUrl}\n\nIf you did not initiate this request, please ignore this email.\n\nBest,\nPokeTeams`;
+  const { username, password } = req.body;
 
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'PokeTeams Email Verification - DO NOT REPLY',
-      message,
+    // const user = await User.findOne({
+    //   username,
+    // });
+    // if (user) {
+    //   res.status(400).json({ success: false, data: 'User already exists' });
+    // }
+    const userExists = await User.exists({ username });
+    if (userExists) {
+      return next(new ErrorResponse(`User already exists.`, 400));
+    }
+    const user = await User.create({
+      username,
+      password,
     });
-    res.status(200).json({ success: true, data: 'Email sent.' });
+    await user.save();
+    res.status(200).json({ success: true, data: 'User created.' });
+    // captcha?
   } catch (err) {
-    await user.delete();
-
-    return next(new ErrorResponse(`Email could not be sent.`, 500));
+    return next(new ErrorResponse(`User was not created.`, 500));
   }
-});
-
-// @desc    Verify User Email
-// @route   PUT /api/v1/auth/verify/:emailToken
-// @access  Public
-exports.verifyEmail = asyncHandler(async (req, res, next) => {
-  // Get hashed token.
-  const emailVerifyToken = crypto
-    .createHash('sha256')
-    .update(req.params.emailToken)
-    .digest('hex');
-
-  const user = await User.findOne({
-    emailVerifyToken,
-    emailVerifyExpire: { $gt: Date.now() },
-  });
-  if (!user) {
-    return next(new ErrorResponse('Invalid token', 400));
-  }
-
-  // Activate account.
-  user.active = true;
-  user.emailVerifyToken = undefined;
-  user.emailVerifyExpire = undefined;
-  await user.save();
-
-  res.status(200).json({ success: true });
 });
 
 // @desc    Login user
-// @route   POST /api/v1/auth/register
+// @route   POST /api/v1/auth/login
 // @access  Public
 exports.login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   // Validate email and password.
-  if (!email || !password) {
-    return next(new ErrorResponse('Please provide an email and password', 400));
+  if (!username || !password) {
+    return next(
+      new ErrorResponse('Please provide a username and password', 400)
+    );
   }
 
   // Check for user; explicitly requests password (defaults to not returning it).
-  const user = await User.findOne({ email: email }).select('+password');
+  const user = await User.findOne({ username: username }).select('+password');
 
   if (!user) {
     return next(
@@ -125,79 +94,12 @@ exports.logout = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc    Forgot password
-// @route   POST /api/v1/auth/forgotpassword
-// @access  Public
-exports.forgotPassword = asyncHandler(async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email });
-
-  if (!user) {
-    return next(new ErrorResponse(`There is no user with that email.`, 404));
-  }
-
-  // Get reset token.
-  const resetToken = user.getResetPasswordToken();
-  await user.save({ validateBeforeSave: false });
-
-  // Create reset url.
-  // const resetURL = `${req.protocol}://${req.get(
-  //   'origin'
-  // )}/auth.html?resettoken=${resetToken}`;
-  // const message = `Hello,\nYou are receiving this email because you (or someone else) has requested the reset of a password. Please click on the following URL to reset your PokeTeams password: \n\n ${resetURL}\n\nIf you did not request this reset, please ignore this email.\n\nBest,\nPokeTeams`;
-  const resetURL = `${req.get('origin')}/auth.html?resettoken=${resetToken}`;
-  const message = `Hello,\n\nYou are receiving this email because you (or someone else) has requested the reset of a password. Please click on the following URL to reset your PokeTeams password: \n\n ${resetURL}\n\nIf you did not request this reset, please ignore this email.\n\nBest,\nPokeTeams`;
-
-  try {
-    await sendEmail({
-      email: user.email,
-      subject: 'PokeTeams Password Reset - DO NOT REPLY',
-      message,
-    });
-    res.status(200).json({ success: true, data: 'Email sent.' });
-  } catch (err) {
-    console.log(err);
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
-    await user.save({ validateBeforeSave: false });
-
-    return next(new ErrorResponse(`Email could not be sent.`, 500));
-  }
-});
-
-// @desc    Reset password
-// @route   PUT /api/v1/auth/resetpassword/:resettoken
-// @access  Public
-exports.resetPassword = asyncHandler(async (req, res, next) => {
-  // Get hashed token.
-  const resetPasswordToken = crypto
-    .createHash('sha256')
-    .update(req.params.resettoken)
-    .digest('hex');
-
-  const user = await User.findOne({
-    resetPasswordToken,
-    resetPasswordExpire: { $gt: Date.now() },
-  });
-  if (!user) {
-    return next(new ErrorResponse('Invalid token', 400));
-  }
-
-  // Set new password.
-  user.password = req.body.password;
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpire = undefined;
-  await user.save();
-
-  res.status(200).json({ success: true, data: 'Email sent.' });
-});
-
 // @desc    Update user details
 // @route   PUT /api/v1/auth/updatedetails
 // @access  Private
 exports.updateDetails = asyncHandler(async (req, res, next) => {
-  console.log(req.body);
   const fieldsToUpdate = {
-    name: req.body.name,
+    username: req.body.username,
     // email: req.body.email,
   };
   const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
@@ -205,29 +107,10 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
     runValidators: true,
   });
 
-  console.log(user);
-
   res.status(200).json({
     success: true,
     data: user,
   });
-});
-
-// @desc    Update Password
-// @route   PUT /api/v1/auth/updatepassword
-// @access  Private
-exports.updatePassword = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select('+password');
-
-  // Check current password.
-  if (!(await user.matchPassword(req.body.currentPassword))) {
-    return next(new ErrorResponse('Incorrect password', 401));
-  }
-
-  user.password = req.body.newPassword;
-  await user.save();
-
-  sendTokenResponse(user, 200, res);
 });
 
 // @desc      Upload photo for user
@@ -235,7 +118,6 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
   // Check if file has been uploaded.
-  console.log(req.files);
   if (!req.files) {
     return next(new ErrorResponse(`Please upload a file.`, 400));
   }
@@ -302,7 +184,7 @@ const sendTokenResponse = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production' ? true : false,
+    secure: process.env.NODE_ENV === 'production',
   };
 
   res

@@ -8,9 +8,9 @@ export default class ProfileView {
   constructor(main) {
     this.main = main;
     this.main.id = 'profile';
-    const { name, photo } = authState.getMe();
+    const { username, photo } = authState.getMe();
     this.photoUpload = new PhotoUpload(photo);
-    this.detailsForm = new DetailsForm(name);
+    // this.detailsForm = new DetailsForm(username);
   }
 
   render() {
@@ -20,12 +20,6 @@ export default class ProfileView {
     const title = document.createElement('h2');
     title.textContent = 'Profile';
     this.main.append(title);
-
-    // Trainer name.
-    this.detailsForm
-      .get()
-      .addEventListener('submit', this.updateName.bind(this));
-    this.main.append(this.detailsForm.get());
 
     // Photo
     this.photoUpload
@@ -53,12 +47,12 @@ export default class ProfileView {
 
   async updateName(e) {
     e.preventDefault();
-    const name = e.target.elements['trainerName'].value;
+    const username = e.target.elements['trainerName'].value;
     // Same name submitted; ignore.
-    if (name == authState.getMe().name) {
+    if (username == authState.getMe().username) {
       gAlert.update(false, 'Provide new name.');
     } else {
-      const success = await authState.update({ name: name });
+      const success = await authState.update({ username: username });
       gAlert.update(success, success ? 'Updated name' : 'Unable to update');
     }
     this.main.insertBefore(gAlert.get(), this.main.firstElementChild);

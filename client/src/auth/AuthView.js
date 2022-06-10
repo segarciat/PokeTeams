@@ -19,11 +19,6 @@ export default class AuthView {
   }
 
   loadAllEventListeners() {
-    this.loginForm.forgotText.addEventListener(
-      'click',
-      this.showForgot.bind(this)
-    );
-
     this.loginForm.registerText.addEventListener(
       'click',
       this.showRegister.bind(this)
@@ -73,9 +68,15 @@ export default class AuthView {
     // Form subtext (flavor text?).
     const text = document.createElement('p');
     text.classList = 'text-center text-muted';
-    text.textContent = 'Email is used only for login and password recovery.';
+    text.textContent =
+      'WARNING: if you forget your password, account recovery is not possible.';
     this.formHeader.textContent = 'New Trainer Approaches';
     this.main.insertBefore(text, this.form);
+
+    const validUserText = document.createElement('small');
+    validUserText.classList = 'mt-3 text-center text-danger';
+    validUserText.innerText = `Usernames cannot contain more than 32 characters and they may only contain upper/lower case alphanumeric characters (A-Z, a-z, 0-9), dot (.), hyphen (-), and underscore (_).Passwords must contain between 8 and 32 characters.`;
+    this.main.insertBefore(validUserText, this.form);
     this.main.append(this.registerForm.get());
   }
 
@@ -83,7 +84,7 @@ export default class AuthView {
     e.preventDefault();
     const form = e.target;
     const fields = {
-      email: form.elements['email'].value,
+      username: form.elements['username'].value,
       password: form.elements['password'].value,
     };
     const success = await AuthState.login(fields);
@@ -105,13 +106,13 @@ export default class AuthView {
       alertMsg = 'The passwords did not match';
     } else {
       const fields = {
-        email: inputs['email'].value,
+        username: inputs['username'].value,
         password: inputs['password'].value,
       };
       success = await AuthState.register(fields);
       alertMsg = success
-        ? 'Verify your email (check spam)'
-        : 'Unable to create account';
+        ? 'Account successfully created!'
+        : 'Username already exists';
       form.reset();
     }
     gAlert.update(success, alertMsg);

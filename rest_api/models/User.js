@@ -4,17 +4,16 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
-  },
-  email: {
-    type: String,
-    required: [true, 'Please add an email.'],
+    required: [true, 'Please add a username.'],
     unique: true,
     match: [
-      /^\S+@\S+\.\S+$/,
+      /^([a-zA-Z0-9_.-]+)$/,
       'Please verify the email is formatted correctly.',
     ],
+    minlength: 8,
+    maxlength: 32,
   },
   password: {
     type: String,
@@ -24,7 +23,7 @@ const UserSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   role: {
     type: String,
@@ -34,8 +33,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'no-photo.png',
   },
-  emailVerifyToken: String,
-  emailVerifyExpire: Date,
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   createdAt: {
@@ -74,23 +71,6 @@ UserSchema.methods.getSignedJwtToken = function () {
 // Match user entered password to hashed password in database.
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
-};
-
-// Generate and hash email token.
-UserSchema.methods.getEmailVerifyToken = function () {
-  // Generate the token.
-  const emailToken = crypto.randomBytes(20).toString('hex');
-
-  // Hash token and set to resetPasswordToken field.
-  this.emailVerifyToken = crypto
-    .createHash('sha256')
-    .update(emailToken)
-    .digest('hex');
-
-  // Set the expire field. (1 day).
-  this.emailVerifyExpire = Date.now() + 1440 * 60 * 1000;
-  // Unhashed token sent back to client.
-  return emailToken;
 };
 
 // Generate and hash password token.
