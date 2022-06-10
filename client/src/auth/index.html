@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico" />
+    <script src="https://www.google.com/recaptcha/api.js"></script>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -48,6 +49,10 @@
       src="https://kit.fontawesome.com/a465367bb1.js"
       crossorigin="anonymous"
     ></script>
-    <!-- <script src="./js/signin.js"></script> -->
+    <script>
+      function onSubmit(token) {
+        document.querySelector('.main auth-form').submit();
+      }
+    </script>
   </body>
 </html>

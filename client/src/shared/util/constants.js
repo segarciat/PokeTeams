@@ -18,3 +18,4 @@ export const PAGINATION_LIMIT = window.matchMedia('(max-width: 576px)').matches
   : 5;
 
 export const MAX_FILE_SIZE = 1048576;
+export const CAPTCHA_SITE_KEY = '6Lf5SV4gAAAAAFuOxQyjDavf6IanVgvIim1oyyfN';
