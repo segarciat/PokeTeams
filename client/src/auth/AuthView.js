@@ -8,6 +8,7 @@ import { gAlert } from '../shared/components/Alert';
 export default class AuthView {
   constructor() {
     this.main = document.querySelector('.main');
+    this.captcha = document.querySelector('.g-recaptcha');
     this.formHeader = document.createElement('h3');
     this.formHeader.classList = 'text-center';
     this.loginForm = new LoginForm();
@@ -44,9 +45,11 @@ export default class AuthView {
       const text = document.createElement('p');
       text.classList = 'text-center text-muted';
       text.textContent = 'Get competitive about Pokemon';
-      this.main.insertBefore(text, this.form);
-
       this.main.append(this.loginForm.get());
+      this.main.insertBefore(text, this.loginForm.get());
+
+      const submit = this.loginForm.get().querySelector('input[type="submit"]');
+      this.loginForm.get().insertBefore(this.captcha, submit);
     }
   }
 
@@ -66,18 +69,22 @@ export default class AuthView {
   showRegister() {
     this.clear();
     // Form subtext (flavor text?).
+    this.main.append(this.registerForm.get());
+    const submit = this.registerForm
+      .get()
+      .querySelector('input[type="submit"]');
+    this.registerForm.get().insertBefore(this.captcha, submit);
     const text = document.createElement('p');
     text.classList = 'text-center text-muted';
     text.textContent =
       'WARNING: if you forget your password, account recovery is not possible.';
     this.formHeader.textContent = 'New Trainer Approaches';
-    this.main.insertBefore(text, this.form);
+    this.main.insertBefore(text, this.registerForm.get());
 
     const validUserText = document.createElement('small');
     validUserText.classList = 'mt-3 text-center text-danger';
     validUserText.innerText = `Usernames cannot contain more than 32 characters and they may only contain upper/lower case alphanumeric characters (A-Z, a-z, 0-9), dot (.), hyphen (-), and underscore (_).Passwords must contain between 8 and 32 characters.`;
-    this.main.insertBefore(validUserText, this.form);
-    this.main.append(this.registerForm.get());
+    this.main.insertBefore(validUserText, this.registerForm.get());
   }
 
   async login(e) {
@@ -86,10 +93,11 @@ export default class AuthView {
     const fields = {
       username: form.elements['username'].value,
       password: form.elements['password'].value,
+      captcha: this.captcha.querySelector('#g-recaptcha-response').value,
     };
     const success = await AuthState.login(fields);
     if (!success) {
-      gAlert.update(false, 'Invalid credentials');
+      gAlert.update(false, 'Invalid credentials or missing captcha');
       this.main.insertBefore(gAlert.get(), this.main.firstElementChild);
     } else {
       window.location.replace('app.html');
@@ -108,11 +116,12 @@ export default class AuthView {
       const fields = {
         username: inputs['username'].value,
         password: inputs['password'].value,
+        captcha: this.captcha.querySelector('#g-recaptcha-response').value,
       };
       success = await AuthState.register(fields);
       alertMsg = success
         ? 'Account successfully created!'
-        : 'Username already exists';
+        : 'Username already exists or missing captcha';
       form.reset();
     }
     gAlert.update(success, alertMsg);

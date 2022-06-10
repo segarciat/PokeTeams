@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const request = require('request');
 const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
 const User = require('../models/User');
@@ -10,36 +11,36 @@ const asyncHandler = require('../utils/async');
 // @route   POST /api/v1/auth/register
 // @access  Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { username, password } = req.body;
-
-  try {
-    // const user = await User.findOne({
-    //   username,
-    // });
-    // if (user) {
-    //   res.status(400).json({ success: false, data: 'User already exists' });
-    // }
-    const userExists = await User.exists({ username });
-    if (userExists) {
-      return next(new ErrorResponse(`User already exists.`, 400));
+  const { username, password, captcha } = req.body;
+  const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET_KEY}&response=${captcha}`;
+  request(verifyUrl, async (err, response, body) => {
+    body = JSON.parse(body);
+    if (!body.success) {
+      return next(new ErrorResponse('Captcha did not pass.', 400));
     }
-    const user = await User.create({
-      username,
-      password,
-    });
-    await user.save();
-    res.status(200).json({ success: true, data: 'User created.' });
-    // captcha?
-  } catch (err) {
-    return next(new ErrorResponse(`User was not created.`, 500));
-  }
+    try {
+      const userExists = await User.exists({ username });
+      if (userExists) {
+        return next(new ErrorResponse(`User already exists.`, 400));
+      }
+      const user = await User.create({
+        username,
+        password,
+      });
+      await user.save();
+      res.status(200).json({ success: true, data: 'User created.' });
+      // captcha?
+    } catch (err) {
+      return next(new ErrorResponse(`User was not created.`, 500));
+    }
+  });
 });
 
 // @desc    Login user
 // @route   POST /api/v1/auth/login
 // @access  Public
 exports.login = asyncHandler(async (req, res, next) => {
-  const { username, password } = req.body;
+  const { username, password, captcha } = req.body;
 
   // Validate email and password.
   if (!username || !password) {
@@ -47,30 +48,39 @@ exports.login = asyncHandler(async (req, res, next) => {
       new ErrorResponse('Please provide a username and password', 400)
     );
   }
+  const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET_KEY}&response=${captcha}`;
 
-  // Check for user; explicitly requests password (defaults to not returning it).
-  const user = await User.findOne({ username: username }).select('+password');
+  request(verifyUrl, async (err, response, body) => {
+    body = JSON.parse(body);
 
-  if (!user) {
-    return next(
-      new ErrorResponse('The credentials provided were invalid.', 401)
-    );
-  }
+    if (!body.success) {
+      return next(new ErrorResponse('Captcha did not pass.', 400));
+    }
 
-  if (!user.active) {
-    return next(new ErrorResponse('Inactive account.', 401));
-  }
+    // Check for user; explicitly requests password (defaults to not returning it).
+    const user = await User.findOne({ username: username }).select('+password');
 
-  // Check if password matches.
-  const isMatch = await user.matchPassword(password);
+    if (!user) {
+      return next(
+        new ErrorResponse('The credentials provided were invalid.', 401)
+      );
+    }
 
-  if (!isMatch) {
-    return next(
-      new ErrorResponse('The credentials provided were invalid.', 401)
-    );
-  }
+    if (!user.active) {
+      return next(new ErrorResponse('Inactive account.', 401));
+    }
 
-  sendTokenResponse(user, 200, res);
+    // Check if password matches.
+    const isMatch = await user.matchPassword(password);
+
+    if (!isMatch) {
+      return next(
+        new ErrorResponse('The credentials provided were invalid.', 401)
+      );
+    }
+
+    sendTokenResponse(user, 200, res);
+  });
 });
 
 // @desc    Get current logged in user

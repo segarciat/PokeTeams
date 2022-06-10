@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico" />
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -13,6 +13,7 @@
     />
     <!-- <link rel="stylesheet" href="./css/styles.css" /> -->
     <title>PokeTeams | Auth</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body class="bg-light">
     <section
@@ -20,6 +21,10 @@
       class="d-flex flex-column justify-content-center align-items-center"
     >
       <div class="main bg-white p-4 border">
+        <div
+          class="g-recaptcha"
+          data-sitekey="6LfIc14gAAAAAAzzPrsMYmXmL4eCTgs0G7cJ0Q2N"
+        ></div>
         <div class="d-flex justify-content-center">
           <img
             style="height: 50px; width: 50px"
@@ -49,10 +54,5 @@
       src="https://kit.fontawesome.com/a465367bb1.js"
       crossorigin="anonymous"
     ></script>
-    <script>
-      function onSubmit(token) {
-        document.querySelector('.main auth-form').submit();
-      }
-    </script>
   </body>
 </html>

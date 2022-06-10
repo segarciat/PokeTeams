@@ -1,4 +1,5 @@
-export const API_URL = 'https://poketeams.xyz/api/v1';
+// export const API_URL = 'https://poketeams.xyz/api/v1';
+export const API_URL = 'http://127.0.0.1:5000/api/v1';
 export const POKE_API_URL = 'https://pokeapi.co/api/v2';
 
 // `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${dexID}.png`;
@@ -18,4 +19,3 @@ export const PAGINATION_LIMIT = window.matchMedia('(max-width: 576px)').matches
   : 5;
 
 export const MAX_FILE_SIZE = 1048576;
-export const CAPTCHA_SITE_KEY = '6Lf5SV4gAAAAAFuOxQyjDavf6IanVgvIim1oyyfN';

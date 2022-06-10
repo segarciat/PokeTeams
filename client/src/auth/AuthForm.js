@@ -1,5 +1,3 @@
-import { CAPTCHA_SITE_KEY } from '../shared/util/constants';
-
 export default class AuthForm {
   constructor(inputs) {
     this.form = document.createElement('form');
@@ -30,12 +28,6 @@ export default class AuthForm {
       }
       this.form.append(element);
     });
-    // Captcha
-    const submit = this.form.querySelector('input[type="submit"]');
-    submit.setAttribute('data-sitekey', CAPTCHA_SITE_KEY);
-    submit.setAttribute('data-callback', 'onSubmit');
-    submit.setAttribute('data-action', 'submit');
-    submit.classList.add('g-recaptcha');
   }
 
   get() {
