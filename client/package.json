@@ -4,7 +4,7 @@
   "description": "Simple application for making pokemon teams using the PokeAPI",
   "main": "app.js",
   "scripts": {
-    "sass": "node-sass -w client/scss/ -o client/dist/css --recursive",
+    "sass": "sass -w client/scss:client/dist/css",
     "build": "webpack serve --open",
     "build:prod": "webpack"
   },
@@ -28,13 +28,11 @@
     "html-loader": "^1.3.2",
     "html-webpack-plugin": "^5.0.0",
     "mini-css-extract-plugin": "^1.3.6",
+    "sass": "^1.56.0",
     "sass-loader": "^11.0.1",
     "style-loader": "^2.0.0",
     "webpack": "^5.21.2",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2"
-  },
-  "dependencies": {
-    "node-sass": "^7.0.1"
   }
 }
