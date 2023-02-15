@@ -2,7 +2,7 @@
 
 ## Description
 
-Full Stack application which is live at https://poketeams.xyz that allows users to create Pokemon teams. Makes use of the public [PokeAPI](https://pokeapi.co/) for Pokemon data and the [PokeTeams API](https://poketeams.xyz/api/v1) for user accounts and other things.
+Full Stack application that allows users to create Pokemon teams. Makes use of the public [PokeAPI](https://pokeapi.co/).
 
 ## PokeTeams API
 
