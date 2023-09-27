@@ -40,7 +40,7 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'development') {
   const cors = require('cors');
   app.use(morgan('dev'));
-  corsOptions = { origin: 'http://127.0.0.1:8080', credentials: true };
+  const corsOptions = { origin: 'http://localhost:8080', credentials: true };
 
   app.use(cors(corsOptions));
 }

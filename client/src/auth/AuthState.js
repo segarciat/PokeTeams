@@ -1,4 +1,3 @@
-import { API_URL } from 'src/shared/util/constants';
 import fetchLoad from '../shared/util/fetchLoad';
 
 export class AuthState {

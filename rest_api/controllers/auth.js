@@ -4,7 +4,6 @@ const request = require('request');
 const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
 const User = require('../models/User');
-const sendEmail = require('../utils/sendEmails');
 const asyncHandler = require('../utils/async');
 
 // @desc    Register user
