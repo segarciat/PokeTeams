@@ -38,3 +38,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Acknowledgements
 
 - [Sweet Farm](https://thenounproject.com/sweetfarm/collection/pokemon-go/) for `public/poketeams.png` that I am using as a temporary logo.
+- [Nature illustrations by Storyset](https://storyset.com/nature)
+- [People illustrations by Storyset](https://storyset.com/people)
