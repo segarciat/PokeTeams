@@ -11,6 +11,15 @@ const config: Config = {
       colors: {
         primary: '#e64545'
       },
+      keyframes: {
+        slideIn: {
+          '0%': {transform: 'translateX(100%)'},
+          '100%': {transform: 'translateX(0%)'}
+        }
+      },
+      animation: {
+        slideIn: 'slideIn 0.2s ease-in-out forwards'
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

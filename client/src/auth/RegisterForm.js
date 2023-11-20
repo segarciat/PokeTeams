@@ -8,7 +8,6 @@ export default class RegisterForm extends AuthForm {
         name: 'username',
         placeholder: 'ash-ketchum',
         labelText: 'Username',
-        pattern: '^([a-zA-Z0-9_.-]+)$',
         minlength: '8',
         maxlength: '32',
         required: '',

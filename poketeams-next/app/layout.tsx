@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { prompt } from "@/app/ui/fonts";
 import "@/app/ui/globals.css";
-import Navbar from "@/app/ui/navbar";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "PokeTeams",
@@ -15,10 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={prompt.className}>
-        <Navbar />
-        {children}
-      </body>
+      <Providers>{children}</Providers>
     </html>
   );
 }
