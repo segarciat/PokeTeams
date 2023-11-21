@@ -1,35 +1,35 @@
-"use client";
+'use client'
 
-import Image from "next/image";
+import Image from 'next/image'
 import {
   Bars3Icon,
   HomeIcon,
   MagnifyingGlassIcon,
   MoonIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import clsx from "clsx";
-import { Dispatch, SetStateAction } from "react";
+  XMarkIcon
+} from '@heroicons/react/24/outline'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+import clsx from 'clsx'
+import { type ReactElement, type Dispatch, type SetStateAction } from 'react'
 
 export interface NavbarProps {
-  isNavMenuOpen: boolean;
-  setIsNavMenuOpen: Dispatch<SetStateAction<boolean>>;
+  isNavMenuOpen: boolean
+  setIsNavMenuOpen: Dispatch<SetStateAction<boolean>>
 }
-export default function Navbar({
+export default function Navbar ({
   isNavMenuOpen,
-  setIsNavMenuOpen,
-}: NavbarProps) {
-  function handleCloseNav() {
-    setIsNavMenuOpen(false);
+  setIsNavMenuOpen
+}: NavbarProps): ReactElement {
+  function handleCloseNav (): void {
+    setIsNavMenuOpen(false)
   }
 
   return (
     <>
       <nav
         className={clsx(
-          "flex flex-row items-center place-content-between bg-primary p-4"
+          'flex flex-row items-center place-content-between bg-primary p-4'
         )}
       >
         <div className="flex flex-row items-center gap-2">
@@ -47,7 +47,7 @@ export default function Navbar({
           <button>
             <MoonIcon height={24} width={24} />
           </button>
-          <button onClick={() => setIsNavMenuOpen(true)}>
+          <button onClick={() => { setIsNavMenuOpen(true) }}>
             <Bars3Icon height={28} width={28} />
           </button>
         </div>
@@ -62,19 +62,18 @@ export default function Navbar({
         )}
       </nav>
     </>
-  );
+  )
 }
 
 const links = [
-  { name: "Home", href: "/", icon: HomeIcon },
-  { name: "Pokesearch", href: "/pokesearch", icon: MagnifyingGlassIcon },
-];
+  { name: 'Home', href: '/', icon: HomeIcon },
+  { name: 'Pokesearch', href: '/pokesearch', icon: MagnifyingGlassIcon }
+]
 interface MenuProps {
-  onMenuButtonClick: () => void;
+  onMenuButtonClick: () => void
 }
-function Menu({ onMenuButtonClick }: MenuProps) {
-  const pathname = usePathname();
-  // clsx({ "blur-sm": isNavMenuOpen })
+function Menu ({ onMenuButtonClick }: MenuProps): ReactElement {
+  const pathname = usePathname()
   return (
     <div
       className={clsx(
@@ -91,15 +90,15 @@ function Menu({ onMenuButtonClick }: MenuProps) {
             onClick={onMenuButtonClick}
             key={name}
             href={href}
-            className={clsx("flex flex-row items-center gap-1", {
-              "text-primary": pathname === href,
+            className={clsx('flex flex-row items-center gap-1', {
+              'text-primary': pathname === href
             })}
           >
             <LinkIcon width={20} height={20} />
             <p>{name}</p>
           </Link>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

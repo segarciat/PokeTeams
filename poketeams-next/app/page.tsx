@@ -1,12 +1,12 @@
-import Navbar from "@/app/ui/navbar";
-import HeroSection from "./ui/hero";
-import FeaturesSection from "./ui/features";
+import HeroSection from './ui/hero'
+import FeaturesSection from './ui/features'
+import { type ReactElement } from 'react'
 
-export default function Home() {
+export default function Home (): ReactElement {
   return (
     <main>
       <HeroSection />
       <FeaturesSection />
     </main>
-  );
+  )
 }

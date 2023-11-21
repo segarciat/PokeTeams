@@ -1,6 +1,7 @@
-import Image from "next/image";
+import Image from 'next/image'
+import { type ReactElement } from 'react'
 
-export default function HeroSection() {
+export default function HeroSection (): ReactElement {
   return (
     <section className="flex flex-col p-10 text-center ring-1 ring-gray-400">
       <Image
@@ -27,5 +28,5 @@ export default function HeroSection() {
         </button>
       </div>
     </section>
-  );
+  )
 }
