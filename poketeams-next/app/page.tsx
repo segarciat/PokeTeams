@@ -1,5 +1,5 @@
-import HeroSection from './ui/hero'
-import FeaturesSection from './ui/features'
+import HeroSection from './ui/home/hero'
+import FeaturesSection from './ui/home/features'
 import { type ReactElement } from 'react'
 
 export default function Home (): ReactElement {

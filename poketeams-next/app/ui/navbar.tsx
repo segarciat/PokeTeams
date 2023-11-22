@@ -81,9 +81,19 @@ function Menu ({ onMenuButtonClick }: MenuProps): ReactElement {
         p-3 rounded-l-md drop-shadow-md z-50 animate-slideIn`
       )}
     >
-      <button className="self-end" onClick={onMenuButtonClick}>
-        <XMarkIcon height={28} width={28} />
-      </button>
+      <div className='flex flex-row justify-between'>
+        <Image
+          priority={true}
+          width={28}
+          height={28}
+          src="/poketeams.png"
+          alt="Temporary PokeTeams logo, by Sweet Farm."
+          className="self-center"
+        />
+        <button className="self-end" onClick={onMenuButtonClick}>
+          <XMarkIcon height={28} width={28} />
+        </button>
+      </div>
       {links.map(({ name, href, icon: LinkIcon }) => {
         return (
           <Link
@@ -94,7 +104,7 @@ function Menu ({ onMenuButtonClick }: MenuProps): ReactElement {
               'text-primary': pathname === href
             })}
           >
-            <LinkIcon width={20} height={20} />
+            <LinkIcon width={16} height={16} />
             <p>{name}</p>
           </Link>
         )

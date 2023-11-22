@@ -8,7 +8,7 @@ export default function Providers ({ children }: { children: React.ReactNode }):
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false)
   return (
     <body
-      className={clsx(`${prompt.className} overflow-x-hidden`, {
+      className={clsx(`${prompt.className}`, {
         'overflow-hidden': isNavMenuOpen // Disable scrolling.
       })}
     >
