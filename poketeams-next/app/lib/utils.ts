@@ -1,4 +1,4 @@
-import { type PokeType } from './definitions'
+import { type PokemonURL, type PokeType } from './definitions'
 
 /**
  * Capitalizes the given word.
@@ -6,7 +6,10 @@ import { type PokeType } from './definitions'
  * @returns Identical string, except first letter is uppercased.
  */
 export function capitalize (word: string): string {
-  return word.length === 0 ? word : word[0].toUpperCase() + word.substring(1).toLowerCase()
+  if (word.length === 0) {
+    return word
+  }
+  return word.replace(/\w+/g, (match) => match[0].toUpperCase() + match.substring(1).toLowerCase())
 }
 
 /**
@@ -36,4 +39,13 @@ export function getPokeTypeBgClass (type: PokeType): string {
     case 'steel': return 'bg-steel'
     case 'water': return 'bg-water'
   }
+}
+
+/**
+ * Creates a filtered list of Pokemon URLs from the given query string.
+ * @param urls List of Pokemon and URLs to filter.
+ * @param query Text used to filter the list.
+ */
+export function filterPokemons (urls: PokemonURL[], query: string): PokemonURL[] {
+  return urls.filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
 }

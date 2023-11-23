@@ -27,7 +27,7 @@ export default function PokemonCard ({ pokemon }: { pokemon: Pokemon }): ReactEl
         />
         No.
         </p>
-      <p className='text-4xl font-bold text-gray-300'>{pokemon.gameIndex.toString().padStart(4, '0')}</p>
+      <p className='text-4xl font-bold text-gray-300'>{pokemon.id.toString().padStart(4, '0')}</p>
       <Sprite isFlipped={isFlipped} isShiny={isShiny} pokemonName={pokemon.name} sprites={pokemon.spriteSrcs}/>
       <hr/>
       <AttributeLabel text='Name' />
@@ -35,7 +35,7 @@ export default function PokemonCard ({ pokemon }: { pokemon: Pokemon }): ReactEl
       <hr />
       <AttributeLabel text='Types' />
       <div className='flex justify-center gap-2 my-2'>
-        {pokemon.types.map((type) => <TypeButton key={type} type={type as PokeType}/>)}
+        {pokemon.types.map((type) => <TypeButton key={type.name} type={type.name}/>)}
       </div>
       <hr />
       <div className='flex flex-col justify-center gap-1 my-1 absolute top-3 right-3'>

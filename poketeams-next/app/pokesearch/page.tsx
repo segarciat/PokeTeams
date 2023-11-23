@@ -1,17 +1,31 @@
+'use server'
 import { type ReactElement } from 'react'
-import PokemonCard from '../ui/pokesearch/pokemon-card'
-import { fetchPokemonDetails } from '../lib/data'
+import { fetchAllPokemon } from '@/app/lib/data'
+import Search from '@/app/ui/pokesearch/search'
+import SearchResults from '@/app/ui/pokesearch/search-results'
+import { filterPokemons } from '@/app/lib/utils'
 
-export default async function Page (): Promise<ReactElement> {
-  const pokemon = await fetchPokemonDetails(4)
+interface PageProps {
+  searchParams?: {
+    query?: string
+    page?: string
+  }
+}
+
+export default async function Page ({ searchParams }: PageProps): Promise<ReactElement> {
+  const allPokemonURLs = await fetchAllPokemon()
+  const query = searchParams?.query ?? ''
+  const currentPage = Number(searchParams?.page) ?? 1
+  const filtered = filterPokemons(allPokemonURLs, query)
+
   return (
     <div className='p-4'>
       <h1 className='font-bold text-4xl'>Pokesearch</h1>
-      <form className='my-4'>
-        <input type='text' className='bg-white ring-1 rounded-full w-full py-1 px-3' placeholder='Search'/>
-      </form>
+      <div className='my-4'>
+        <Search placeholder='Search' allPokemon={allPokemonURLs} />
+      </div>
       <section className='flex flex-col items-center'>
-        <PokemonCard pokemon={pokemon}/>
+        <SearchResults results={filtered} currentPage={currentPage} />
       </section>
     </div>
   )
