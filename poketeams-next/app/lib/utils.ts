@@ -6,7 +6,7 @@ import { type PokeType } from './definitions'
  * @returns Identical string, except first letter is uppercased.
  */
 export function capitalize (word: string): string {
-  return word[0].toUpperCase() + word.substring(1)
+  return word.length === 0 ? word : word[0].toUpperCase() + word.substring(1).toLowerCase()
 }
 
 /**
