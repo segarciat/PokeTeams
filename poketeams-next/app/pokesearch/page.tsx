@@ -3,7 +3,7 @@ import { type ReactElement } from 'react'
 import { fetchAllPokemon } from '@/app/lib/data'
 import Search from '@/app/ui/pokesearch/search'
 import SearchResults from '@/app/ui/pokesearch/search-results'
-import { filterPokemons } from '@/app/lib/utils'
+import { filterByName } from '@/app/lib/utils'
 
 interface PageProps {
   searchParams?: {
@@ -16,7 +16,7 @@ export default async function Page ({ searchParams }: PageProps): Promise<ReactE
   const allPokemonURLs = await fetchAllPokemon()
   const query = searchParams?.query ?? ''
   const currentPage = Number(searchParams?.page) ?? 1
-  const filtered = filterPokemons(allPokemonURLs, query)
+  const filtered = filterByName(allPokemonURLs, query)
 
   return (
     <div className='p-4'>

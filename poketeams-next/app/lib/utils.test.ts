@@ -1,5 +1,6 @@
 import { type PokemonURL } from './definitions'
-import { capitalize, filterPokemons } from './utils'
+import { capitalize, filterByName } from './utils'
+import { describe, it, expect } from '@jest/globals'
 
 describe('Capitalize', () => {
   it('should lowercase word', () => {
@@ -25,11 +26,10 @@ describe('Filter Pokemons', () => {
     const query = 'bu'
 
     // Act
-    const result = filterPokemons(pokemonURLs, query)
+    const result = filterByName(pokemonURLs, query)
 
     // Assert
-    expect(result).toHaveLength(2)
-    expect(result).toMatchObject([
+    expect(result).toEqual([
       { name: 'butterfree' },
       { name: 'electrabuzz' }
     ])
@@ -40,11 +40,10 @@ describe('Filter Pokemons', () => {
     const query = 'bU'
 
     // Act
-    const result = filterPokemons(pokemonURLs, query)
+    const result = filterByName(pokemonURLs, query)
 
     // Assert
-    expect(result).toHaveLength(2)
-    expect(result).toMatchObject([
+    expect(result).toEqual([
       { name: 'butterfree' },
       { name: 'electrabuzz' }
     ])
@@ -55,7 +54,7 @@ describe('Filter Pokemons', () => {
     const query = 'foo'
 
     // Act
-    const result = filterPokemons(pokemonURLs, query)
+    const result = filterByName(pokemonURLs, query)
 
     // Assert
     expect(result).toHaveLength(0)

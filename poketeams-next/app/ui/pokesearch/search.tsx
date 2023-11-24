@@ -1,6 +1,6 @@
 'use client'
 import { type PokemonURL } from '@/app/lib/definitions'
-import { filterPokemons } from '@/app/lib/utils'
+import { filterByName } from '@/app/lib/utils'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { type ReactElement } from 'react'
@@ -16,7 +16,7 @@ export default function Search ({ placeholder, allPokemon }: SearchProps): React
   const router = useRouter()
 
   const handleSearch = useDebouncedCallback((query: string) => {
-    const filtered = filterPokemons(allPokemon, query)
+    const filtered = filterByName(allPokemon, query)
     console.log(filtered)
   }, 300)
 

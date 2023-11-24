@@ -1,4 +1,26 @@
-import { type PokemonURL, type PokeType } from './definitions'
+import { type PokeType } from './definitions'
+
+// Dynamic tailwind class must appear as unbroken literals: https://tailwindcss.com/docs/content-configuration#dynamic-class-names
+export const POKE_TYPE_BG_CLASS: Record<PokeType, string> = {
+  grass: 'bg-grass',
+  poison: 'bg-poison',
+  bug: 'bg-bug',
+  dark: 'bg-dark',
+  normal: 'bg-normal',
+  dragon: 'bg-dragon',
+  electric: 'bg-electric',
+  fairy: 'bg-fairy',
+  fighting: 'bg-fighting',
+  ghost: 'bg-ghost',
+  fire: 'bg-fire',
+  flying: 'bg-flying',
+  ground: 'bg-ground',
+  ice: 'bg-ice',
+  psychic: 'bg-psychic',
+  rock: 'bg-rock',
+  steel: 'bg-steel',
+  water: 'bg-water'
+}
 
 /**
  * Capitalizes the given word.
@@ -13,39 +35,10 @@ export function capitalize (word: string): string {
 }
 
 /**
- * Gets the background color class for the specified type.
- * @param type The pokemon type.
- * @returns A background color tailwind CSS class corresponding to the provided type.
- */
-export function getPokeTypeBgClass (type: PokeType): string {
-  // Dynamic tailwind class must appear as unbroken literals: https://tailwindcss.com/docs/content-configuration#dynamic-class-names
-  switch (type) {
-    case 'grass': return 'bg-grass'
-    case 'poison': return 'bg-poison'
-    case 'bug': return 'bg-bug'
-    case 'dark': return 'bg-dark'
-    case 'normal': return 'bg-normal'
-    case 'dragon': return 'bg-dragon'
-    case 'electric': return 'bg-electric'
-    case 'fairy': return 'bg-fairy'
-    case 'fighting': return 'bg-fighting'
-    case 'ghost': return 'bg-ghost'
-    case 'fire': return 'bg-fire'
-    case 'flying': return 'bg-flying'
-    case 'ground': return 'bg-ground'
-    case 'ice': return 'bg-ice'
-    case 'psychic': return 'bg-psychic'
-    case 'rock': return 'bg-rock'
-    case 'steel': return 'bg-steel'
-    case 'water': return 'bg-water'
-  }
-}
-
-/**
  * Creates a filtered list of Pokemon URLs from the given query string.
  * @param urls List of Pokemon and URLs to filter.
  * @param query Text used to filter the list.
  */
-export function filterPokemons (urls: PokemonURL[], query: string): PokemonURL[] {
+export function filterByName <T extends { name: string }> (urls: T[], query: string): T[] {
   return urls.filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
 }

@@ -1,6 +1,6 @@
 'use client'
 import { type Pokemon, type PokeType } from '@/app/lib/definitions'
-import { capitalize, getPokeTypeBgClass } from '@/app/lib/utils'
+import { capitalize, POKE_TYPE_BG_CLASS } from '@/app/lib/utils'
 import { ArrowPathRoundedSquareIcon, DocumentMagnifyingGlassIcon, SparklesIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useState, type ReactElement } from 'react'
@@ -62,8 +62,7 @@ interface TypeButtonProps {
 }
 
 function TypeButton ({ type }: TypeButtonProps): ReactElement {
-  const bgColorClass = getPokeTypeBgClass(type)
-  return <button className={`${bgColorClass} px-6 py-2 rounded-full text-white text-xs `}>
+  return <button className={`${POKE_TYPE_BG_CLASS[type]} px-6 py-2 rounded-full text-white text-xs `}>
     {capitalize(type)}
   </button>
 }
