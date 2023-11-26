@@ -9,15 +9,11 @@ const links = [
   { name: 'Pokesearch', href: '/pokesearch', icon: MagnifyingGlassIcon }
 ]
 
-interface NavLinkProps {
-  onLinkClick: () => void
-}
-
-export default function NavLinks (props: NavLinkProps): ReactElement {
+export default function NavLinks (): ReactElement {
   const pathname = usePathname()
   return <ul aria-label="Site navigation links" className='flex flex-col lg:flex-row gap-2'>
     {links.map(({ name, href, icon: LinkIcon }) => (
-      <Link key={name} href={href} onClick={props.onLinkClick}
+      <Link key={name} href={href}
         className={clsx('flex flex-row items-center gap-1', {
           'text-primary': pathname === href
         })}

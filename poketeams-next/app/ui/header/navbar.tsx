@@ -19,16 +19,16 @@ export interface NavbarProps {
 export default function Navbar ({ isNavMenuOpen, setIsNavMenuOpen, title }: NavbarProps): ReactElement {
   return (
     <header className={clsx(`bg-white opacity-95 border-b-slate-500 drop-shadow-sm p-4
-                            sticky top-0 flex flex-wrap flex-row items-center gap-3`
+                            sticky top-0 z-50 flex flex-wrap flex-row items-center gap-3`
     )}>
       <div className='mr-auto'>
         <Logo title={title} />
       </div>
       <nav className={clsx({
-        'max-lg:order-last max-lg:w-full h-screen py-2 border-t-2 border-t-slate-200': isNavMenuOpen,
+        'max-lg:py-2 max-lg:absolute top-full': isNavMenuOpen,
         'max-lg:hidden': !isNavMenuOpen
       })}>
-        <NavLinks onLinkClick={() => { setIsNavMenuOpen(false) }} />
+        <NavLinks />
       </nav>
       <menu className="flex flex-row gap-2">
         <li className='flex items-center'>

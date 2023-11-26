@@ -19,14 +19,12 @@ export default async function Page ({ searchParams }: PageProps): Promise<ReactE
   const filtered = filterByName(allPokemonURLs, query)
 
   return (
-    <div className='p-4'>
+    <main className='p-4'>
       <h1 className='font-bold text-4xl'>Pokesearch</h1>
       <div className='my-4'>
         <Search placeholder='Search' allPokemon={allPokemonURLs} />
       </div>
-      <section className='flex flex-col items-center'>
-        <SearchResults results={filtered} currentPage={currentPage} />
-      </section>
-    </div>
+      <SearchResults results={filtered} currentPage={currentPage} />
+    </main>
   )
 }

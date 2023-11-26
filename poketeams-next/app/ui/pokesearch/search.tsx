@@ -39,6 +39,7 @@ export default function Search ({ placeholder, allPokemon }: SearchProps): React
         Pokemon Search
       </label>
       <input
+        id='query'
         name='query'
         role='search'
         className='bg-white rounded-xl border border-gray-300 w-full py-1 pl-8 text-sm placeholder:text-gray-500'
