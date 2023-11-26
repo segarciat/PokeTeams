@@ -4,6 +4,7 @@ import Search from '@/app/ui/pokesearch/search'
 import SearchResults from '@/app/ui/pokesearch/search-results'
 import { filterByName } from '@/app/lib/utils'
 import { type Metadata } from 'next'
+import NoPokeSearchResults from '../ui/pokesearch/no-results'
 
 export const metadata: Metadata = {
   title: 'Pokesearch'
@@ -28,7 +29,12 @@ export default async function Page ({ searchParams }: PageProps): Promise<ReactE
       <div className='my-4'>
         <Search placeholder='Search' allPokemon={allPokemonURLs} />
       </div>
-      <SearchResults results={filtered} currentPage={currentPage} />
+      <section aria-label="Search results" className='flex flex-col items-center'>
+        {filtered.length === 0
+          ? <NoPokeSearchResults />
+          : <SearchResults results={filtered} currentPage={currentPage} />
+        }
+      </section>
     </main>
   )
 }

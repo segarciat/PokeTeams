@@ -48,6 +48,7 @@ export default function Search ({ placeholder, allPokemon }: SearchProps): React
           handleSearch(e.target.value)
         }}
         defaultValue={searchParams.get('query')?.toString()}
+        required
       />
       <MagnifyingGlassIcon height={14} width={14} className='absolute left-3 top-[7px] text-gray-500'/>
     </form>
