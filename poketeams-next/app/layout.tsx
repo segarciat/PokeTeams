@@ -4,7 +4,10 @@ import LayoutBody from './layout-body'
 import React, { type ReactElement } from 'react'
 
 export const metadata: Metadata = {
-  title: 'PokeTeams',
+  title: {
+    template: '%s | PokeTeams',
+    default: 'PokeTeams'
+  },
   description: 'Pokemon-themed hobby project powered by PokeAPI.'
 }
 

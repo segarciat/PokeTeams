@@ -1,9 +1,13 @@
-'use server'
 import { type ReactElement } from 'react'
 import { fetchAllPokemon } from '@/app/lib/data'
 import Search from '@/app/ui/pokesearch/search'
 import SearchResults from '@/app/ui/pokesearch/search-results'
 import { filterByName } from '@/app/lib/utils'
+import { type Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Pokesearch'
+}
 
 interface PageProps {
   searchParams?: {
