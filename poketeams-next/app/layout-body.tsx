@@ -1,22 +1,22 @@
 'use client'
 import { type ReactElement, useState } from 'react'
-import Navbar from './ui/navbar'
 import { prompt } from './ui/fonts'
+import Navbar from '@/app//ui/header/navbar'
 import clsx from 'clsx'
 
-export default function Providers ({ children }: { children: React.ReactNode }): ReactElement {
+export default function LayoutBody ({ children }: { children: React.ReactNode }): ReactElement {
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false)
+
   return (
-    <body
-      className={clsx(`${prompt.className} bg-slate-50`, {
-        'overflow-hidden': isNavMenuOpen // Disable scrolling.
-      })}
-    >
+    <body className={`${prompt.className} bg-slate-50`}>
       <Navbar
         isNavMenuOpen={isNavMenuOpen}
         setIsNavMenuOpen={setIsNavMenuOpen}
+        title='PokeTeams'
       />
-      <div>{children}</div>
+      <div className={clsx({ hidden: isNavMenuOpen })}>
+        {children}
+      </div>
     </body>
   )
 }

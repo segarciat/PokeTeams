@@ -1,21 +1,21 @@
 import type { Metadata } from 'next'
 import '@/app/ui/globals.css'
-import Providers from './providers'
-import { type ReactElement } from 'react'
+import LayoutBody from './layout-body'
+import React, { type ReactElement } from 'react'
 
 export const metadata: Metadata = {
   title: 'PokeTeams',
   description: 'Pokemon-themed hobby project powered by PokeAPI.'
 }
 
-export default function RootLayout ({
-  children
-}: {
+interface RootLayoutProps {
   children: React.ReactNode
-}): ReactElement {
+}
+
+export default function RootLayout ({ children }: RootLayoutProps): ReactElement {
   return (
     <html lang="en">
-      <Providers>{children}</Providers>
+      <LayoutBody>{children}</LayoutBody>
     </html>
   )
 }
