@@ -59,9 +59,9 @@ function flattenPokemonData (data: RawPokemonData): Pokemon {
     name: data.name,
     id: data.id,
     spriteSrcs: {
-      frontDefault: data.sprites.front_default,
+      frontDefault: data.sprites.front_default ?? data.sprites.other['official-artwork'].front_default,
       backDefault: data.sprites.back_default,
-      frontShiny: data.sprites.front_shiny,
+      frontShiny: data.sprites.front_shiny ?? data.sprites.other['official-artwork'].front_default,
       backShiny: data.sprites.back_shiny
     }
   }

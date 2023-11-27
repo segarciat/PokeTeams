@@ -49,6 +49,12 @@ export interface RawPokemonData {
     back_default: string
     front_shiny: string
     back_shiny: string
+    other: {
+      'official-artwork': {
+        front_default: string
+        shiny_default: string
+      }
+    }
   }
   abilities: Array<{
     ability: {

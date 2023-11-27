@@ -10,7 +10,7 @@ interface SearchResultsProps {
 export default async function SearchResults ({ results, currentPage }: SearchResultsProps): Promise<ReactElement> {
   const pokemons = await fetchPokedexPage(results, currentPage)
   return <section aria-label="Search results" className='flex flex-col items-center'>
-    <ol>
+    <ol className='flex flex-col gap-3'>
       {pokemons.map(pokemon => (
         <li key={pokemon.name}>
           <PokemonCard pokemon={pokemon} />

@@ -17,7 +17,6 @@ export default function Search ({ placeholder, allPokemon }: SearchProps): React
 
   const handleSearch = useDebouncedCallback((query: string) => {
     const filtered = filterByName(allPokemon, query)
-    console.log(filtered)
   }, 300)
 
   function handleSubmit (e: React.FormEvent): void {
