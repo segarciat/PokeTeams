@@ -1,6 +1,5 @@
 'use client'
-import { type PokemonURL } from '@/app/lib/definitions'
-import { filterByName } from '@/app/lib/utils'
+import { containsCaseInsensitively } from '@/app/lib/utils'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { type ReactElement } from 'react'
@@ -8,7 +7,7 @@ import { useDebouncedCallback } from 'use-debounce'
 
 export interface SearchProps {
   placeholder: string
-  allPokemon: PokemonURL[]
+  allPokemon: string[]
 }
 export default function Search ({ placeholder, allPokemon }: SearchProps): ReactElement {
   const searchParams = useSearchParams()
@@ -16,7 +15,7 @@ export default function Search ({ placeholder, allPokemon }: SearchProps): React
   const router = useRouter()
 
   const handleSearch = useDebouncedCallback((query: string) => {
-    const filtered = filterByName(allPokemon, query)
+    const filtered = allPokemon.filter(containsCaseInsensitively(query))
   }, 300)
 
   function handleSubmit (e: React.FormEvent): void {

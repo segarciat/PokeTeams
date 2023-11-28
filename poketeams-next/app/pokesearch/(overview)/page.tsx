@@ -1,8 +1,8 @@
 import { Suspense, type ReactElement } from 'react'
-import { fetchAllPokemon } from '@/app/lib/data'
+import { fetchAllPokemonNames } from '@/app/lib/data'
 import Search from '@/app/ui/pokesearch/search'
 import SearchResults from '@/app/ui/pokesearch/search-results'
-import { filterByName } from '@/app/lib/utils'
+import { containsCaseInsensitively } from '@/app/lib/utils'
 import { type Metadata } from 'next'
 import NoPokeSearchResults from '@/app/ui/pokesearch/no-results'
 import { SearchResultsSkeleton } from '@/app/ui/skeletons'
@@ -19,10 +19,10 @@ interface PageProps {
 }
 
 export default async function Page ({ searchParams }: PageProps): Promise<ReactElement> {
-  const allPokemonURLs = await fetchAllPokemon()
+  const allPokemonURLs = await fetchAllPokemonNames()
   const query = searchParams?.query ?? ''
   const currentPage = Number(searchParams?.page ?? 1)
-  const filtered = filterByName(allPokemonURLs, query)
+  const filtered = allPokemonURLs.filter(containsCaseInsensitively(query))
 
   return (
     <main className='p-4'>
@@ -34,8 +34,8 @@ export default async function Page ({ searchParams }: PageProps): Promise<ReactE
         {filtered.length === 0
           ? <NoPokeSearchResults />
           : (
-            <Suspense fallback={<SearchResultsSkeleton />}>
-              <SearchResults results={filtered} currentPage={currentPage} />
+            <Suspense key={query + currentPage} fallback={<SearchResultsSkeleton />}>
+              <SearchResults resultUrls={filtered} page={currentPage} />
             </Suspense>
             )
         }

@@ -35,10 +35,17 @@ export function capitalize (word: string): string {
 }
 
 /**
- * Creates a filtered list of Pokemon URLs from the given query string.
- * @param urls List of Pokemon and URLs to filter.
- * @param query Text used to filter the list.
+ * Creates string matching function from the given query string.
  */
-export function filterByName <T extends { name: string }> (urls: T[], query: string): T[] {
-  return urls.filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
+export function containsCaseInsensitively (query: string): (w: string) => boolean {
+  const re = new RegExp(query, 'i')
+  return (w: string) => re.test(w)
+}
+
+export function getArrayPage<T> (a: T[], page: number, pageSize: number): T[] {
+  if (page <= 0 || pageSize <= 0) {
+    throw new RangeError(`Expected non-zero page and pageSize, but got: page=${page}, pageSize=${pageSize}`)
+  }
+  const offset = (page - 1) * pageSize
+  return a.slice(offset, offset + pageSize)
 }

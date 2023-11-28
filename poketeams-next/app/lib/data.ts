@@ -1,68 +1,88 @@
-import { type PokemonURL, type Pokemon, type RawPokemonData } from './definitions'
-import { capitalize } from './utils'
+import { type Pokemon, type RawPokemonData } from './definitions'
+import { getArrayPage } from './utils'
 import toCamelCase from 'lodash.camelcase'
 
 const POKE_API_BASE_URL = 'https://pokeapi.co/api/v2'
 const POKEMON_URL = POKE_API_BASE_URL + '/pokemon'
-const POKEMONS_PER_PAGE = 20
 
 /**
- * Fetch list of all Pokemon names and their resource URLs.
- * @returns Array of Pokemon names and their resource URLs, ordered by ID.
+ * Fetch list of all Pokemon names.
+ * @returns Array of Pokemon names.
  */
-export async function fetchAllPokemon (): Promise<PokemonURL[]> {
-  // See: https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#fetching-data-on-the-server-with-fetch
-  let result = await fetch(POKEMON_URL, { cache: 'force-cache' })
-  const { count } = await result.json()
+export async function fetchAllPokemonNames (): Promise<string[]> {
+  try {
+    // See: https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#fetching-data-on-the-server-with-fetch
+    let result = await fetch(POKEMON_URL, { cache: 'force-cache' })
+    const { count } = await result.json()
 
-  result = await fetch(`${POKEMON_URL}/?limit=${count}`, { cache: 'force-cache' })
-  const data = await result.json()
-  return data.results.map((p: PokemonURL) => ({ ...p, name: capitalize(p.name) }))
+    result = await fetch(`${POKEMON_URL}/?limit=${count}`, { cache: 'force-cache' })
+    const data = await result.json()
+    return data.results.map(({ name }: { name: string }) => (name))
+  } catch (error) {
+    console.error('Error fetching list of all Pokemon from external API.')
+    throw new Error('Failed to fetch list of all Pokemon')
+  }
 }
 
 /**
- * Fetches Pokemon details for all Pokemon on the indicated @param page.
- * @param results List of Pokemon URLs.
+ * Fetches for all Pokemon on the indicated @param page.
+ * @param pokemonIds Array of Pokemon IDs.
  * @param page Desired page from given URLs.
- * @param resultsPerPage Number of results per page, defaults to @constant POKEMONS_PER_PAGE
- * @returns List of details for all Pokemon in desired page.
+ * @param pageSize Number of results per page.
+ * @returns Array of at most @param pageSize Pokemon from the given page.
  */
-export async function fetchPokedexPage (results: PokemonURL[], page: number, resultsPerPage = POKEMONS_PER_PAGE): Promise<Pokemon[]> {
-  resultsPerPage = resultsPerPage <= 0 ? POKEMONS_PER_PAGE : resultsPerPage
-  const offset = resultsPerPage * (page - 1)
-  const details = await Promise.all(results
-    .slice(offset, offset + resultsPerPage)
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
-    .map(({ url }) => fetch(url).then(data => data.json()))
-  )
-  return details.map(flattenPokemonData)
+export async function fetchPokedexPage (pokemonIds: Array<string | number>, page: number, pageSize: number): Promise<Pokemon[]> {
+  const pageUrls = getArrayPage(pokemonIds, page, pageSize)
+  try {
+    return await Promise.all(pageUrls.map(fetchPokemon))
+  } catch (error) {
+    console.error('Error fetching Pokemon details.', error)
+    throw new Error('Failed to fetch details for all Pokemon in given page.')
+  }
+}
+
+/**
+ * Fetch Pokemon data for Pokemon with name or id @param id
+ * @param id Name or id of Pokemon of interest
+ * @returns Pokemon matching the given id.
+ */
+export async function fetchPokemon (id: string | number): Promise<Pokemon> {
+  try {
+    const res = await fetch(`${POKEMON_URL}/${id}`)
+    const data = await res.json()
+    return flattenRawPokeData(data)
+  } catch (error) {
+    const errorMessage = `Failed to fetch pokemon data for ${id}`
+    console.error(errorMessage, error)
+    throw new Error(errorMessage)
+  }
 }
 
 /**
  * Flattens the Pokemon data received from PokeAPI's /pokemon endpoint into new array.
- * @param data Parsed JSON from external endpoint.
+ * @param rawData Parsed JSON from external endpoint.
  */
-function flattenPokemonData (data: RawPokemonData): Pokemon {
-  const stats = data.stats.reduce((acc: Record<string, number>, s) => {
+function flattenRawPokeData (rawData: RawPokemonData): Pokemon {
+  const stats = rawData.stats.reduce((acc: Record<string, number>, s) => {
     acc[toCamelCase(s.stat.name)] = s.base_stat
     return acc
   }, {}) as Pokemon['stats']
-  const abilities = data.abilities.map((a) =>
+  const abilities = rawData.abilities.map((a) =>
     ({ name: a.ability.name, isHidden: a.is_hidden, url: a.ability.url })
   )
-  const types = data.types.map(({ type: { name, url } }) => ({ name, url }))
+  const types = rawData.types.map(({ type: { name, url } }) => ({ name, url }))
 
   return {
     stats,
     abilities,
     types,
-    name: data.name,
-    id: data.id,
+    name: rawData.name,
+    id: rawData.id,
     spriteSrcs: {
-      frontDefault: data.sprites.front_default ?? data.sprites.other['official-artwork'].front_default,
-      backDefault: data.sprites.back_default,
-      frontShiny: data.sprites.front_shiny ?? data.sprites.other['official-artwork'].front_default,
-      backShiny: data.sprites.back_shiny
+      frontDefault: rawData.sprites.front_default ?? rawData.sprites.other['official-artwork'].front_default,
+      backDefault: rawData.sprites.back_default,
+      frontShiny: rawData.sprites.front_shiny ?? rawData.sprites.other['official-artwork'].front_shiny,
+      backShiny: rawData.sprites.back_shiny
     }
   }
 }

@@ -68,7 +68,6 @@ function Feature ({
     <div className="flex flex-col items-center">
       <h3 className="text-primary font-bold text-lg">{title}</h3>
       <Image
-        priority={true}
         width={150}
         height={150}
         src={imgSrc}

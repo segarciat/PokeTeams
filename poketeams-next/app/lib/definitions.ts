@@ -17,10 +17,10 @@ export interface Pokemon {
   }>
   stats: Record<PokeStat, number>
   spriteSrcs: {
-    frontDefault: string
-    backDefault: string
-    frontShiny: string
-    backShiny: string
+    frontDefault: string | null
+    backDefault: string | null
+    frontShiny: string | null
+    backShiny: string | null
   }
 }
 
@@ -45,14 +45,14 @@ export interface RawPokemonData {
     }
   }>
   sprites: {
-    front_default: string
-    back_default: string
-    front_shiny: string
-    back_shiny: string
+    front_default: string | null
+    back_default: string | null
+    front_shiny: string | null
+    back_shiny: string | null
     other: {
       'official-artwork': {
-        front_default: string
-        shiny_default: string
+        front_default: string | null
+        front_shiny: string | null
       }
     }
   }

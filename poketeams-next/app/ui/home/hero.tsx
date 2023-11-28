@@ -5,7 +5,6 @@ export default function HeroSection (): ReactElement {
   return (
     <section aria-label="Headline" className="flex flex-col p-10 text-center ring-1 ring-gray-400">
       <Image
-        priority={true}
         width={96}
         height={96}
         src="/poketeams.png"
