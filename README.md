@@ -4,6 +4,12 @@
 
 Full Stack application that allows users to browse Pokemon, moves, and to create teams. It is powered by [PokeAPI](https://pokeapi.co/). See `client` and `rest_api` folder for more specific information on each, as well as installation.
 
+## Development
+
+The initial version of this application was created without a full-stack or front-end framework. Instead, it used HTML, CSS/SASS/Bootstrap, and JavaScript (with Webpack) for the front-end. For the back-end, it had a REST API endpoints made with the Express framework in Node.js, and connected to a MongoDB backend. It was served via a self-hosted NGINX server.
+
+The ongoing version of this application is available in the `poketeams-next` folder. As the name indicates, it leverages a React framework, namely Next.js. It also uses TailwindCSS for styling.
+
 ## Acknowledgements
 
 - Jose Gonzalez (https://github.com/jm-gonzalez): collaborated together on frontend mockup on Figma. Together implemented Pokedex and Moves tab.
