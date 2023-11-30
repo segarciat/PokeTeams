@@ -1,4 +1,9 @@
-import { describe, it, expect, jest, beforeAll, beforeEach } from '@jest/globals'
+/**
+ * @jest-environment node
+ */
+
+// Line above is required to enable 'fetch', since jest.config.mjs sets 'jest-environment-jsdom'
+import { describe, it, expect, jest, beforeAll, beforeEach, afterEach } from '@jest/globals'
 import { type Pokemon, type RawPokemonData } from './definitions'
 import fs from 'fs'
 import path from 'path'

@@ -1,5 +1,4 @@
 'use client'
-import { containsCaseInsensitively } from '@/app/lib/utils'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { type ReactElement } from 'react'
@@ -15,7 +14,6 @@ export default function Search ({ placeholder, allPokemon }: SearchProps): React
   const router = useRouter()
 
   const handleSearch = useDebouncedCallback((query: string) => {
-    const filtered = allPokemon.filter(containsCaseInsensitively(query))
   }, 300)
 
   function handleSubmit (e: React.FormEvent): void {
