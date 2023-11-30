@@ -16,9 +16,6 @@ const config = {
   collectCoverageFrom: [
     'app/ui/header/*.{js,jsx,ts,tsx}',
   ],
-  globals: {
-    fetch: global.fetch, // See: https://stackoverflow.com/questions/74945569/cannot-access-built-in-node-js-fetch-function-from-jest-tests
-  },
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
