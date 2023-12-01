@@ -3,10 +3,11 @@ import '@/app/ui/globals.css'
 import LayoutBody from './layout-body'
 import React, { type ReactElement } from 'react'
 
+const PAGE_TITLE = 'PokeTeams'
 export const metadata: Metadata = {
   title: {
-    template: '%s | PokeTeams',
-    default: 'PokeTeams'
+    template: `%s | ${PAGE_TITLE}`,
+    default: `${PAGE_TITLE}`
   },
   description: 'Pokemon-themed hobby project powered by PokeAPI.'
 }
@@ -18,7 +19,7 @@ interface RootLayoutProps {
 export default function RootLayout ({ children }: RootLayoutProps): ReactElement {
   return (
     <html lang="en">
-      <LayoutBody>{children}</LayoutBody>
+      <LayoutBody title={PAGE_TITLE}>{children}</LayoutBody>
     </html>
   )
 }
