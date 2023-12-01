@@ -19,8 +19,7 @@ export async function fetchAllPokemonNames (): Promise<string[]> {
     const data = await result.json()
     return data.results.map(({ name }: { name: string }) => (name))
   } catch (error) {
-    console.error('Error fetching list of all Pokemon from external API.')
-    throw new Error('Failed to fetch list of all Pokemon')
+    throw new Error(`Failed to fetch list of all Pokemon: ${(error as Error).message}.`)
   }
 }
 
@@ -36,8 +35,7 @@ export async function fetchPokedexPage (pokemonIds: Array<string | number>, page
   try {
     return await Promise.all(pageUrls.map(fetchPokemon))
   } catch (error) {
-    console.error('Error fetching Pokemon details.', error)
-    throw new Error('Failed to fetch details for all Pokemon in given page.')
+    throw new Error('Failed to fetch details for some Pokemon in given page.')
   }
 }
 
@@ -52,9 +50,7 @@ export async function fetchPokemon (id: string | number): Promise<Pokemon> {
     const data = await res.json()
     return flattenRawPokeData(data)
   } catch (error) {
-    const errorMessage = `Failed to fetch pokemon data for ${id}`
-    console.error(errorMessage, error)
-    throw new Error(errorMessage)
+    throw new Error(`Failed to fetch pokemon data for ${id}: ${(error as Error).message}`)
   }
 }
 
