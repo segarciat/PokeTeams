@@ -12,15 +12,16 @@ const links = [
 export default function NavLinks (): ReactElement {
   const pathname = usePathname()
   return <ul aria-label="Site navigation links" className='flex flex-col lg:flex-row gap-2'>
-    {links.map(({ name, href, icon: LinkIcon }) => (
-      <Link key={name} href={href} aria-current={pathname === href}
-        className={clsx('flex flex-row items-center gap-1', {
-          'text-primary': pathname === href
-        })}
-      >
-        <LinkIcon width={24} height={24} />
-        <p>{name}</p>
-      </Link>
-    ))}
+    {links.map(({ name, href, icon: LinkIcon }) => {
+      const isCurrent = pathname === href
+      return (
+        <Link key={name} href={href} aria-current={isCurrent ? 'page' : false}
+          className={clsx('flex flex-row items-center gap-1', { 'text-primary': isCurrent })}
+        >
+          <LinkIcon width={24} height={24} />
+          <p>{name}</p>
+        </Link>
+      )
+    })}
   </ul>
 }
