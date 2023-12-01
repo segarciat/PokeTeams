@@ -30,7 +30,6 @@ export default function LayoutBody ({ title, children }: { title: string, childr
   }
 
   useEffect(() => { // Always close nav sidebar, if shown when route changes.
-    console.log('pathname useeffect')
     setIsNavSidebarOpen(false)
     window.addEventListener('resize', handleResize)
     return () => { window.removeEventListener('resize', handleResize) }
