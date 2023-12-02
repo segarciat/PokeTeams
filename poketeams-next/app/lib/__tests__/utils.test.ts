@@ -1,4 +1,4 @@
-import { POKE_TYPE_BG_CLASS, capitalize, containsCaseInsensitively, getArrayPage } from './utils'
+import { POKE_TYPE_BG_CLASS, capitalize, containsCaseInsensitively, getArrayPage } from '../utils'
 import { describe, it, expect } from '@jest/globals'
 
 describe('Poke Type BG class map', () => {
