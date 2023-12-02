@@ -2,12 +2,13 @@
 import { useEffect, type ReactElement } from 'react'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import { Bars3Icon, HomeIcon, MagnifyingGlassIcon, MoonIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, HomeIcon, InformationCircleIcon, MagnifyingGlassIcon, MoonIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import clsx from 'clsx'
 
 const links = [
   { name: 'Home', href: '/', icon: HomeIcon },
+  { name: 'About', href: '/about', icon: InformationCircleIcon },
   { name: 'Pokesearch', href: '/pokesearch', icon: MagnifyingGlassIcon }
 ]
 

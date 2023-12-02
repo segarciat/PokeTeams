@@ -25,8 +25,8 @@ export default async function Page ({ searchParams }: PageProps): Promise<ReactE
   const filtered = allPokemonURLs.filter(containsCaseInsensitively(query))
 
   return (
-    <main className='p-4'>
-      <h1 className='font-bold text-4xl'>Pokesearch</h1>
+    <div className='p-4'>
+      <h2 className='font-bold text-4xl'>Pokesearch</h2>
       <div className='my-4'>
         <Search placeholder='Search' allPokemon={allPokemonURLs} />
       </div>
@@ -40,6 +40,6 @@ export default async function Page ({ searchParams }: PageProps): Promise<ReactE
             )
         }
       </section>
-    </main>
+    </div>
   )
 }

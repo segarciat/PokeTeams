@@ -10,7 +10,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Tests
 
-Run tests with
+### Unit Tests
+
+Unit tests are implemented with Jest and React Testing Library for unit tests; see `package.json`. Run them with:
 
 ```bash
 npm test
@@ -19,6 +21,28 @@ npm test
 The starting point for the test setup was the [Next.js testing documentation](https://nextjs.org/docs/pages/building-your-application/optimizing/testing#setting-up-jest-with-the-rust-compiler). The tests use [Jest](https://jestjs.io/docs/getting-started) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
 The [Testing Library documentation recommends a browser extension](https://testing-library.com/docs/queries/about#browser-extension) that allows you to inspect elements on your page and provides suggested queries. These can in turn be used to help with UI testing. Find the [Testing Playground extension here](https://chromewebstore.google.com/detail/testing-playground/hejbmebodbijjdhflfknehhcgaklhano)
+
+### End-To-End Tests
+
+End-to-end tests are implemented with Playwright; see `package.json`. Run them with:
+
+```bash
+# See https://playwright.dev/docs/running-tests
+
+# Build the app.
+npm run build
+
+# Run in headless mode.
+npm run test:e2e
+
+# Run interactively in headed mode.
+npm run test:e2e -- --headed
+
+# Run interactively in UI mode.
+npm run test:e2e -- --ui
+```
+
+See [Playwright docs](https://playwright.dev/).
 
 ## Learn More about Next.js
 
