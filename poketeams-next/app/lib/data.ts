@@ -1,9 +1,7 @@
+import { POKEMON_URL } from './constants'
 import { type Pokemon, type RawPokemonData } from './definitions'
 import { getArrayPage } from './utils'
 import toCamelCase from 'lodash.camelcase'
-
-const POKE_API_BASE_URL = 'https://pokeapi.co/api/v2'
-const POKEMON_URL = POKE_API_BASE_URL + '/pokemon'
 
 /**
  * Fetch list of all Pokemon names.
