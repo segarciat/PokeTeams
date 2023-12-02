@@ -4,18 +4,18 @@
 
 // Line above is required to enable 'fetch', since jest.config.mjs sets 'jest-environment-jsdom'
 import { describe, it, expect, jest, beforeAll, beforeEach, afterEach } from '@jest/globals'
-import { type Pokemon, type RawPokemonData } from './definitions'
+import { type Pokemon, type RawPokemonData } from '../definitions'
 import fs from 'fs'
 import path from 'path'
 
-jest.mock('./utils', () => ({
+jest.mock('../utils', () => ({
   getArrayPage: jest.fn()
 }))
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-let dataModule: typeof import('./data')
+let dataModule: typeof import('../data')
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-let utilsModule: typeof import('./utils')
+let utilsModule: typeof import('../utils')
 
 interface TestPokemonData {
   name: string
@@ -27,8 +27,8 @@ let testPokemonData: TestPokemonData[]
 
 beforeAll(async () => {
   // See: https://stackoverflow.com/a/71044616
-  dataModule = await import('./data')
-  utilsModule = await import('./utils')
+  dataModule = await import('../data')
+  utilsModule = await import('../utils')
   const testFile = path.join(__dirname, 'pokemons.test.json')
   testPokemonData = JSON.parse(fs.readFileSync(testFile, 'utf-8'))
 })
