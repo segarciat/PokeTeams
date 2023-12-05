@@ -14,7 +14,7 @@ const config = {
   testEnvironment: 'jest-environment-jsdom',
   collectCoverage: true,
   collectCoverageFrom: [
-    'app/ui/*.{js,jsx,ts,tsx}',
+    'app/ui/pokesearch/*.{js,jsx,ts,tsx}',
   ],
 }
 
