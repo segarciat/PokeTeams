@@ -1,6 +1,8 @@
 import { describe, expect, it } from '@jest/globals'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import Main from '../main'
+import userEvent from '@testing-library/user-event'
+import { act } from 'react-dom/test-utils'
 
 describe('Main (global) layout', () => {
   it('should display main content, and navbar with logo, navigation links, and actions', () => {
@@ -12,5 +14,49 @@ describe('Main (global) layout', () => {
 
     expect(screen.queryByRole('heading', { level: 2 })).toBeInTheDocument()
     expect(screen.getByRole('banner')).toBeInTheDocument()
+  })
+
+  it('should hide the button to open the navbar after clicking it, and then shows the open button', async () => {
+    render((
+      <Main title='Test title'>
+        <h2>Test section</h2>
+      </Main>
+    ))
+    const navbar = screen.getByRole('banner')
+    expect(navbar).toBeInTheDocument()
+    const openSidenavBtn = within(navbar).getByRole('button', { name: /open/i })
+    expect(openSidenavBtn).toBeInTheDocument()
+    expect(within(navbar).queryByRole('button', { name: /close/i })).not.toBeInTheDocument()
+
+    await userEvent.click(openSidenavBtn)
+    expect(within(navbar).queryByRole('button', { name: /close/i })).toBeInTheDocument()
+    expect(within(navbar).queryByRole('button', { name: /open/i })).not.toBeInTheDocument()
+  })
+
+  it('should show button to open nav sidebar after resizing to desktop size screen', async () => {
+    global.innerWidth = 800
+    render((
+      <Main title='Test title'>
+        <h2>Test section</h2>
+      </Main>
+    ))
+
+    const openSidenavBtn = screen.getByRole('button', { name: /open nav/i })
+    expect(openSidenavBtn).toBeInTheDocument()
+    await userEvent.click(openSidenavBtn)
+    expect(screen.queryByRole('button', { name: /open nav/i })).not.toBeInTheDocument()
+
+    jest.useFakeTimers()
+
+    act(() => {
+      global.innerWidth = 1200
+      fireEvent.resize(window)
+      jest.advanceTimersByTime(1000)
+    })
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /open nav/i })).toBeInTheDocument()
+    })
+    jest.useRealTimers()
   })
 })

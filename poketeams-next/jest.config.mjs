@@ -14,7 +14,7 @@ const config = {
   testEnvironment: 'jest-environment-jsdom',
   collectCoverage: true,
   collectCoverageFrom: [
-    'app/lib/*.{js,jsx,ts,tsx}',
+    'app/ui/*.{js,jsx,ts,tsx}',
   ],
 }
 
