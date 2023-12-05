@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { type ReactElement } from 'react'
 
-export default function NoPokeSearchResults (): ReactElement {
+export default function NoResults (): ReactElement {
   return <div className='flex flex-col items-center'>
     <h2 className='text-center text-xl font-semibold'>Woops, no results.</h2>
     <p className='pb-4 text-center'> Please try again.</p>

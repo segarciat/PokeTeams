@@ -32,7 +32,7 @@ export default function Navbar ({ title, isSideNavOpen, setIsSideNavOpen }: Navb
 
   return (
     <header className={`bg-white opacity-95 border-b-slate-500 drop-shadow-sm p-4
-      sticky top-0 flex flex-wrap flex-row items-center gap-3`
+      sticky top-0 z-50 flex flex-wrap flex-row items-center gap-3`
     }>
       <div aria-label="logo" className='mr-auto'>
         <Link href='/' className='flex flex-row items-center gap-2'>

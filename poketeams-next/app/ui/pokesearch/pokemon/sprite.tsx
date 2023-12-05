@@ -4,14 +4,14 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { type ReactElement } from 'react'
 
-interface PokeCardSpriteProps {
+interface SpriteProps {
   isShiny: boolean
   isFlipped: boolean
   pokemonName: Pokemon['name']
   sprites: Pokemon['spriteSrcs']
 }
 
-export default function PokeCardSprite ({ isShiny, isFlipped, pokemonName, sprites }: PokeCardSpriteProps): ReactElement {
+export default function Sprite ({ isShiny, isFlipped, pokemonName, sprites }: SpriteProps): ReactElement {
   let imageSrc
   if (!isFlipped && !isShiny) {
     imageSrc = sprites.frontDefault
