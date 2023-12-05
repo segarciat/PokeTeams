@@ -62,9 +62,14 @@ export default function Navbar ({ title, isSideNavOpen, setIsSideNavOpen }: Navb
           <button aria-label="Use Dark Mode"> <MoonIcon height={24} width={24} /></button>
         </li>
         <li className='lg:hidden flex items-center'>
-          <button aria-label="Nav Menu toggler" onClick={handleTogglerClick}>
-            {isSideNavOpen ? <XMarkIcon height={24} width={24} /> : <Bars3Icon height={24} width={24} />}
+          {isSideNavOpen
+            ? <button aria-label='close nav sidebar' onClick={handleTogglerClick}>
+              <XMarkIcon height={24} width={24} />
           </button>
+            : <button aria-label='open nav sidebar' onClick={handleTogglerClick}>
+              <Bars3Icon height={24} width={24} />
+          </button>
+          }
         </li>
       </menu>
     </header>
