@@ -2,12 +2,12 @@ import { type Pokemon, type PokeType } from '@/app/lib/definitions'
 import { POKE_TYPE_BG_CLASS, capitalize } from '@/app/lib/utils'
 import { type ReactElement } from 'react'
 
-interface CardSummaryProps {
+interface SummaryProps {
   types: Pokemon['types']
   name: Pokemon['name']
 }
 
-export default function CardSummary ({ types, name }: CardSummaryProps): ReactElement {
+export default function Summary ({ types, name }: SummaryProps): ReactElement {
   return <section arial-label="pokemon summary">
     <AttributeLabel text='Name' />
     <h3 className='text-center font-bold text-2xl'>{capitalize(name)}</h3>

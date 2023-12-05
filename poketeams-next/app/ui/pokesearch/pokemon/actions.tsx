@@ -2,13 +2,13 @@ import { ArrowPathRoundedSquareIcon, SparklesIcon } from '@heroicons/react/24/ou
 import clsx from 'clsx'
 import { type ReactElement } from 'react'
 
-interface CardActionsProps {
+interface ActionProps {
   isFlipped: boolean
   isShiny: boolean
   onFlipClick: () => void
   onShinyClick: () => void
 }
-export default function CardActions ({ isFlipped, isShiny, onShinyClick, onFlipClick }: CardActionsProps): ReactElement {
+export default function Actions ({ isFlipped, isShiny, onShinyClick, onFlipClick }: ActionProps): ReactElement {
   return <menu className='flex flex-col justify-center gap-1 my-1'>
     <ToggleAction onClick={onFlipClick} actionName='Flip Image' isToggledOn={isFlipped}>
       <ArrowPathRoundedSquareIcon height={20} width={20} />

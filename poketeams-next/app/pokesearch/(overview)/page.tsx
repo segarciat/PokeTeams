@@ -1,11 +1,8 @@
-import { Suspense, type ReactElement } from 'react'
+import { type ReactElement } from 'react'
 import { fetchAllPokemonNames } from '@/app/lib/data'
-import Search from '@/app/ui/pokesearch/search'
-import SearchResults from '@/app/ui/pokesearch/search-results'
-import { containsCaseInsensitively } from '@/app/lib/utils'
 import { type Metadata } from 'next'
-import NoPokeSearchResults from '@/app/ui/pokesearch/no-results'
-import { SearchResultsSkeleton } from '@/app/ui/skeletons'
+import Form from '@/app/ui/pokesearch/forms'
+import Results from '@/app/ui/pokesearch/results'
 
 export const metadata: Metadata = {
   title: 'Pokesearch'
@@ -19,27 +16,15 @@ interface PageProps {
 }
 
 export default async function Page ({ searchParams }: PageProps): Promise<ReactElement> {
-  const allPokemonURLs = await fetchAllPokemonNames()
+  const allPokemons = await fetchAllPokemonNames()
   const query = searchParams?.query ?? ''
-  const currentPage = Number(searchParams?.page ?? 1)
-  const filtered = allPokemonURLs.filter(containsCaseInsensitively(query))
+  const page = Number(searchParams?.page ?? 1)
 
   return (
     <div className='p-4'>
       <h2 className='font-bold text-4xl'>Pokesearch</h2>
-      <div className='my-4'>
-        <Search placeholder='Search Pokemon' allPokemon={allPokemonURLs} />
-      </div>
-      <section aria-label="Search results" className='flex flex-col items-center'>
-        {filtered.length === 0
-          ? <NoPokeSearchResults />
-          : (
-            <Suspense key={query + currentPage} fallback={<SearchResultsSkeleton />}>
-              <SearchResults resultUrls={filtered} page={currentPage} />
-            </Suspense>
-            )
-        }
-      </section>
+      <Form placeholder='Search Pokemon' />
+      <Results allPokemons={allPokemons} query={query} page={page} />
     </div>
   )
 }
