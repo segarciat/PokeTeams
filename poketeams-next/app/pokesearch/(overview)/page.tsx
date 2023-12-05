@@ -28,7 +28,7 @@ export default async function Page ({ searchParams }: PageProps): Promise<ReactE
     <div className='p-4'>
       <h2 className='font-bold text-4xl'>Pokesearch</h2>
       <div className='my-4'>
-        <Search placeholder='Search' allPokemon={allPokemonURLs} />
+        <Search placeholder='Search Pokemon' allPokemon={allPokemonURLs} />
       </div>
       <section aria-label="Search results" className='flex flex-col items-center'>
         {filtered.length === 0
