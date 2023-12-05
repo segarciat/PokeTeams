@@ -7,7 +7,11 @@ import Header from './header'
 import Summary from './summary'
 import Actions from './actions'
 
-export default function Card ({ pokemon }: { pokemon: Pokemon }): ReactElement {
+export interface CardProps {
+  pokemon: Pick<Pokemon, 'id' | 'name' | 'types' | 'spriteSrcs'>
+}
+
+export default function Card ({ pokemon }: CardProps): ReactElement {
   const [isFlipped, setIsFlipped] = useState(false)
   const [isShiny, setIsShiny] = useState(false)
 

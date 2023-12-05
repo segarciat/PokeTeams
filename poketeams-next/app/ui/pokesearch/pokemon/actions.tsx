@@ -9,31 +9,22 @@ interface ActionProps {
   onShinyClick: () => void
 }
 export default function Actions ({ isFlipped, isShiny, onShinyClick, onFlipClick }: ActionProps): ReactElement {
-  return <menu className='flex flex-col justify-center gap-1 my-1'>
-    <ToggleAction onClick={onFlipClick} actionName='Flip Image' isToggledOn={isFlipped}>
-      <ArrowPathRoundedSquareIcon height={20} width={20} />
-    </ToggleAction>
-    <ToggleAction onClick={onShinyClick} actionName='Toggle Shiny Image' isToggledOn={isShiny}>
-      <SparklesIcon height={20} width={20}/>
-    </ToggleAction>
-  </menu>
-}
-
-interface ToggleActionProps {
-  actionName: string
-  isToggledOn: boolean
-  onClick: () => void
-  children: React.ReactNode
-}
-
-function ToggleAction (props: ToggleActionProps): ReactElement {
-  return <button aria-label={props.actionName}
-    className={clsx('border-2 rounded-full p-2', {
-      'border-primary text-primary bg-white': !props.isToggledOn,
-      'text-white bg-primary': props.isToggledOn
-    })}
-    onClick={props.onClick}
-  >
-    {props.children}
-  </button>
+  const actions = [
+    { name: 'flip', icon: ArrowPathRoundedSquareIcon, isEnabled: isFlipped, onClick: onFlipClick },
+    { name: 'toggle shiny', icon: SparklesIcon, isEnabled: isShiny, onClick: onShinyClick }
+  ]
+  return (
+    <menu className='flex flex-col justify-center gap-1 my-1'>
+      {actions.map(({ name, isEnabled, onClick, icon: Icon }) => (
+        <li key={name}>
+          <button aria-label={name} onClick={onClick} className={clsx('border-2 rounded-full p-2', {
+            'border-primary text-primary bg-white': !isEnabled,
+            'text-white bg-primary': isEnabled
+          })}>
+            <Icon height={20} width={20}/>
+          </button>
+        </li>
+      ))}
+    </menu>
+  )
 }
