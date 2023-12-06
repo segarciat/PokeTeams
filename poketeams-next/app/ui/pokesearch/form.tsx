@@ -39,8 +39,8 @@ export default function Form ({ placeholder }: FormProps): ReactElement {
             required
           />
           <label htmlFor="query" className='absolute left-9 top-[1px] text-xs text-gray-400
-        peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-[1px] =
-        peer-focus:text-xs transition-all'>
+          peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-[1px] =
+          peer-focus:text-xs transition-all'>
             {placeholder}
           </label>
         </div>

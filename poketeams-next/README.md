@@ -48,6 +48,10 @@ npm run test:e2e -- --ui
 
 See [Playwright docs](https://playwright.dev/). Also, see the [basic Next.js Test Playwright setup](https://nextjs.org/docs/pages/building-your-application/optimizing/testing#manual-setup-1).
 
+### Issues
+
+There currently is no clear way to test React Server Components with React Testing Library. See: https://github.com/testing-library/react-testing-library/issues/1209.
+
 ## Learn More about Next.js
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). To learn more about Next.js, take a look at the following resources:
