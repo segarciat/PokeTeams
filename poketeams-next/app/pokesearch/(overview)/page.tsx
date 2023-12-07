@@ -1,7 +1,7 @@
 import { type ReactElement } from 'react'
 import { fetchAllPokemonNames } from '@/app/lib/data'
 import { type Metadata } from 'next'
-import Form from '@/app/ui/pokesearch/form'
+import Search from '@/app/ui/pokesearch/search'
 import Results from '@/app/ui/pokesearch/results'
 
 export const metadata: Metadata = {
@@ -23,7 +23,7 @@ export default async function Page ({ searchParams }: PageProps): Promise<ReactE
   return (
     <div className='p-4'>
       <h2 className='font-bold text-4xl'>Pokesearch</h2>
-      <Form placeholder='Search Pokemon' />
+      <Search placeholder='Search Pokemon' />
       <Results allPokemons={allPokemons} query={query} page={page}/>
     </div>
   )
