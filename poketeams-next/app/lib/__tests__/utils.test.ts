@@ -1,4 +1,4 @@
-import { POKE_TYPE_BG_CLASS, capitalize, containsCaseInsensitively, getArrayPage } from '../utils'
+import { POKE_TYPE_BG_CLASS, capitalize, filterLike, getArrayPage } from '../utils'
 import { describe, it, expect } from 'vitest'
 
 describe('Poke Type BG class map', () => {
@@ -24,39 +24,17 @@ describe('Capitalize', () => {
 
 describe('Contains string', () => {
   // Arrange
-  it('should match strings that contain the query as a substring', () => {
+  it('should match strings that contain the query as a case insensitive substring', () => {
     // Arrange
     const query = 'bu'
 
     // Act
-    const result = containsCaseInsensitively(query)
+    const result = filterLike(['Butterfree', 'electrabuzz', 'foo'], query)
 
     // Assert
-    expect(result('butterfree')).toBeTruthy()
-    expect(result('electrabuzz')).toBeTruthy()
-  })
-
-  it('should be case insensitive', () => {
-    // Arrange
-    const query = 'bU'
-
-    // Act
-    const result = containsCaseInsensitively(query)
-
-    // Assert
-    expect(result('butterfree')).toBeTruthy()
-    expect(result('electraBuzz')).toBeTruthy()
-  })
-
-  it('should be false when string is not substring', () => {
-    // Arrange
-    const query = 'foo'
-
-    // Act
-    const result = containsCaseInsensitively(query)
-
-    // Assert
-    expect(result('butterfree')).toBeFalsy()
+    expect(result).toContain('Butterfree')
+    expect(result).toContain('electrabuzz')
+    expect(result).not.toContain('foo')
   })
 })
 

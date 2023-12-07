@@ -27,6 +27,7 @@ describe('search form', () => {
     const input = within(search).getByLabelText(/pokesearch input/i)
     expect(input).toBeInTheDocument()
     expect(input).toHaveValue('')
+    expect(within(search).queryByRole('button', { name: /clear/i })).not.toBeInTheDocument()
   })
 
   it('should have default text on input', () => {
@@ -39,6 +40,24 @@ describe('search form', () => {
     const input = within(search).getByLabelText(/pokesearch input/i)
     expect(input).toBeInTheDocument()
     expect(input).toHaveValue('default test input')
+  })
+
+  it('should clear input value when clear button is clicked', async () => {
+    const params = new URLSearchParams()
+    params.set('query', 'default test input')
+    mockUseSearchParams.mockReturnValueOnce(params)
+
+    render(<Search placeholder='pokesearch input' />)
+    const search = screen.getByRole('search')
+    expect(search).toBeInTheDocument()
+    const input = within(search).getByLabelText(/pokesearch input/i)
+    expect(input).toBeInTheDocument()
+    expect(input).toHaveValue('default test input')
+
+    const clearInputButton = within(search).getByRole('button', { name: /clear/i })
+    expect(clearInputButton).toBeInTheDocument()
+    await userEvent.click(clearInputButton)
+    expect(input).toHaveValue('')
   })
 
   it('should set page parameter to 1 and query parameter to the input value', async () => {
