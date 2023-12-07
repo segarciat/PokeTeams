@@ -1,19 +1,20 @@
 'use client'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { type ReactElement } from 'react'
+import React, { type FormEvent, type ReactElement } from 'react'
 
-export interface FormProps {
+export interface SearchProps {
   placeholder: string
 }
-export default function Form ({ placeholder }: FormProps): ReactElement {
+
+export default function Search ({ placeholder }: SearchProps): ReactElement {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
 
-  function handleSubmit (e: React.FormEvent): void {
+  function handleSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
-    const { query } = e.target as typeof e.target & { query: { value: string } }
+    const { query } = e.currentTarget.elements as typeof e.currentTarget.elements & { query: { value: string } }
     const params = new URLSearchParams(searchParams)
     params.set('page', '1')
     if (query.value !== '') {
@@ -26,21 +27,19 @@ export default function Form ({ placeholder }: FormProps): ReactElement {
 
   return (
     <section aria-label="search options" className='my-4'>
-      <form className='relative flex flex-1' onSubmit={handleSubmit}>
+      <form role='search' aria-label='pokesearch form' className='relative flex flex-1' onSubmit={handleSubmit}>
         <div className='relative w-full'>
           <input
             id='query' // Matches value in label htmlFor
             name='query' // Used to access form submission element.
-            role='search'
             className='peer placeholder:text-transparent bg-white rounded-2xl border outline-gray-300
-          border-gray-300 w-full py-3 pl-9 text-base placeholder:text-gray-500'
+        border-gray-300 w-full py-3 pl-9 text-base placeholder:text-gray-500'
             placeholder={placeholder}
-            defaultValue={searchParams.get('query')?.toString()}
-            required
+            defaultValue={searchParams?.get('query')?.toString()}
           />
           <label htmlFor="query" className='absolute left-9 top-[1px] text-xs text-gray-400
-          peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-[1px] =
-          peer-focus:text-xs transition-all'>
+        peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-[1px] =
+        peer-focus:text-xs transition-all'>
             {placeholder}
           </label>
         </div>
