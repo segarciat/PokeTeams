@@ -1,16 +1,27 @@
 'use client'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { type FormEvent, type ReactElement } from 'react'
+import React, { useState, type FormEvent, type ReactElement } from 'react'
 
 export interface SearchProps {
   placeholder: string
 }
 
+const leftInputIconClass = 'absolute left-3 top-4 text-gray-400'
+
 export default function Search ({ placeholder }: SearchProps): ReactElement {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
+  const [query, setQuery] = useState(searchParams?.get('query')?.toString() ?? '')
+
+  function handleChange (e: React.ChangeEvent<HTMLInputElement>): void {
+    setQuery(e.currentTarget.value)
+  }
+
+  function handleClearInput (): void {
+    setQuery('')
+  }
 
   function handleSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
@@ -35,7 +46,8 @@ export default function Search ({ placeholder }: SearchProps): ReactElement {
             className='peer placeholder:text-transparent bg-white rounded-2xl border outline-gray-300
         border-gray-300 w-full py-3 pl-9 text-base placeholder:text-gray-500'
             placeholder={placeholder}
-            defaultValue={searchParams?.get('query')?.toString()}
+            value={query}
+            onChange={handleChange}
           />
           <label htmlFor="query" className='absolute left-9 top-[1px] text-xs text-gray-400
         peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-[1px] =
@@ -43,7 +55,12 @@ export default function Search ({ placeholder }: SearchProps): ReactElement {
             {placeholder}
           </label>
         </div>
-        <MagnifyingGlassIcon height={18} width={18} className='absolute left-3 top-4 text-gray-400' />
+        {query.length === 0
+          ? <MagnifyingGlassIcon height={18} width={18} className={leftInputIconClass} />
+          : <button aria-label='clear input' type='button' className={leftInputIconClass} onClick={handleClearInput}>
+              <XMarkIcon height={18} width={18} />
+            </button>
+        }
       </form>
     </section>
   )

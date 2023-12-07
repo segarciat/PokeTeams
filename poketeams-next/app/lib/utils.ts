@@ -35,11 +35,13 @@ export function capitalize (word: string): string {
 }
 
 /**
- * Creates string matching function from the given query string.
+ * Returns an array of the strings in @param words that contain @param query. Case insensitive.
+ * @param words Array of strings
+ * @param query String to match for containment
  */
-export function containsCaseInsensitively (query: string): (w: string) => boolean {
-  const re = new RegExp(query, 'i')
-  return (w: string) => re.test(w)
+export function filterLike (words: string[], query: string): string[] {
+  const insensitiveQuery = query.toLowerCase()
+  return words.filter(w => w.toLowerCase().includes(insensitiveQuery))
 }
 
 export function getArrayPage<T> (a: T[], page: number, pageSize: number): T[] {
