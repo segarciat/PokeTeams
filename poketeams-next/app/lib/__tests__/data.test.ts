@@ -1,16 +1,11 @@
-/**
- * @jest-environment node
- */
-
-// Line above is required to enable 'fetch', since jest.config.mjs sets 'jest-environment-jsdom'
-import { describe, it, expect, jest, beforeAll, afterEach, afterAll } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach, afterAll, vi } from 'vitest'
 import { mockError, server } from '@/mocks/server'
-import { type Pokemon } from '../definitions'
+import { type Pokemon } from '@/app/lib/definitions'
 import fs from 'fs'
 import path from 'path'
 
-jest.mock('../utils', () => ({
-  getArrayPage: jest.fn()
+vi.mock('../utils', () => ({
+  getArrayPage: vi.fn()
 }))
 
 let pokemons: Pokemon[]
@@ -33,8 +28,8 @@ beforeAll(async () => {
 })
 
 afterEach(() => {
-  jest.restoreAllMocks()
-  jest.clearAllMocks()
+  vi.restoreAllMocks()
+  vi.clearAllMocks()
   server.resetHandlers()
 })
 
@@ -96,7 +91,7 @@ describe('Fetch Pokedex page', () => {
     // Arrange
     const expected = pokemons.slice(1)
     const expectedNames = pokemonNames.slice(1)
-    const spyGetArrayPage = jest.spyOn(utilsModule, 'getArrayPage')
+    const spyGetArrayPage = vi.spyOn(utilsModule, 'getArrayPage')
       .mockImplementation((array, page, pageSize) => expectedNames)
 
     // Act
@@ -104,7 +99,7 @@ describe('Fetch Pokedex page', () => {
 
     // Assert
     expect(spyGetArrayPage).toHaveBeenCalledTimes(1)
-    expect(jest.isMockFunction(spyGetArrayPage)).toBeTruthy()
+    expect(vi.isMockFunction(spyGetArrayPage)).toBeTruthy()
     await expect(result).resolves.toEqual(expected)
   })
 })
