@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals'
+import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import Main from '../main'
 import userEvent from '@testing-library/user-event'
@@ -46,17 +46,18 @@ describe('Main (global) layout', () => {
     await userEvent.click(openSidenavBtn)
     expect(screen.queryByRole('button', { name: /open nav/i })).not.toBeInTheDocument()
 
-    jest.useFakeTimers()
+    // See: https://vitest.dev/guide/migration.html#timer-mocks-3925
+    vi.useFakeTimers({ toFake: ['nextTick'] })
 
     act(() => {
       global.innerWidth = 1200
       fireEvent.resize(window)
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
     })
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /open nav/i })).toBeInTheDocument()
     })
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 })

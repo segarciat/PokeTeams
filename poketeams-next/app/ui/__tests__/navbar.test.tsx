@@ -1,8 +1,8 @@
-import { describe, expect } from '@jest/globals'
+import { describe, expect, vi, beforeAll, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
-const usePathnameMock = jest.fn()
-jest.mock('next/navigation', () => ({
+const usePathnameMock = vi.fn()
+vi.mock('next/navigation', () => ({
   usePathname: usePathnameMock
 }))
 
@@ -14,7 +14,7 @@ beforeAll(async () => {
 
 describe('Navbar', () => {
   it('should display navigation links, site actions, and logo', () => {
-    const mockIsSideNavOpen = jest.fn()
+    const mockIsSideNavOpen = vi.fn()
     render(<Navbar title='test title' isSideNavOpen={false} setIsSideNavOpen={mockIsSideNavOpen} />)
     expect(screen.queryByRole('heading', { level: 1, name: /test title/i })).toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: /site navigation/i })).toBeInTheDocument()
@@ -22,7 +22,7 @@ describe('Navbar', () => {
   })
 
   it('pathname changes the current navigation link', () => {
-    const mockIsSideNavOpen = jest.fn()
+    const mockIsSideNavOpen = vi.fn()
     usePathnameMock
       .mockReturnValueOnce('/')
       .mockReturnValueOnce('/pokesearch')

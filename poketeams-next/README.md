@@ -12,13 +12,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Unit Tests
 
-Unit tests are implemented with Jest and React Testing Library; see `package.json`. Run them with:
+Unit tests are implemented with Vitest and React Testing Library; see `package.json`. Run them with:
 
 ```bash
 npm test
 ```
 
-The starting point for the test setup was the [Next.js testing documentation](https://nextjs.org/docs/pages/building-your-application/optimizing/testing#setting-up-jest-with-the-rust-compiler). The tests use [Jest](https://jestjs.io/docs/getting-started) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
+The starting point for the test setup was the [Next.js testing documentation](https://nextjs.org/docs/pages/building-your-application/optimizing/testing). The tests use [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
 The [Testing Library documentation recommends a browser extension](https://testing-library.com/docs/queries/about#browser-extension) that allows you to inspect elements on your page and provides suggested queries. These can in turn be used to help with UI testing. Find the [Testing Playground extension here](https://chromewebstore.google.com/detail/testing-playground/hejbmebodbijjdhflfknehhcgaklhano)
 
