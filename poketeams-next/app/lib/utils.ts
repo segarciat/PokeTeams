@@ -1,4 +1,4 @@
-import { type PokeType } from './definitions'
+import { type URLPageParam, type PokeType } from './definitions'
 
 // Dynamic tailwind class must appear as unbroken literals: https://tailwindcss.com/docs/content-configuration#dynamic-class-names
 export const POKE_TYPE_BG_CLASS: Record<PokeType, string> = {
@@ -66,4 +66,17 @@ export function getPaginationNumbers (currentPage: number, totalPages: number, m
   const first = Math.max(1, currentPage - Math.floor(maxLinks / 2))
   return Array.from({ length: maxLinks }, (v, i) => first + i)
     .filter(n => n !== 0 && n !== totalPages + 1)
+}
+
+export function validatePageParam (page: URLPageParam): number {
+  const p = Number(Array.isArray(page) ? page[0] : page)
+  return isNaN(p) ? 1 : Math.floor(Math.max(1, Math.abs(p)))
+}
+
+export function validateQueryParam (query: URLPageParam): string {
+  if (query === undefined) {
+    return ''
+  } else {
+    return Array.isArray(query) ? query.join('') : query
+  }
 }

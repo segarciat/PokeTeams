@@ -5,13 +5,14 @@ import React, { useState, type FormEvent, type ReactElement } from 'react'
 
 export interface SearchProps {
   placeholder: string
+  defaultQuery: string
 }
 
-export default function Search ({ placeholder }: SearchProps): ReactElement {
+export default function Search ({ placeholder, defaultQuery }: SearchProps): ReactElement {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
-  const [query, setQuery] = useState(searchParams?.get('query')?.toString() ?? '')
+  const [query, setQuery] = useState(defaultQuery)
 
   function handleChange (e: React.ChangeEvent<HTMLInputElement>): void {
     setQuery(e.currentTarget.value)

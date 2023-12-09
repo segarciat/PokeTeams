@@ -22,7 +22,7 @@ export default function Results ({ allPokemons, query, page }: ResultProps): Rea
         ? <NoResults />
         : <Suspense key={page + query} fallback={<SearchResultsSkeleton />}>
             <CardList matches={filtered} page={page} max={RESULTS_PER_PAGE} />
-            {totalPages > 1 && (<Pagination totalPages={totalPages} page={page} />)}
+            {totalPages > 1 && page < totalPages && (<Pagination totalPages={totalPages} page={page} />)}
           </Suspense>
       }
     </section>

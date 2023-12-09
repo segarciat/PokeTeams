@@ -13,7 +13,8 @@ export default defineConfig({
     setupFiles: ['vitest-setup.ts'],
     include: ['app/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     coverage: {
-      include: ["app/ui/pokesearch/*"],
+      include: ["app/ui/*"],
+      exclude: ['app/lib/definitions.ts']
     }
   },
 })

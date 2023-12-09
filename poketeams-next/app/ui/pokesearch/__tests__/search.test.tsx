@@ -21,7 +21,7 @@ afterEach(() => {
 
 describe('search form', () => {
   it('should display form with labeled search input', async () => {
-    render(<Search placeholder='pokesearch input'/>)
+    render(<Search placeholder='pokesearch input' defaultQuery=''/>)
     const search = screen.getByRole('search')
     expect(search).toBeInTheDocument()
     const input = within(search).getByLabelText(/pokesearch input/i)
@@ -30,24 +30,8 @@ describe('search form', () => {
     expect(within(search).queryByRole('button', { name: /clear/i })).not.toBeInTheDocument()
   })
 
-  it('should have default text on input', () => {
-    const params = new URLSearchParams()
-    params.set('query', 'default test input')
-    mockUseSearchParams.mockReturnValueOnce(params)
-    render(<Search placeholder='pokesearch input' />)
-    const search = screen.getByRole('search')
-    expect(search).toBeInTheDocument()
-    const input = within(search).getByLabelText(/pokesearch input/i)
-    expect(input).toBeInTheDocument()
-    expect(input).toHaveValue('default test input')
-  })
-
   it('should clear input value when clear button is clicked', async () => {
-    const params = new URLSearchParams()
-    params.set('query', 'default test input')
-    mockUseSearchParams.mockReturnValueOnce(params)
-
-    render(<Search placeholder='pokesearch input' />)
+    render(<Search placeholder='pokesearch input' defaultQuery='default test input' />)
     const search = screen.getByRole('search')
     expect(search).toBeInTheDocument()
     const input = within(search).getByLabelText(/pokesearch input/i)
@@ -61,7 +45,7 @@ describe('search form', () => {
   })
 
   it('should set page parameter to 1 and query parameter to the input value', async () => {
-    render(<Search placeholder='pokesearch input' />)
+    render(<Search placeholder='pokesearch input' defaultQuery=''/>)
     await userEvent.type(screen.getByLabelText(/pokesearch input/i), 'hello')
     fireEvent.submit(screen.getByRole('search'))
 
@@ -73,7 +57,7 @@ describe('search form', () => {
   })
 
   it('should not have a query parameter when search input is empty', async () => {
-    render(<Search placeholder='pokesearch input' />)
+    render(<Search placeholder='pokesearch input' defaultQuery=''/>)
     fireEvent.submit(screen.getByRole('search'))
 
     expect(mockReplace).toHaveBeenCalledTimes(1)
