@@ -1,4 +1,4 @@
-import { POKE_TYPE_BG_CLASS, capitalize, filterLike, getArrayPage, getPaginationNumbers, getTotalPageCount } from '../utils'
+import { POKE_TYPE_BG_CLASS, capitalize, filterLike, getArrayPage, getPaginationNumbers, getTotalPageCount, validatePageParam, validateQueryParam } from '../utils'
 import { describe, it, expect } from 'vitest'
 
 describe('Poke Type BG class map', () => {
@@ -95,11 +95,52 @@ describe('Pagination total page count', () => {
 })
 
 describe('Get pagination numbers', () => {
+  it('should throw when not given a positive number', () => {
+    expect(() => getPaginationNumbers(0, 1, 1)).toThrow()
+    expect(() => getPaginationNumbers(1, 0, 1)).toThrow()
+    expect(() => getPaginationNumbers(1, 1, 0)).toThrow()
+  })
   it('should return correct array of values', () => {
     expect(getPaginationNumbers(1, 2, 3)).toEqual([1, 2])
     expect(getPaginationNumbers(1, 4, 3)).toEqual([1, 2, 3])
     expect(getPaginationNumbers(50, 70, 3)).toEqual([49, 50, 51])
     expect(getPaginationNumbers(50, 70, 5)).toEqual([48, 49, 50, 51, 52])
     expect(getPaginationNumbers(69, 70, 5)).toEqual([67, 68, 69, 70])
+  })
+})
+
+describe('validate page parameter', () => {
+  it('should be 1 when not provided, not given a number, or given 0', () => {
+    expect(validatePageParam(undefined)).toBe(1)
+    expect(validatePageParam('')).toBe(1)
+    expect(validatePageParam('a')).toBe(1)
+    expect(validatePageParam('0')).toBe(1)
+  })
+
+  it('should be the absolute value when given a negative number', () => {
+    expect(validatePageParam('2')).toBe(2)
+    expect(validatePageParam('-2')).toBe(2)
+    expect(validatePageParam('2.5')).toBe(2)
+    expect(validatePageParam('2.7')).toBe(2)
+  })
+
+  it('should be the absolute value of the first element when given an array', () => {
+    expect(validatePageParam(['3', '4'])).toBe(3)
+    expect(validatePageParam(['']))
+  })
+})
+
+describe('validate query param', () => {
+  it('should be empty when given undefined or given an empty string', () => {
+    expect(validateQueryParam(undefined)).toBe('')
+    expect(validateQueryParam('')).toBe('')
+  })
+
+  it('should have be the unchanged string when given any string', () => {
+    expect(validateQueryParam('az2')).toBe('az2')
+  })
+
+  it('should concatenate the strings when given an array', () => {
+    expect(validateQueryParam(['a', 'z', '2'])).toBe('az2')
   })
 })

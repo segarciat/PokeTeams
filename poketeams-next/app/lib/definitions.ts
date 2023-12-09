@@ -64,3 +64,5 @@ export interface RawPokemonData {
     is_hidden: boolean
   }>
 }
+
+export type URLPageParam = string | string[] | undefined
