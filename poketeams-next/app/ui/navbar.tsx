@@ -24,7 +24,6 @@ export default function Navbar ({ title, isSideNavOpen, setIsSideNavOpen }: Navb
 
   function handleTogglerClick (): void {
     setIsSideNavOpen(isOpen => !isOpen)
-    document.body.classList.toggle('max-lg:overflow-y-hidden')
   }
   useEffect(() => {
     setIsSideNavOpen(false)
