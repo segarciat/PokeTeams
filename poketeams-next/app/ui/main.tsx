@@ -8,6 +8,7 @@ const MOBILE_THRESHOLD = 1024
 
 export default function Main ({ children, title }: { children: React.ReactNode, title: string }): ReactElement {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
+  toggleScrolling(isSideNavOpen)
 
   const handleScreenResize = useDebouncedCallback(() => {
     const isDesktopSize = global.innerWidth >= MOBILE_THRESHOLD
@@ -27,4 +28,14 @@ export default function Main ({ children, title }: { children: React.ReactNode, 
       {children}
     </main>
   </>
+}
+
+function toggleScrolling (isSideNavOpen: boolean): void {
+  if (typeof window !== 'undefined') {
+    if (isSideNavOpen) {
+      document.body.classList.add('max-lg:overflow-y-hidden')
+    } else {
+      document.body.classList.remove('max-lg:overflow-y-hidden')
+    }
+  }
 }
