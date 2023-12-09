@@ -51,3 +51,19 @@ export function getArrayPage<T> (a: T[], page: number, pageSize: number): T[] {
   const offset = (page - 1) * pageSize
   return a.slice(offset, offset + pageSize)
 }
+
+export function getTotalPageCount (resultSize: number, pageSize: number): number {
+  if (resultSize < 0 || pageSize <= 0) {
+    throw new RangeError(`Expected non-negative result size and position page size, but got: resultSize=${resultSize}, pageSize=${pageSize}`)
+  }
+  return Math.ceil(resultSize / pageSize)
+}
+
+export function getPaginationNumbers (currentPage: number, totalPages: number, maxLinks: number): number[] {
+  if (currentPage <= 0 || totalPages <= 0 || maxLinks <= 0) {
+    throw new RangeError('Only position inputs are allowed')
+  }
+  const first = Math.max(1, currentPage - Math.floor(maxLinks / 2))
+  return Array.from({ length: maxLinks }, (v, i) => first + i)
+    .filter(n => n !== 0 && n !== totalPages + 1)
+}
