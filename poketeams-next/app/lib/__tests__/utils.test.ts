@@ -1,4 +1,4 @@
-import { POKE_TYPE_BG_CLASS, capitalize, filterLike, getArrayPage } from '../utils'
+import { POKE_TYPE_BG_CLASS, capitalize, filterLike, getArrayPage, getPaginationNumbers, getTotalPageCount } from '../utils'
 import { describe, it, expect } from 'vitest'
 
 describe('Poke Type BG class map', () => {
@@ -76,5 +76,30 @@ describe('getArrayPage', () => {
 
   it('should be empty when given array is empty', () => {
     expect(getArrayPage([], 1, 1)).toEqual([])
+  })
+})
+
+describe('Pagination total page count', () => {
+  it('should throw if given invalid page size or result size', () => {
+    expect(() => getTotalPageCount(-1, 1)).toThrow()
+    expect(() => getTotalPageCount(0, 0)).toThrow()
+    expect(() => getTotalPageCount(1, 1)).not.toThrow()
+  })
+
+  it('should yield correct page count', () => {
+    expect(getTotalPageCount(0, 2)).toBe(0)
+    expect(getTotalPageCount(6, 2)).toBe(3)
+    expect(getTotalPageCount(7, 2)).toBe(4)
+    expect(getTotalPageCount(8, 2)).toBe(4)
+  })
+})
+
+describe('Get pagination numbers', () => {
+  it('should return correct array of values', () => {
+    expect(getPaginationNumbers(1, 2, 3)).toEqual([1, 2])
+    expect(getPaginationNumbers(1, 4, 3)).toEqual([1, 2, 3])
+    expect(getPaginationNumbers(50, 70, 3)).toEqual([49, 50, 51])
+    expect(getPaginationNumbers(50, 70, 5)).toEqual([48, 49, 50, 51, 52])
+    expect(getPaginationNumbers(69, 70, 5)).toEqual([67, 68, 69, 70])
   })
 })

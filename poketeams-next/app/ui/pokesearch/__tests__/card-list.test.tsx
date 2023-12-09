@@ -1,7 +1,6 @@
-import { afterAll, beforeAll, describe, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, it } from 'vitest'
 import { render } from '@testing-library/react'
 import { server } from '@/mocks/server'
-import { afterEach } from 'node:test'
 
 beforeAll(() => {
   server.listen()

@@ -1,13 +1,18 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import Results from '../results'
+import Results, { RESULTS_PER_PAGE } from '../results'
 
-const { CardListMock } = vi.hoisted(() => ({
-  CardListMock: vi.fn()
+const { CardListMock, PaginationMock } = vi.hoisted(() => ({
+  CardListMock: vi.fn(),
+  PaginationMock: vi.fn()
 }))
 
 vi.mock('../card-list', () => ({
   default: CardListMock
+}))
+
+vi.mock('../pagination', () => ({
+  default: PaginationMock
 }))
 
 afterEach(() => {
@@ -24,10 +29,18 @@ describe('pokesearch results', () => {
     expect(screen.queryByRole('list')).not.toBeInTheDocument()
   })
 
-  it('should display a list when the results are found', () => {
-    CardListMock.mockReturnValue(<ul><li>test</li></ul>)
-    render(<Results allPokemons={['bulbasaur']} query='b' page={1}/>)
+  it('should display a list when the results are found, and pagination if more than 1 page is available', () => {
+    CardListMock.mockReturnValue(<ol><li>test</li></ol>)
+    PaginationMock.mockReturnValue(<nav></nav>)
+
+    const { rerender } = render(<Results allPokemons={['bulbasaur']} query='b' page={1}/>)
     expect(screen.queryByRole('heading', { name: /no results/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('list')).toBeInTheDocument()
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument()
+
+    rerender(<Results allPokemons={Array.from('b'.repeat(RESULTS_PER_PAGE + 1))} query='b' page={1} />)
+    expect(screen.queryByRole('heading', { name: /no results/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('list')).toBeInTheDocument()
+    expect(screen.queryByRole('navigation')).toBeInTheDocument()
   })
 })

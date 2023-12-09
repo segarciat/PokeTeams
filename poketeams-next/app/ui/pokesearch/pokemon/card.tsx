@@ -37,7 +37,7 @@ export default function Card ({ pokemon }: CardProps): ReactElement {
       <footer className='flex justify-center'>
         <button className='ring-1 self-center my-4 px-5 py-2 rounded-full flex items-center gap-1 bg-primary text-white text-sm font-semibold'>
           <DocumentMagnifyingGlassIcon height={20} width={20} className='inline-block' />
-          See More
+          View Entry
         </button>
       </footer>
     </article>
