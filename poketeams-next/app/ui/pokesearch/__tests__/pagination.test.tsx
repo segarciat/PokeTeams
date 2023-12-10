@@ -16,14 +16,16 @@ vi.mock('next/navigation', () => ({
 
 describe('pagination', () => {
   it('should display next link if the current is not the last page', () => {
-    render(<Pagination page={1} totalPages={7} />)
+    const handlePageClick = vi.fn()
+    render(<Pagination page={1} totalPages={7} onPageClick={handlePageClick}/>)
     const pagination = screen.getByRole('navigation', { name: /pagination/i })
     expect(pagination).toBeVisible()
     expect(within(pagination).getByRole('button', { name: /next/i })).toBeVisible()
   })
 
   it('should display previous link if current is not first page', () => {
-    render(<Pagination page={7} totalPages={7} />)
+    const handlePageClick = vi.fn()
+    render(<Pagination page={7} totalPages={7} onPageClick={handlePageClick}/>)
     const pagination = screen.getByRole('navigation', { name: /pagination/i })
     expect(pagination).toBeVisible()
     expect(within(pagination).getByRole('button', { name: /previous/i })).toBeVisible()

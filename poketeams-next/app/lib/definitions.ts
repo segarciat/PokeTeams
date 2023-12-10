@@ -66,3 +66,9 @@ export interface RawPokemonData {
 }
 
 export type URLPageParam = string | string[] | undefined
+
+export interface PokeSearchParamAction {
+  action: 'CLEAR_QUERY' | 'SUBMIT_QUERY' | 'NEW_PAGE'
+  page?: number
+  query?: string
+}
