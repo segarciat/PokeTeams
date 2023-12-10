@@ -23,23 +23,23 @@ export default function Pagination ({ totalPages, page, onPageClick }: Paginatio
 
   function handlePageSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
-    const { desiredPage } = e.currentTarget.elements as typeof e.currentTarget.elements & { desiredPage: { value: number } }
-    handleLinkClick(desiredPage.value)
+    const { desiredPage } = e.currentTarget.elements as typeof e.currentTarget.elements & { desiredPage: { value: string } }
+    handleLinkClick(Number(desiredPage.value))
   }
 
   const pageNumbers = getPaginationNumbers(page, totalPages, MAX_LINKS)
 
   const goToFirstPage = !pageNumbers.includes(1) &&
-    (<PageLink icon={ChevronDoubleLeftIcon} page={1} label={'first page'} onClick={() => { handleLinkClick(1) }} />)
+    (<PageLink icon={ChevronDoubleLeftIcon} page={1} rel={'first'} onClick={() => { handleLinkClick(1) }} />)
 
   const goToPreviousPage = page !== 1 && totalPages > MAX_LINKS &&
-    (<PageLink icon={ChevronLeftIcon} page={page - 1} label={'previous page'} onClick={() => { handleLinkClick(page - 1) }}/>)
+    (<PageLink icon={ChevronLeftIcon} page={page - 1} rel={'previous'} onClick={() => { handleLinkClick(page - 1) }}/>)
 
   const goToNextPage = page !== totalPages && totalPages > MAX_LINKS &&
-    (<PageLink icon={ChevronRightIcon} page={page + 1} label={'next page'} onClick={() => { handleLinkClick(page + 1) }}/>)
+    (<PageLink icon={ChevronRightIcon} page={page + 1} rel={'next'} onClick={() => { handleLinkClick(page + 1) }}/>)
 
   const goToLastPage = !pageNumbers.includes(totalPages) &&
-     (<PageLink icon={ChevronDoubleRightIcon} page={totalPages} label={'last page'} onClick={() => { handleLinkClick(totalPages) }}/>)
+     (<PageLink icon={ChevronDoubleRightIcon} page={totalPages} rel={'last'} onClick={() => { handleLinkClick(totalPages) }}/>)
 
   return (
     <nav aria-label='pagination' className='flex flex-col items-center gap-4'>
@@ -48,7 +48,7 @@ export default function Pagination ({ totalPages, page, onPageClick }: Paginatio
           {goToFirstPage}
           {goToPreviousPage}
           {pageNumbers.map((n: number) => (
-            <PageLink key={n} page={n} label={`page ${n}`} current={n === page} onClick={() => { handleLinkClick(n) }} />
+            <PageLink key={n} page={n} current={n === page} onClick={() => { handleLinkClick(n) }} />
           ))}
           {goToNextPage}
           {goToLastPage}
@@ -56,7 +56,7 @@ export default function Pagination ({ totalPages, page, onPageClick }: Paginatio
       )}
       { totalPages > MAX_LINKS && (
         <form onSubmit={handlePageSubmit} className='flex flex-row items-center gap-2'>
-          <label className='sr-only' htmlFor='desiredPage'>Page</label>
+          <label className='sr-only' htmlFor='desiredPage'>Desired Page</label>
           <input required id='desiredPage' name='page' type="number" defaultValue={page} min={1} max={totalPages}
             className='border border-gray-400 text-center rounded-md p-1 h-10'
           /> of {totalPages}
@@ -69,18 +69,18 @@ export default function Pagination ({ totalPages, page, onPageClick }: Paginatio
 
 interface PageLinkProps {
   page: number
-  label: string
+  rel?: string
   icon?: any
   current?: boolean
   onClick: () => void
 }
 
-function PageLink ({ page, label, onClick, icon: Icon = null, current = false }: PageLinkProps): ReactElement {
+function PageLink ({ page, rel, onClick, icon: Icon = null, current = false }: PageLinkProps): ReactElement {
   return (
-    <li >
-      <a onClick={onClick} role='button' aria-current={current} aria-label={label}
-        className={clsx(`bg-gray-200 rounded-full p-3 border border-gray-300 h-12 w-12 cursor-pointer
-        flex items-center text-center justify-center text-sm`, { 'bg-primary text-white': current })}>
+    <li>
+      <a onClick={current ? (e) => { e.preventDefault() } : onClick} aria-current={current} rel={rel} aria-label={rel}
+        className={clsx(`bg-gray-200 rounded-full p-3 border border-gray-300 h-12 w-12
+        flex items-center text-center justify-center text-sm cursor-pointer `, { 'bg-primary text-white pointer-events-none': current })}>
         {Icon !== null ? <Icon height={12} width={12} /> : page}
       </a>
     </li>
