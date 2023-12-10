@@ -2,25 +2,23 @@
 import { getPaginationNumbers } from '@/app/lib/utils'
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
-import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { type FormEvent, type ReactElement } from 'react'
+import { type PokeSearchParamAction } from '@/app/lib/definitions'
 
 export const MAX_LINKS = 3
 
 export interface PaginationProps {
   totalPages: number
   page: number
+  onPageClick: (action: PokeSearchParamAction) => void
 }
 
-export default function Pagination ({ totalPages, page }: PaginationProps): ReactElement {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const router = useRouter()
-
+export default function Pagination ({ totalPages, page, onPageClick }: PaginationProps): ReactElement {
   function handleLinkClick (page: number): void {
-    const params = new URLSearchParams(searchParams)
-    params.set('page', page.toString())
-    router.replace(`${pathname}?${params.toString()}`)
+    onPageClick?.({
+      action: 'NEW_PAGE',
+      page
+    })
   }
 
   function handlePageSubmit (e: FormEvent<HTMLFormElement>): void {

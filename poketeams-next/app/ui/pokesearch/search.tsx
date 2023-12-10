@@ -1,17 +1,15 @@
 'use client'
+import { type PokeSearchParamAction } from '@/app/lib/definitions'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useState, type FormEvent, type ReactElement } from 'react'
 
 export interface SearchProps {
   placeholder: string
   defaultQuery: string
+  onSubmit: (action: PokeSearchParamAction) => void
 }
 
-export default function Search ({ placeholder, defaultQuery }: SearchProps): ReactElement {
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const router = useRouter()
+export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchProps): ReactElement {
   const [query, setQuery] = useState(defaultQuery)
 
   function handleChange (e: React.ChangeEvent<HTMLInputElement>): void {
@@ -24,20 +22,15 @@ export default function Search ({ placeholder, defaultQuery }: SearchProps): Rea
 
   function handleSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
-    const { query } = e.currentTarget.elements as typeof e.currentTarget.elements & { query: { value: string } }
-    const params = new URLSearchParams(searchParams)
-    params.set('page', '1')
-    if (query.value !== '') {
-      params.set('query', query.value)
-    } else {
-      params.delete('query')
-    }
-    router.replace(`${pathname}?${params.toString()}`)
+    onSubmit({
+      action: 'SUBMIT_QUERY',
+      query
+    })
   }
 
   return (
     <section aria-label="search options" className='my-4'>
-      <form role='search' aria-label='pokesearch form' className='relative flex flex-1 flex-col gap-2' onSubmit={handleSubmit}>
+      <form role='search' aria-label='pokesearch form' onSubmit={handleSubmit} className='relative flex flex-1 flex-col gap-2'>
         <div className='relative w-full'>
           <input
             id='query' // Matches value in label htmlFor
@@ -58,8 +51,7 @@ export default function Search ({ placeholder, defaultQuery }: SearchProps): Rea
           <button aria-label='clear input' type='button' className='absolute left-3 top-4 text-gray-400' onClick={handleClearInput}>
             <XMarkIcon height={18} width={18} />
           </button>
-        )
-        }
+        )}
         <button type='submit' className='text-white bg-primary p-2 rounded-2xl flex flex-row items-center justify-center gap-2'>
           <MagnifyingGlassIcon className='inline-block' height={18} width={18} />
           Search
