@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import ParamsWrapper, { computeSearchParams } from '../params-wrapper.js'
+import ParamsWrapper, { computeSearchParams } from '../params-wrapper'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import { type PokeSearchParamAction } from '@/app/lib/definitions'
 import { render } from '@testing-library/react'
