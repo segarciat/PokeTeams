@@ -1,3 +1,5 @@
+# PokeTeams
+
 ## Getting Started
 
 First, run the development server:
@@ -67,8 +69,13 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+## Disclaimer
+
+This website was made with the intention to learn how to use web technologies, and in no way makes any attempt to profit or claim ownership for any intellectual or creative property found. The data used in this site comes from the which in turn is based on Pokémon, a Nintendo trademark.
+
 ## Acknowledgements
 
 - [Sweet Farm](https://thenounproject.com/sweetfarm/collection/pokemon-go/) for `public/poketeams.png` that I am using as a temporary logo.
 - [Nature illustrations by Storyset](https://storyset.com/nature)
 - [People illustrations by Storyset](https://storyset.com/people)
+- [PokeAPI](https://pokeapi.co/): All Pokemon images, information, moves, etc, come from this great free, open source API.
