@@ -1,9 +1,0 @@
-node_modules/
-.vscode/
-*.zip
-*.txt
-rest_api/_data
-rest_api/public/uploads/photo*
-rest_api/config/config.env
-poketeams.postman_collection.json
-client/dist
