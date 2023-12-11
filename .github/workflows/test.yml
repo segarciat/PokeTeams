@@ -15,13 +15,12 @@ jobs:
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version-file: poketeams-next/.nvmrc
-          cache-dependency-path: poketeams-next
+          node-version-file: .nvmrc
       - name: Restore cache
         uses: actions/cache@v3
         with:
           path: |
-            poketeams-next/.next/cache
+            .next/cache
           # Generate a new cache whenever packages or source files change.
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
@@ -29,10 +28,8 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Install dependencies
         run: npm ci # clean install; installs dependencies used in package-lock.json
-        working-directory: poketeams-next
       - name: Run tests
         run: npm test
-        working-directory: poketeams-next
   e2e-test-playwright:
     needs: unit-test
     timeout-minutes: 60
@@ -43,13 +40,12 @@ jobs:
       - name: Instal NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version-file: poketeams-next/.nvmrc
-          cache-dependency-path: poketeams-next
+          node-version-file: .nvmrc
       - name: Restore cache
         uses: actions/cache@v3
         with:
           path: |
-            poketeams-next/.next/cache
+            .next/cache
           # Generate a new cache whenever packages or source files change.
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
@@ -57,16 +53,12 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Install dependencies
         run: npm ci
-        working-directory: poketeams-next
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-        working-directory: poketeams-next
       - name: Build the NextJS project.
         run: npm run build
-        working-directory: poketeams-next
       - name: Run Playwright tests
         run: npx playwright test
-        working-directory: poketeams-next
       - uses: actions/upload-artifact@v3
         if: always()
         with:
