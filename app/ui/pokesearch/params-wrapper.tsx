@@ -3,19 +3,21 @@ import { type PokeSearchParamAction } from '@/app/lib/definitions'
 import { type ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { type ReactElement } from 'react'
 import Search from './search'
-import { filterLike } from '@/app/lib/utils'
+import { filterLike, validatePageParam, validateQueryParam } from '@/app/lib/utils'
 import Results from './results'
 
 export interface ParamsWrapperProps {
   allPokemons: string[]
-  page: number
-  query: string
 }
 
-export default function ParamsWrapper ({ allPokemons, page, query }: ParamsWrapperProps): ReactElement {
+export default function ParamsWrapper ({ allPokemons }: ParamsWrapperProps): ReactElement {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
+
+  const query = validateQueryParam(searchParams.get('query') ?? undefined)
+  const page = validatePageParam(searchParams.get('page') ?? undefined)
+
   const filtered = filterLike(allPokemons, query)
 
   function handleParamsAction (action: PokeSearchParamAction): void {
