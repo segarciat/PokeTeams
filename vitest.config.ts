@@ -7,14 +7,14 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   test: {
-    /* Ensures cleanup() runs after each test: https://testing-library.com/docs/svelte-testing-library/setup/#vitest*/
+    /* Ensures cleanup() runs after each test: https://testing-library.com/docs/svelte-testing-library/setup/#vitest */
     globals: true,
     environment: 'jsdom',
     setupFiles: ['vitest-setup.ts'],
     include: ['app/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     coverage: {
-      include: ["app/ui/*"],
+      include: ['app/ui/*'],
       exclude: ['app/lib/definitions.ts']
     }
-  },
+  }
 })
