@@ -65,6 +65,8 @@ describe('compute search params', () => {
 
 describe('params wrapper', () => {
   it('should display search container and results container', () => {
-    render(<ParamsWrapper allPokemons={[]} query='bulbasaur' page={1}/>)
+    const searchParams = new URLSearchParams({ query: 'bulbasaur', page: '1' })
+    mockUseSearchParams.mockReturnValue(new ReadonlyURLSearchParams(searchParams))
+    render(<ParamsWrapper allPokemons={[]}/>)
   })
 })
