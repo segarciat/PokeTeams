@@ -14,7 +14,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Unit Tests
 
-Unit tests are implemented with Vitest and React Testing Library; see `package.json`. Run them with:
+Unit tests have the pattern `*.unit.test.ts` (or `.tsx`) are implemented with Vitest and React Testing Library; see `package.json` and
+`vitest.config.ts`. Run them with:
 
 ```bash
 npm test
@@ -23,6 +24,23 @@ npm test
 The starting point for the test setup was the [Next.js testing documentation](https://nextjs.org/docs/pages/building-your-application/optimizing/testing). The tests use [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
 The [Testing Library documentation recommends a browser extension](https://testing-library.com/docs/queries/about#browser-extension) that allows you to inspect elements on your page and provides suggested queries. These can in turn be used to help with UI testing. Find the [Testing Playground extension here](https://chromewebstore.google.com/detail/testing-playground/hejbmebodbijjdhflfknehhcgaklhano)
+
+### Integration Tests
+
+Integration tests also use Vitest, but they correspond to file ending in `integ.test.ts` (or `.tsx`); see `package.json` and `vitest.config.ts`. Moreover, they require using [Docker](https://docs.docker.com/engine/install/). Create a Docker container:
+
+```bash
+# Services defined in the docker-compose.yml file.
+docker compose up
+```
+
+Once the containers/services have initialized, you can run the integration tests with:
+
+```bash
+npm run test:integration
+```
+
+Note that environment variables are loaded from `.env.local.test`, and they contain values from `docker-compose.yml`.
 
 #### Mock API
 
