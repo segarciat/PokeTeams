@@ -3,8 +3,8 @@ import { type ObjectId } from 'mongodb'
 import clientPromise from '../db'
 import { type PokemonSummary, type Pokemon } from '../definitions'
 
-const POKETEAMS_DB = 'poketeams'
-const POKEMON_COLLECTION = 'pokemon'
+export const POKETEAMS_DB = 'poketeams'
+export const POKEMON_COLLECTION = 'pokemon'
 
 interface PokemonModel extends Pokemon {
   _id?: ObjectId
@@ -14,7 +14,7 @@ interface PokemonModel extends Pokemon {
  * Fetch list of all Pokemon names.
  * @returns Array of Pokemon names.
  */
-export async function fetchAllPokemonNames (): Promise<PokemonSummary[]> {
+export async function fetchAllPokemon (): Promise<PokemonSummary[]> {
   const client = await clientPromise
 
   const result: PokemonModel[] = await client
@@ -36,16 +36,16 @@ export async function fetchAllPokemonNames (): Promise<PokemonSummary[]> {
 export async function fetchPokemon (id: string | number): Promise<Pokemon> {
   try {
     const client = await clientPromise
-    const pokemon: PokemonModel | null = await client
+    const pokemonWithObjectId: PokemonModel | null = await client
       .db(POKETEAMS_DB)
       .collection<PokemonModel>(POKEMON_COLLECTION)
       .findOne({
         $or: [{ name: id as string }, { id: id as number }]
       })
-    if (pokemon === null) {
+    if (pokemonWithObjectId === null) {
       throw new Error('No Pokemon found with name or id ' + id.toString())
     }
-    delete pokemon._id
+    const { _id, ...pokemon } = pokemonWithObjectId
     return pokemon
   } catch (error) {
     throw new Error('Unable to get data for the Pokemon: ' + (error as any).message)

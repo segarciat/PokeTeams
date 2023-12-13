@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react'
-import { fetchAllPokemonNames } from '@/app/lib/models/pokemon'
+import { fetchAllPokemon } from '@/app/lib/models/pokemon'
 import { type Metadata } from 'next'
 import ParamsWrapper from '@/app/ui/pokesearch/params-wrapper'
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 }
 
 export default async function Page (): Promise<ReactElement> {
-  const allPokemons = await fetchAllPokemonNames()
+  const allPokemons = await fetchAllPokemon()
 
   return (
     <div className='p-4'>
