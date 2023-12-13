@@ -13,8 +13,8 @@ export default defineConfig({
     setupFiles: ['vitest-setup.ts'],
     include: ['app/**/*.{test,spec}.?(c|m)[jt]s?(x)', 'scripts/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     coverage: {
-      include: ['app/ui/*'],
-      exclude: ['app/lib/definitions.ts']
+      include: ['app/**/*'],
+      exclude: ['app/lib/definitions.ts', 'app/**/*skeleton*', 'app/**/*page*', 'app/ui/fonts.ts']
     }
   }
 })

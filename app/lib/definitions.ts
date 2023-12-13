@@ -3,25 +3,28 @@ export type PokeType = 'normal' | 'fighting' | 'flying' | 'poison' | 'ground' | 
 
 export type PokeStat = 'hp' | 'attack' | 'defense' | 'specialAttack' | 'specialDefense' | 'speed'
 
-export interface Pokemon {
+export interface PokemonSummary {
   name: string
   id: number
-  abilities: Array<{
-    name: string
-    isHidden: boolean
-    url: string
-  }>
   types: Array<{
     name: PokeType
     url: string
   }>
-  stats: Record<PokeStat, number>
   spriteSrcs: {
     frontDefault: string | null
     backDefault: string | null
     frontShiny: string | null
     backShiny: string | null
   }
+}
+
+export interface Pokemon extends PokemonSummary {
+  abilities: Array<{
+    name: string
+    isHidden: boolean
+    url: string
+  }>
+  stats: Record<PokeStat, number>
 }
 
 export interface PokemonURL {

@@ -1,15 +1,14 @@
-import { type ReactElement, Suspense } from 'react'
+import { type ReactElement } from 'react'
 import NoResults from './no-results'
 import CardList from './card-list'
 import Pagination from './pagination'
-import { SearchResultsSkeleton } from '../skeletons'
-import { type PokeSearchParamAction } from '@/app/lib/definitions'
+import { type PokemonSummary, type PokeSearchParamAction } from '@/app/lib/definitions'
 import { getTotalPageCount } from '@/app/lib/utils'
 
 export const RESULTS_PER_PAGE = 20
 
 export interface ResultsProps {
-  matches: string[]
+  matches: PokemonSummary[]
   query: string
   page: number
   onParamsAction: (action: PokeSearchParamAction) => void
@@ -25,12 +24,12 @@ export default function Results ({ matches, query, page, onParamsAction }: Resul
         {matches.length === 0
           ? <NoResults />
           : (
-            <Suspense key={page + query} fallback={<SearchResultsSkeleton />}>
-              <CardList matches={matches} page={page} max={RESULTS_PER_PAGE} />
+            <>
+              <CardList key={page + query} matches={matches} page={page} max={RESULTS_PER_PAGE} />
               {totalPages > 1 && page <= totalPages && (
                 <Pagination totalPages={totalPages} page={page} onPageClick={onParamsAction} />
               )}
-            </Suspense>
+            </>
             )}
       </div>
     </section>

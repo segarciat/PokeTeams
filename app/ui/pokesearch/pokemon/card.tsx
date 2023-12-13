@@ -1,5 +1,5 @@
 'use client'
-import { type Pokemon } from '@/app/lib/definitions'
+import { type PokemonSummary } from '@/app/lib/definitions'
 import { DocumentMagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useState, type ReactElement } from 'react'
 import Sprite from './sprite'
@@ -8,7 +8,7 @@ import Summary from './summary'
 import Actions from './actions'
 
 export interface CardProps {
-  pokemon: Pick<Pokemon, 'id' | 'name' | 'types' | 'spriteSrcs'>
+  pokemon: PokemonSummary
 }
 
 export default function Card ({ pokemon }: CardProps): ReactElement {
