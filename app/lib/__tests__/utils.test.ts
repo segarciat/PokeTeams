@@ -1,4 +1,4 @@
-import { POKE_TYPE_BG_CLASS, capitalize, filterLike, getArrayPage, getPaginationNumbers, getTotalPageCount, validatePageParam, validateQueryParam } from '../utils'
+import { POKE_TYPE_BG_CLASS, capitalize, filterByName, getArrayPage, getPaginationNumbers, getTotalPageCount, validatePageParam, validateQueryParam } from '../utils'
 import { describe, it, expect } from 'vitest'
 
 describe('Poke Type BG class map', () => {
@@ -29,12 +29,20 @@ describe('Contains string', () => {
     const query = 'bu'
 
     // Act
-    const result = filterLike(['Butterfree', 'electrabuzz', 'foo'], query)
+    const result = filterByName([
+      { name: 'Butterfree', region: 'Kanto' },
+      { name: 'electrabuzz', type: 'electric' },
+      { name: 'foo', bar: 'gamma' }],
+    query)
 
     // Assert
-    expect(result).toContain('Butterfree')
-    expect(result).toContain('electrabuzz')
-    expect(result).not.toContain('foo')
+    expect(result.length).toBe(2)
+    expect(result[0]).toEqual({
+      name: 'Butterfree', region: 'Kanto'
+    })
+    expect(result[1]).toEqual({
+      name: 'electrabuzz', type: 'electric'
+    })
   })
 })
 

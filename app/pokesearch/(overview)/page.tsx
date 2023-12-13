@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react'
-import { fetchAllPokemonNames } from '@/app/lib/data'
+import { fetchAllPokemonNames } from '@/app/lib/models/pokemon'
 import { type Metadata } from 'next'
 import ParamsWrapper from '@/app/ui/pokesearch/params-wrapper'
 

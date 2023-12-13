@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, it } from 'vitest'
 import { render } from '@testing-library/react'
 import { server } from '@/mocks/server'
+import { type PokemonSummary } from '@/app/lib/definitions'
 
 beforeAll(() => {
   server.listen()
@@ -23,7 +24,17 @@ beforeAll(async () => {
 
 describe('card list', () => {
   it('should display list of pokemons', async () => {
-    // mockFetchPokedexPage.mockResolvedValue([mockPokemon])
-    render(await CardList({ matches: ['bulbasaur'], page: 1, max: 1 }))
+    const match: PokemonSummary = {
+      name: 'bulbasaur',
+      id: 1,
+      types: [{ name: 'grass', url: 'http://grass.com' }],
+      spriteSrcs: {
+        backDefault: '/back.png',
+        frontDefault: '/front.png',
+        frontShiny: '/frontshiny.png',
+        backShiny: '/backshiny.png'
+      }
+    }
+    render(await CardList({ matches: [match], page: 1, max: 1 }))
   })
 })

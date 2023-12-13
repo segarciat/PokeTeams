@@ -35,13 +35,14 @@ export function capitalize (word: string): string {
 }
 
 /**
- * Returns an array of the strings in @param words that contain @param query. Case insensitive.
- * @param words Array of strings
- * @param query String to match for containment
+ * Returns a subset array where all object names contain the query insensitively.
+ * @param words Array of objects containing a property "name".
+ * @param query String to match for containment.
+ * @returns filtered array, without altering ordering.
  */
-export function filterLike (words: string[], query: string): string[] {
+export function filterByName <T extends { name: string }> (words: T[], query: string): T[] {
   const insensitiveQuery = query.toLowerCase()
-  return words.filter(w => w.toLowerCase().includes(insensitiveQuery))
+  return words.filter(w => w.name.toLowerCase().includes(insensitiveQuery))
 }
 
 export function getArrayPage<T> (a: T[], page: number, pageSize: number): T[] {
