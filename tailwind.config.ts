@@ -6,10 +6,22 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: '#e64545',
+        primary: {
+          100: 'hsl(0 76% 90%)',
+          200: 'hsl(0 76% 80%)',
+          300: 'hsl(0 76% 70%)',
+          400: 'hsl(0 76% 60%)',
+          500: 'hsl(0 76% 50%)',
+          600: 'hsl(0 76% 40%)',
+          700: 'hsl(0 76% 30%)',
+          800: 'hsl(0 76% 20%)',
+          900: 'hsl(0 76% 10%)',
+          DEFAULT: 'hsl(0 76% 40%)'
+        },
         // Pokemon types.
         normal: '#a8a878',
         fire: '#f08030',
