@@ -36,6 +36,7 @@ export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchP
             id='query' // Matches value in label htmlFor
             name='query' // Used to access form submission element.
             className='peer placeholder:text-transparent bg-white rounded-2xl border outline-gray-300
+            dark:bg-gray-600
         border-gray-300 w-full py-3 text-base pl-8 placeholder:text-gray-500'
             placeholder={placeholder}
             value={query}
@@ -52,7 +53,7 @@ export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchP
             <XMarkIcon height={18} width={18} />
           </button>
         )}
-        <button type='submit' className='text-white bg-primary p-2 rounded-2xl flex flex-row items-center justify-center gap-2'>
+        <button type='submit' className='text-white bg-primary-400 p-2 rounded-2xl flex flex-row items-center justify-center gap-2'>
           <MagnifyingGlassIcon className='inline-block' height={18} width={18} />
           Search
         </button>

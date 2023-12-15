@@ -93,7 +93,7 @@ This website was made with the intention to learn how to use web technologies, a
 
 ## Acknowledgements
 
-- [Sweet Farm](https://thenounproject.com/sweetfarm/collection/pokemon-go/) for `public/poketeams.png` that I am using as a temporary logo.
+- [Sweet Farm](https://thenounproject.com/sweetfarm/collection/pokemon-go/), from which I created a red version `public/poketeams-logo.png` that I am using as a logo.
 - [Nature illustrations by Storyset](https://storyset.com/nature)
 - [People illustrations by Storyset](https://storyset.com/people)
 - [PokeAPI](https://pokeapi.co/): All Pokemon images, information, moves, etc, come from this great free, open source API.
