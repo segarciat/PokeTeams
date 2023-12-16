@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import Results, { RESULTS_PER_PAGE } from '../results'
+import { type PokemonSummary } from '@/app/lib/definitions'
 
 const { CardListMock, PaginationMock } = vi.hoisted(() => ({
   CardListMock: vi.fn(),
@@ -34,13 +35,25 @@ describe('pokesearch results', () => {
     const handleParamsAction = vi.fn()
     CardListMock.mockReturnValue(<ol><li>test</li></ol>)
     PaginationMock.mockReturnValue(<nav></nav>)
+    const matches: PokemonSummary[] = [{
+      id: 1,
+      name: 'bulbasaur',
+      types: [{ name: 'grass', url: 'https://grass.com' }],
+      spriteSrcs: {
+        frontDefault: null,
+        backDefault: null,
+        frontShiny: null,
+        backShiny: null
+      }
+    }
+    ]
 
-    const { rerender } = render(<Results matches={['bulbasaur']} query='b' page={1} onParamsAction={handleParamsAction}/>)
+    const { rerender } = render(<Results matches={matches} query='b' page={1} onParamsAction={handleParamsAction}/>)
     expect(screen.queryByRole('heading', { name: /no results/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('list')).toBeInTheDocument()
     expect(screen.queryByRole('navigation')).not.toBeInTheDocument()
 
-    rerender(<Results matches={Array.from('b'.repeat(RESULTS_PER_PAGE + 1))} query='b' page={1} onParamsAction={handleParamsAction}/>)
+    rerender(<Results matches={Array(RESULTS_PER_PAGE + 1).fill(matches[0])} query='b' page={1} onParamsAction={handleParamsAction}/>)
     expect(screen.queryByRole('heading', { name: /no results/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('list')).toBeInTheDocument()
     expect(screen.queryByRole('navigation')).toBeInTheDocument()

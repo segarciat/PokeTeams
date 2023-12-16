@@ -14,7 +14,7 @@ export default function HeroSection (): ReactElement {
       </p>
       <menu className="flex flex-row justify-center gap-4">
         <li>
-          <button className="py-2 px-5 rounded-full bg-primary text-white">
+          <button className="py-2 px-5 rounded-full bg-primary-400 text-white">
             Try It Out
           </button>
         </li>
