@@ -64,7 +64,7 @@ export default function ThemeMenuItem (): ReactElement {
   }, [setShowThemeMenu, menuRef])
 
   return (
-    <li className='flex items-center relative'>
+    <li className='flex items-center relative px-2 max-lg:border-r lg:border-l dark:border-gray-400'>
       <button ref={menuRef} onClick={handleThemeMenuClick} aria-label="Change theme">
         {ButtonIcon !== undefined && <ButtonIcon className='text-primary-300' height={24} width={24} />}
       </button>

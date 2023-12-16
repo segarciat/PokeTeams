@@ -4,7 +4,7 @@ import Logo from '../logo'
 export default function HeroSection (): ReactElement {
   return (
     <section aria-label="Headline" className="flex flex-col p-10 text-center ring-1 ring-gray-400">
-      <Logo width={96} height={96} className="self-center mb-3" />
+      <Logo width={96} height={96} className="self-center mb-3 opacity-50" />
       <h1 className="text-4xl font-bold mb-3">
         Become a master like never before
       </h1>

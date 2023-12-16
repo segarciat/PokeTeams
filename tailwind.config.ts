@@ -20,7 +20,7 @@ const config: Config = {
           700: 'hsl(0 76% 30%)',
           800: 'hsl(0 76% 20%)',
           900: 'hsl(0 76% 10%)',
-          DEFAULT: 'hsl(0 76% 40%)'
+          DEFAULT: 'hsl(0 76% 60%)'
         },
         // Pokemon types.
         normal: '#a8a878',
