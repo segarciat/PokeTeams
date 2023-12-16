@@ -14,8 +14,8 @@ beforeAll(async () => {
 
 describe('Navbar', () => {
   it('should display navigation links, site actions, and logo', () => {
-    const mockIsSideNavOpen = vi.fn()
-    render(<Navbar title='test title' isSideNavOpen={false} setIsSideNavOpen={mockIsSideNavOpen} />)
+    const mockShowSideMenu = vi.fn()
+    render(<Navbar title='test title'showSideMenu={false} setShowSideMenu={mockShowSideMenu} />)
     expect(screen.queryByRole('heading', { level: 1, name: /test title/i })).toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: /site navigation/i })).toBeInTheDocument()
     expect(screen.queryByRole('list', { name: /site actions/i })).toBeInTheDocument()
@@ -27,11 +27,11 @@ describe('Navbar', () => {
       .mockReturnValueOnce('/')
       .mockReturnValueOnce('/pokesearch')
 
-    const { rerender } = render(<Navbar title='test title' isSideNavOpen={true} setIsSideNavOpen={mockIsSideNavOpen} />)
+    const { rerender } = render(<Navbar title='test title'showSideMenu={true} setShowSideMenu={mockIsSideNavOpen} />)
     expect(screen.queryByRole('link', { name: /home/i, current: 'page' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /pokesearch/i, current: false })).toBeInTheDocument()
 
-    rerender(<Navbar title='test title' isSideNavOpen={true} setIsSideNavOpen={mockIsSideNavOpen} />)
+    rerender(<Navbar title='test title'showSideMenu={true} setShowSideMenu={mockIsSideNavOpen} />)
     expect(screen.queryByRole('link', { name: /home/i, current: false })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /pokesearch/i, current: 'page' })).toBeInTheDocument()
   })
