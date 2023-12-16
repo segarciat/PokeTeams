@@ -35,9 +35,9 @@ export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchP
           <input
             id='query' // Matches value in label htmlFor
             name='query' // Used to access form submission element.
-            className='peer placeholder:text-transparent bg-white rounded-2xl border outline-gray-300
-            dark:bg-gray-600
-        border-gray-300 w-full py-3 text-base pl-8 placeholder:text-gray-500'
+            className='peer placeholder:text-transparent bg-white rounded-2xl border outline-gray-700
+            dark:bg-gray-700
+        border-gray-600 w-full py-3 text-base pl-8 placeholder:text-gray-'
             placeholder={placeholder}
             value={query}
             onChange={handleChange}

@@ -58,9 +58,9 @@ export default function Pagination ({ totalPages, page, onPageClick }: Paginatio
         <form onSubmit={handlePageSubmit} className='flex flex-row items-center gap-2'>
           <label className='sr-only' htmlFor='desiredPage'>Desired Page</label>
           <input required id='desiredPage' name='page' type="number" defaultValue={page} min={1} max={totalPages}
-            className='border border-gray-400 text-center rounded-md p-1 h-10'
+            className='border dark:bg-gray-600 border-gray-400 text-center rounded-md p-1 h-10'
           /> of {totalPages}
-          <button type="submit" className='p-2 text-sm bg-primary text-white border rounded-xl'>Go</button>
+          <button type="submit" className='p-3 text-sm bg-primary-400 text-white border border-slate-500 rounded-2xl'>Go</button>
         </form>
       )}
     </nav>
@@ -79,8 +79,11 @@ function PageLink ({ page, rel, onClick, icon: Icon = null, current = false }: P
   return (
     <li>
       <a onClick={current ? (e) => { e.preventDefault() } : onClick} aria-current={current} rel={rel} aria-label={rel}
-        className={clsx(`bg-gray-200 rounded-full p-3 border border-gray-300 h-12 w-12
-        flex items-center text-center justify-center text-sm cursor-pointer `, { 'bg-primary text-white pointer-events-none': current })}>
+        className={clsx(`rounded-full p-3 border border-slate-300 dark:border-slate-500 h-12 w-12
+        flex items-center text-center justify-center text-sm cursor-pointer `, {
+          'bg-gray-200 dark:bg-gray-700': !current,
+          'bg-primary-400 text-white pointer-events-none': current
+        })}>
         {Icon !== null ? <Icon height={12} width={12} /> : page}
       </a>
     </li>

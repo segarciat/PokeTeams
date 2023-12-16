@@ -21,7 +21,7 @@ interface RootLayoutProps {
 
 export default function RootLayout ({ children }: RootLayoutProps): ReactElement {
   return (
-    <html lang="en">
+    <html lang="en" className='bg:white dark:bg-primary-800'>
       <body className={`${prompt.className} bg-slate-50 dark:bg-primary-900 dark:text-white`}>
         <Main title={PAGE_TITLE}>
           {children}

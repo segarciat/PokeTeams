@@ -32,7 +32,7 @@ export default function Navbar ({ title, showSideMenu, setShowSideMenu }: Navbar
   }, [pathname, setShowSideMenu])
 
   return (
-    <header className={`bg-white opacity-95 border-b-slate-600 dark:bg-primary-800 drop-shadow-sm p-4
+    <header className={`bg-white opacity-95 border-b border-b-slate-300 dark:border-b-slate-600 dark:bg-primary-800 drop-shadow-sm p-4
       sticky top-0 z-50 flex flex-wrap flex-row items-center gap-3`
     }>
       <div aria-label="logo" className='mr-auto'>
@@ -57,7 +57,7 @@ export default function Navbar ({ title, showSideMenu, setShowSideMenu }: Navbar
         </ul>
       </nav>
       <menu aria-label="Site actions" className="flex flex-row gap-2">
-        <ThemeMenuItem />
+        <ThemeMenuItem/>
         <li className='lg:hidden flex items-center'>
           {showSideMenu
             ? <button aria-label='close nav sidebar' onClick={handleTogglerClick}>
