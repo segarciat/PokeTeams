@@ -6,6 +6,7 @@ import Sprite from './sprite'
 import Header from './header'
 import Summary from './summary'
 import Actions from './actions'
+import Link from 'next/link'
 
 export interface CardProps {
   pokemon: PokemonSummary
@@ -35,10 +36,10 @@ export default function Card ({ pokemon }: CardProps): ReactElement {
         <Actions isFlipped={isFlipped} isShiny={isShiny} onFlipClick={handleFlipClick} onShinyClick={handleShinyClick} />
       </div>
       <footer className='flex justify-center'>
-        <button className='ring-1 self-center my-4 px-5 py-2 rounded-full flex items-center gap-1 bg-primary text-white text-sm font-semibold'>
+        <Link href={`/pokesearch/${pokemon.name}`} className='ring-1 self-center my-4 px-5 py-2 rounded-full flex items-center gap-1 bg-primary text-white text-sm font-semibold'>
           <DocumentMagnifyingGlassIcon height={20} width={20} className='inline-block' />
           View Entry
-        </button>
+        </Link>
       </footer>
     </article>
   )

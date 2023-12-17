@@ -96,4 +96,5 @@ This website was made with the intention to learn how to use web technologies, a
 - [Sweet Farm](https://thenounproject.com/sweetfarm/collection/pokemon-go/), from which I created a red version `public/poketeams-logo.png` that I am using as a logo.
 - [Nature illustrations by Storyset](https://storyset.com/nature)
 - [People illustrations by Storyset](https://storyset.com/people)
+- [Work illustrations by StorySet](https://storyset.com/work)
 - [PokeAPI](https://pokeapi.co/): All Pokemon images, information, moves, etc, come from this great free, open source API.

@@ -7,7 +7,7 @@ export default function NoResults (): ReactElement {
       <h3 className='text-center text-xl font-semibold'>Woops, no results.</h3>
       <p className='pb-4 text-center'> Please try again.</p>
       <Image
-        src="Empty-pana.svg"
+        src="/Empty-pana.svg"
         alt="No results image"
         height={300}
         width={300}
