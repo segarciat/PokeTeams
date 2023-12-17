@@ -1,5 +1,6 @@
 import { type ReactElement } from 'react'
 import Logo from '../logo'
+import Link from 'next/link'
 
 export default function HeroSection (): ReactElement {
   return (
@@ -14,14 +15,14 @@ export default function HeroSection (): ReactElement {
       </p>
       <menu className="flex flex-row justify-center gap-4">
         <li>
-          <button className="py-2 px-5 rounded-full bg-primary-400 text-white">
+          <Link href='/pokesearch' className="py-2 px-5 rounded-full bg-primary-400 text-white">
             Try It Out
-          </button>
+          </Link>
         </li>
         <li>
-          <button className="py-2 px-5 rounded-full ring-1 ring-slate-400">
+          <Link href='/signup' className="py-2 px-5 rounded-full ring-1 ring-slate-400">
             Sign Up
-          </button>
+          </Link>
         </li>
       </menu>
     </section>
