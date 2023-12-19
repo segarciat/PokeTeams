@@ -1,6 +1,7 @@
-import { type Pokemon } from '@/app/lib/definitions'
-import { POKE_TYPE_BG_CLASS, capitalize } from '@/app/lib/utils'
 import { type ReactElement } from 'react'
+import { POKE_TYPE_BG_CLASS } from '@/app/lib/constants'
+import { type Pokemon } from '@/app/lib/definitions'
+import { capitalize } from '@/app/lib/utils'
 
 interface SummaryProps {
   types: Pokemon['types']

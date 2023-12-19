@@ -1,5 +1,4 @@
-export type PokeType = 'normal' | 'fighting' | 'flying' | 'poison' | 'ground' | 'rock' | 'bug' | 'ghost' | 'steel' |
-'fire' | 'water' | 'grass' | 'electric' | 'psychic' | 'ice' | 'dragon' | 'dark' | 'fairy'
+import { type PokeType } from './constants'
 
 export type PokeStat = 'hp' | 'attack' | 'defense' | 'specialAttack' | 'specialDefense' | 'speed'
 
@@ -25,11 +24,6 @@ export interface Pokemon extends PokemonSummary {
     url: string
   }>
   stats: Record<PokeStat, number>
-}
-
-export interface PokemonURL {
-  name: string
-  url: string
 }
 
 export interface RawPokemonData {
@@ -68,10 +62,9 @@ export interface RawPokemonData {
   }>
 }
 
-export type URLPageParam = string | string[] | undefined
-
 export interface PokeSearchParamAction {
-  action: 'CLEAR_QUERY' | 'SUBMIT_QUERY' | 'NEW_PAGE'
+  action: 'CLEAR_QUERY' | 'SUBMIT_QUERY' | 'NEW_PAGE' | 'FILTER'
   page?: number
   query?: string
+  types?: Set<PokeType>
 }

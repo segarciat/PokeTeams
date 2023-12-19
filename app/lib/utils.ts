@@ -1,26 +1,4 @@
-import { type URLPageParam, type PokeType } from './definitions'
-
-// Dynamic tailwind class must appear as unbroken literals: https://tailwindcss.com/docs/content-configuration#dynamic-class-names
-export const POKE_TYPE_BG_CLASS: Record<PokeType, string> = {
-  grass: 'bg-grass',
-  poison: 'bg-poison',
-  bug: 'bg-bug',
-  dark: 'bg-dark',
-  normal: 'bg-normal',
-  dragon: 'bg-dragon',
-  electric: 'bg-electric',
-  fairy: 'bg-fairy',
-  fighting: 'bg-fighting',
-  ghost: 'bg-ghost',
-  fire: 'bg-fire',
-  flying: 'bg-flying',
-  ground: 'bg-ground',
-  ice: 'bg-ice',
-  psychic: 'bg-psychic',
-  rock: 'bg-rock',
-  steel: 'bg-steel',
-  water: 'bg-water'
-}
+import { POKE_TYPES, type PokeType } from './constants'
 
 /**
  * Capitalizes the given word.
@@ -69,6 +47,8 @@ export function getPaginationNumbers (currentPage: number, totalPages: number, m
     .filter(n => n !== 0 && n !== totalPages + 1)
 }
 
+export type URLPageParam = string | string[] | undefined
+
 export function validatePageParam (page: URLPageParam): number {
   const p = Number(Array.isArray(page) ? page[0] : page)
   return isNaN(p) ? 1 : Math.floor(Math.max(1, Math.abs(p)))
@@ -80,4 +60,10 @@ export function validateQueryParam (query: URLPageParam): string {
   } else {
     return Array.isArray(query) ? query.join('') : query
   }
+}
+
+export function validateTypeParam (types: string[]): Set<PokeType> {
+  return new Set(
+    types.filter(type => POKE_TYPES.includes(type as any)) as PokeType[]
+  )
 }

@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import ParamsWrapper, { computeSearchParams } from '../params-wrapper'
+import ParamsWrapper, { PAGE_PARAM, QUERY_PARAM, TYPE_PARAM, computeSearchParams } from '../params-wrapper'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import { type PokeSearchParamAction } from '@/app/lib/definitions'
 import { render } from '@testing-library/react'
+import { type PokeType } from '@/app/lib/constants'
 
 const { ResultsMock, mockReplace, mockUsePathname, mockUseSearchParams } = vi.hoisted(() => ({
   ResultsMock: vi.fn(),
@@ -32,40 +33,59 @@ afterEach(() => {
 describe('compute search params', () => {
   it('should throw when given an invalid action', () => {
     const searchParams = new ReadonlyURLSearchParams(new URLSearchParams())
-    const action = { type: 'FAKE' } as any as PokeSearchParamAction
+    const action = { [TYPE_PARAM]: 'FAKE' } as any as PokeSearchParamAction
     expect(() => computeSearchParams(searchParams, action)).toThrow()
   })
   it('should delete the query parameter on CLEAR_QUERY', () => {
-    const searchParams = new ReadonlyURLSearchParams(new URLSearchParams({ query: 'foo' }))
+    const searchParams = new ReadonlyURLSearchParams(new URLSearchParams({ [QUERY_PARAM]: 'foo' }))
     const action: PokeSearchParamAction = { action: 'CLEAR_QUERY' }
     const resultParams = computeSearchParams(searchParams, action)
 
-    expect(searchParams.get('query')).toEqual('foo')
-    expect(resultParams.has('query')).toBeFalsy()
+    expect(searchParams.get(QUERY_PARAM)).toEqual('foo')
+    expect(resultParams.has(QUERY_PARAM)).toBeFalsy()
   })
   it('should add the query parameter on SUBMIT_QUERY and set page parameter to 1', () => {
     const searchParams = new ReadonlyURLSearchParams(new URLSearchParams())
-    const action: PokeSearchParamAction = { action: 'SUBMIT_QUERY', query: 'hello' }
+    const action: PokeSearchParamAction = { action: 'SUBMIT_QUERY', [QUERY_PARAM]: 'hello' }
     const resultParams = computeSearchParams(searchParams, action)
 
-    expect(searchParams.has('query')).toBeFalsy()
-    expect(resultParams.get('query')).toEqual('hello')
-    expect(resultParams.get('page')).toEqual('1')
+    expect(searchParams.has(QUERY_PARAM)).toBeFalsy()
+    expect(resultParams.get(QUERY_PARAM)).toEqual('hello')
+    expect(resultParams.get(PAGE_PARAM)).toEqual('1')
   })
   it('should set the page parameter to the indicated number, and keep the existing parameters', () => {
-    const searchParams = new ReadonlyURLSearchParams(new URLSearchParams({ query: 'hello', pokeType: 'grass' }))
-    const action: PokeSearchParamAction = { action: 'NEW_PAGE', page: 7 }
+    const searchParams = new ReadonlyURLSearchParams(new URLSearchParams({ [QUERY_PARAM]: 'hello', [TYPE_PARAM]: 'grass' }))
+    const action: PokeSearchParamAction = { action: 'NEW_PAGE', [PAGE_PARAM]: 7 }
     const resultParams = computeSearchParams(searchParams, action)
 
-    expect(resultParams.get('query')).toEqual('hello')
-    expect(resultParams.get('pokeType')).toEqual('grass')
-    expect(resultParams.get('page')).toEqual('7')
+    expect(resultParams.get(QUERY_PARAM)).toEqual('hello')
+    expect(resultParams.get(TYPE_PARAM)).toEqual('grass')
+    expect(resultParams.get(PAGE_PARAM)).toEqual('7')
+  })
+  it('should clear the type parameter when given an empty array', () => {
+    const searchParams = new ReadonlyURLSearchParams(new URLSearchParams({ [QUERY_PARAM]: 'hello', [PAGE_PARAM]: '7' }))
+    const action: PokeSearchParamAction = { action: 'FILTER', types: new Set() }
+    const resultParams = computeSearchParams(searchParams, action)
+
+    expect(resultParams.get(QUERY_PARAM)).toEqual('hello')
+    expect(resultParams.get(PAGE_PARAM)).toEqual('7')
+    expect(resultParams.get(TYPE_PARAM)).toBeNull()
+  })
+
+  it('should replace the type parameter when given a non-empty array of types', () => {
+    const searchParams = new ReadonlyURLSearchParams(new URLSearchParams({ [QUERY_PARAM]: 'hello', [PAGE_PARAM]: '7', [TYPE_PARAM]: 'foo' }))
+    const action: PokeSearchParamAction = { action: 'FILTER', types: new Set<PokeType>(['grass', 'poison']) }
+    const resultParams = computeSearchParams(searchParams, action)
+
+    expect(resultParams.get(QUERY_PARAM)).toEqual('hello')
+    expect(resultParams.get(PAGE_PARAM)).toEqual('7')
+    expect(resultParams.getAll(TYPE_PARAM)).toEqual(['grass', 'poison'])
   })
 })
 
 describe('params wrapper', () => {
   it('should display search container and results container', () => {
-    const searchParams = new URLSearchParams({ query: 'bulbasaur', page: '1' })
+    const searchParams = new URLSearchParams({ [QUERY_PARAM]: 'bulbasaur', [PAGE_PARAM]: '1' })
     mockUseSearchParams.mockReturnValue(new ReadonlyURLSearchParams(searchParams))
     render(<ParamsWrapper allPokemons={[]}/>)
   })
