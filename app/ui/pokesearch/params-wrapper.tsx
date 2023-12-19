@@ -3,7 +3,7 @@ import { type PokemonSummary, type PokeSearchParamAction } from '@/app/lib/defin
 import { type ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { type ReactElement } from 'react'
 import Search from './search'
-import { filterByName, validatePageParam, validateQueryParam, validateTypeParam } from '@/app/lib/utils'
+import { filterByName, filterByType, validatePageParam, validateQueryParam, validateTypeParam } from '@/app/lib/utils'
 import Results from './results'
 import Filter from './filter'
 
@@ -24,7 +24,11 @@ export default function ParamsWrapper ({ allPokemons }: ParamsWrapperProps): Rea
   const page = validatePageParam(searchParams.get(PAGE_PARAM) ?? undefined)
   const types = validateTypeParam(searchParams.getAll(TYPE_PARAM))
 
-  const filtered = filterByName(allPokemons, query)
+  let results = allPokemons
+  results = filterByName(results, query)
+  if (types.size > 0) {
+    results = filterByType(results, types)
+  }
 
   function handleParamsAction (action: PokeSearchParamAction): void {
     const params = computeSearchParams(searchParams, action)
@@ -35,7 +39,7 @@ export default function ParamsWrapper ({ allPokemons }: ParamsWrapperProps): Rea
     <>
       <Search placeholder='Search Pokemon' defaultQuery={query} onSubmit={handleParamsAction}/>
       <Filter defaultEnabledTypes={types} onSubmit={handleParamsAction}/>
-      <Results matches={filtered} page={page} query={query} onParamsAction={handleParamsAction}/>
+      <Results matches={results} page={page} query={query} onParamsAction={handleParamsAction} />
     </>
   )
 }
@@ -58,6 +62,7 @@ export function computeSearchParams (searchParams: ReadonlyURLSearchParams, { ac
       break
     }
     case 'FILTER': {
+      params.set(PAGE_PARAM, '1')
       params.delete(TYPE_PARAM)
       types?.forEach(type => { params.append(TYPE_PARAM, type) })
       break

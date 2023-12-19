@@ -62,23 +62,23 @@ describe('compute search params', () => {
     expect(resultParams.get(TYPE_PARAM)).toEqual('grass')
     expect(resultParams.get(PAGE_PARAM)).toEqual('7')
   })
-  it('should clear the type parameter when given an empty array', () => {
+  it('should set page param to 1 and clear the type parameter when given an empty array', () => {
     const searchParams = new ReadonlyURLSearchParams(new URLSearchParams({ [QUERY_PARAM]: 'hello', [PAGE_PARAM]: '7' }))
     const action: PokeSearchParamAction = { action: 'FILTER', types: new Set() }
     const resultParams = computeSearchParams(searchParams, action)
 
     expect(resultParams.get(QUERY_PARAM)).toEqual('hello')
-    expect(resultParams.get(PAGE_PARAM)).toEqual('7')
+    expect(resultParams.get(PAGE_PARAM)).toEqual('1')
     expect(resultParams.get(TYPE_PARAM)).toBeNull()
   })
 
-  it('should replace the type parameter when given a non-empty array of types', () => {
+  it('should set page param to 1 and replace the type parameter when given a non-empty array of types', () => {
     const searchParams = new ReadonlyURLSearchParams(new URLSearchParams({ [QUERY_PARAM]: 'hello', [PAGE_PARAM]: '7', [TYPE_PARAM]: 'foo' }))
     const action: PokeSearchParamAction = { action: 'FILTER', types: new Set<PokeType>(['grass', 'poison']) }
     const resultParams = computeSearchParams(searchParams, action)
 
     expect(resultParams.get(QUERY_PARAM)).toEqual('hello')
-    expect(resultParams.get(PAGE_PARAM)).toEqual('7')
+    expect(resultParams.get(PAGE_PARAM)).toEqual('1')
     expect(resultParams.getAll(TYPE_PARAM)).toEqual(['grass', 'poison'])
   })
 })
