@@ -6,6 +6,7 @@ import { type PokeSearchParamAction } from '@/app/lib/definitions'
 import { type PokeType } from '@/app/lib/constants'
 import clsx from 'clsx'
 import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { toast } from 'react-toastify'
 
 export interface FilterProps {
   defaultEnabledTypes: Set<PokeType>
@@ -38,6 +39,7 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
       types: enabledTypes
     })
     handleShowForm()
+    toast.success('Filters applied!')
   }
 
   function handleReset (): void {
@@ -61,7 +63,7 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
       {showForm && (
         <div className='fixed z-50 inset-0 overflow-y-scroll w-full max-h-screen flex justify-center items-center'>
           <div className='fixed inset-0 -z-10 bg-black opacity-75' />
-          <form aria-label='filters' onSubmit={handleSubmit} className={'flex flex-col gap-2 p-4 z-50 bg-white w-5/6 lg:max-w-2xl'}>
+          <form aria-label='filters' onSubmit={handleSubmit} className={'flex flex-col gap-2 p-4 z-50 bg-white dark:bg-primary-900 w-5/6 lg:max-w-2xl'}>
             <header className='flex flex-row justify-between border-b border-b-gray-200'>
               <button type='button' aria-label='closeFilters' onClick={handleClose}><XMarkIcon height={20} width={20} /></button>
               <h2 className='text-3xl font-bold text-center'>Filters</h2>
@@ -77,7 +79,7 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
             <button type='submit' className=' border-2 border-gray-300 bg-primary-400 text-white rounded-xl w-full px-2 py-4'>
               Apply
             </button>
-            <button type='button' onClick={handleClose} className='text-black border-2 border-gray-400 rounded-xl w-full px-2 py-4'>
+            <button type='button' onClick={handleClose} className='text-black dark:text-white dark:bg-gray-600 border-2 border-gray-400 rounded-xl w-full px-2 py-4'>
               Cancel
             </button>
           </form>
@@ -92,7 +94,7 @@ function PokeFilterBtn ({ type, isEnabled, onClick }: { type: PokeType, isEnable
     <button type='button' onClick={onClick} aria-pressed={isEnabled}
       className={clsx('px-2 py-2 rounded-full text-xs w-24 transition-colors duration-500', {
         [`text-white ${POKE_TYPE_BG_CLASS[type]}`]: isEnabled,
-        'text-gray-700 bg-gray-200': !isEnabled
+        'text-gray-700 bg-gray-200 dark:bg-gray-600 dark:text-white': !isEnabled
       })}>
       <span className='flex flex-col'>
         <PokeTypeIcon pokeType={type} size="xl" />

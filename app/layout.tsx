@@ -7,9 +7,11 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from '@fortawesome/fontawesome-svg-core'
 config.autoAddCss = false /* eslint-disable import/first */
+import 'react-toastify/dist/ReactToastify.css'
 import React, { type ReactElement } from 'react'
 import { prompt } from './ui/fonts'
 import Main from './ui/main'
+import { ToastContainer } from 'react-toastify'
 
 const PAGE_TITLE = 'PokeTeams'
 export const metadata: Metadata = {
@@ -24,12 +26,11 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-// const MainNoSSR = dynamic(async () => await import('./ui/main'), { ssr: false })
-
 export default function RootLayout ({ children }: RootLayoutProps): ReactElement {
   return (
     <html lang="en" className='bg:white dark:bg-primary-800'>
       <body className={`relative ${prompt.className} bg-slate-50 dark:bg-primary-900 dark:text-white`}>
+        <ToastContainer position='top-right' autoClose={2000} draggable={false} />
         <Main title={PAGE_TITLE}>
           {children}
         </Main>

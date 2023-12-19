@@ -1,5 +1,5 @@
-import { type PokeType } from '../constants'
-import { capitalize, filterByName, getArrayPage, getPaginationNumbers, getTotalPageCount, validatePageParam, validateQueryParam, validateTypeParam } from '../utils'
+import { POKE_TYPES, type PokeType } from '../constants'
+import { capitalize, filterByName, filterByType, getArrayPage, getPaginationNumbers, getTotalPageCount, validatePageParam, validateQueryParam, validateTypeParam } from '../utils'
 import { describe, it, expect } from 'vitest'
 
 describe('Capitalize', () => {
@@ -17,7 +17,7 @@ describe('Capitalize', () => {
   })
 })
 
-describe('Contains string', () => {
+describe('Filter by name', () => {
   // Arrange
   it('should match strings that contain the query as a case insensitive substring', () => {
     // Arrange
@@ -38,6 +38,26 @@ describe('Contains string', () => {
     expect(result[1]).toEqual({
       name: 'electrabuzz', type: 'electric'
     })
+  })
+})
+
+describe('filter by poke type', () => {
+  interface WithPokeType { types: Array<{ name: PokeType }> }
+
+  it('should be unaltered input when type filter set is empty', () => {
+    const allTypes: WithPokeType[] = POKE_TYPES.map(t => ({ types: [{ name: t }] }))
+    expect(filterByType(allTypes, new Set())).toEqual(allTypes)
+  })
+
+  it('should contain all entries where all types are contained', () => {
+    const filterTypes = new Set<PokeType>(['poison', 'grass'])
+
+    const matchingAll: WithPokeType = { types: [{ name: 'grass' }, { name: 'poison' }, { name: 'electric' }] }
+    const matchingOnlyOne: WithPokeType = { types: [{ name: 'steel' }, { name: 'grass' }] }
+    const matchingNeither: WithPokeType = { types: [{ name: 'dragon' }] }
+
+    const array: WithPokeType[] = [matchingAll, matchingOnlyOne, matchingNeither]
+    expect(filterByType(array, filterTypes)).toEqual([matchingAll])
   })
 })
 

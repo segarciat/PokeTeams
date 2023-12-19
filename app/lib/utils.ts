@@ -23,6 +23,15 @@ export function filterByName <T extends { name: string }> (words: T[], query: st
   return words.filter(w => w.name.toLowerCase().includes(insensitiveQuery))
 }
 
+export function filterByType<T extends { types: Array<{ name: PokeType }> }> (input: T[], types: Set<PokeType>): T[] {
+  if (types.size === 0) {
+    return input
+  }
+  return input.filter(
+    p => p.types.map(({ name }) => name).filter(t => types.has(t)).length === types.size
+  )
+}
+
 export function getArrayPage<T> (a: T[], page: number, pageSize: number): T[] {
   if (page <= 0 || pageSize <= 0) {
     throw new RangeError(`Expected non-zero page and pageSize, but got: page=${page}, pageSize=${pageSize}`)
