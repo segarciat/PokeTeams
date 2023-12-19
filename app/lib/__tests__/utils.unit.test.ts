@@ -1,11 +1,6 @@
-import { POKE_TYPE_BG_CLASS, capitalize, filterByName, getArrayPage, getPaginationNumbers, getTotalPageCount, validatePageParam, validateQueryParam } from '../utils'
+import { type PokeType } from '../constants'
+import { capitalize, filterByName, getArrayPage, getPaginationNumbers, getTotalPageCount, validatePageParam, validateQueryParam, validateTypeParam } from '../utils'
 import { describe, it, expect } from 'vitest'
-
-describe('Poke Type BG class map', () => {
-  it('should return the correct class given a valid type', () => {
-    expect(POKE_TYPE_BG_CLASS.grass).toMatch('bg-grass')
-  })
-})
 
 describe('Capitalize', () => {
   it('should lowercase word', () => {
@@ -150,5 +145,11 @@ describe('validate query param', () => {
 
   it('should concatenate the strings when given an array', () => {
     expect(validateQueryParam(['a', 'z', '2'])).toBe('az2')
+  })
+
+  it('should remove duplicates and non-poketype values', () => {
+    const types: PokeType[] = ['grass', 'bug', 'bug']
+    const nonTypes: string[] = ['foo', 'bar', 'foo']
+    expect(validateTypeParam([...types, ...nonTypes])).toEqual(new Set(['grass', 'bug']))
   })
 })

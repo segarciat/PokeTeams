@@ -30,8 +30,14 @@ export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchP
 
   return (
     <section aria-label="search options" className='my-4'>
-      <form role='search' aria-label='pokesearch form' onSubmit={handleSubmit} className='relative flex flex-1 flex-col gap-2'>
+      <form role='search' aria-label='pokesearch form' onSubmit={handleSubmit}
+      className='relative flex flex-1 flex-row gap-2'>
         <div className='relative w-full'>
+          {query.length !== 0 && (
+            <button aria-label='clear input' type='button' className='absolute left-3 top-4 text-gray-400' onClick={handleClearInput}>
+              <XMarkIcon height={20} width={20} />
+            </button>
+          )}
           <input
             id='query' // Matches value in label htmlFor
             name='query' // Used to access form submission element.
@@ -47,16 +53,11 @@ export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchP
         peer-focus:text-xs transition-all'>
             {placeholder}
           </label>
-        </div>
-        {query.length !== 0 && (
-          <button aria-label='clear input' type='button' className='absolute left-3 top-4 text-gray-400' onClick={handleClearInput}>
-            <XMarkIcon height={18} width={18} />
+          <button aria-label="search" type='submit'
+            className='text-gray-400 p-2 rounded-full flex flex-row items-center justify-center gap-2 absolute right-3 top-2'>
+            <MagnifyingGlassIcon className='inline-block' height={20} width={20} />
           </button>
-        )}
-        <button type='submit' className='text-white bg-primary-400 p-2 rounded-2xl flex flex-row items-center justify-center gap-2'>
-          <MagnifyingGlassIcon className='inline-block' height={18} width={18} />
-          Search
-        </button>
+        </div>
       </form>
     </section>
   )
