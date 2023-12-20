@@ -1,4 +1,5 @@
-import { useState, type ReactElement, type FormEvent } from 'react'
+'use client'
+import { useState, type ReactElement, type FormEvent, useContext } from 'react'
 import { POKE_TYPES, POKE_TYPE_BG_CLASS } from '@/app/lib/constants'
 import { type PokeSearchParamAction } from '@/app/lib/definitions'
 import { type PokeType } from '@/app/lib/constants'
@@ -6,19 +7,21 @@ import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outlin
 import { toast } from 'react-toastify'
 import PokeTypeTag from '../poke-type-tags'
 import clsx from 'clsx'
+import TypesParamContext from '@/app/context/poke-types-param'
 
 export interface FilterProps {
   defaultEnabledTypes: Set<PokeType>
   onSubmit: (action: PokeSearchParamAction) => void
 }
 
-export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps): ReactElement {
-  const [enabledTypes, setEnabledTypes] = useState(defaultEnabledTypes)
+export default function Filter (): ReactElement {
+  const { types, setTypes } = useContext(TypesParamContext)
+  const [enabledTypes, setEnabledTypes] = useState(types)
   const [showForm, setShowForm] = useState(false)
 
   function handleShowForm (): void {
     setShowForm(show => !show)
-    setEnabledTypes(defaultEnabledTypes)
+    setEnabledTypes(types)
     document.body.classList.toggle('overflow-y-hidden')
   }
 
@@ -34,10 +37,7 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
 
   function handleSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
-    onSubmit({
-      action: 'FILTER',
-      types: enabledTypes
-    })
+    setTypes(enabledTypes)
     handleShowForm()
     toast.success('Filters applied!')
   }
@@ -47,7 +47,7 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
   }
 
   function handleClose (): void {
-    setEnabledTypes(defaultEnabledTypes)
+    setEnabledTypes(types)
     handleShowForm()
   }
 
