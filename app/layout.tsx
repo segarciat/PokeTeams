@@ -30,7 +30,7 @@ export default function RootLayout ({ children }: RootLayoutProps): ReactElement
   return (
     <html lang="en" className='bg:white dark:bg-primary-800'>
       <body className={`relative ${prompt.className} bg-slate-50 dark:bg-primary-900 dark:text-white`}>
-        <ToastContainer position='top-right' autoClose={2000} draggable={false} />
+        <ToastContainer position='top-right' autoClose={2000} draggable={false} hideProgressBar={true}/>
         <Main title={PAGE_TITLE}>
           {children}
         </Main>

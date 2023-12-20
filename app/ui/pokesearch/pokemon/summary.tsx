@@ -1,7 +1,8 @@
 import { type ReactElement } from 'react'
-import { POKE_TYPE_BG_CLASS } from '@/app/lib/constants'
 import { type Pokemon } from '@/app/lib/definitions'
 import { capitalize } from '@/app/lib/utils'
+import PokeTypeTag from '../../poke-type-tags'
+import { POKE_TYPE_BG_CLASS } from '@/app/lib/constants'
 
 interface SummaryProps {
   types: Pokemon['types']
@@ -20,8 +21,8 @@ export default function Summary ({ types, name }: SummaryProps): ReactElement {
       <ul className='flex justify-center gap-2 my-2'>
         {types.map((type) => (
           <li key={type.name}>
-            <button className={`${POKE_TYPE_BG_CLASS[type.name]} px-6 py-2 rounded-full text-white text-xs `}>
-              {capitalize(type.name)}
+            <button className={`px-4 py-2 ${POKE_TYPE_BG_CLASS[type.name]} text-white rounded-full text-sm`}>
+              <PokeTypeTag pokeType={type.name}/>
             </button>
           </li>
         ))}

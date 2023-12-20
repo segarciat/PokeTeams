@@ -12,7 +12,7 @@ interface CardListProps {
 export default async function CardList ({ matches, page, max }: CardListProps): Promise<ReactElement> {
   const pokemons = getArrayPage(matches, page, max)
   return (
-    <ol className='flex flex-col gap-3'>
+    <ol aria-label='pokemonCards' className='flex flex-col gap-3'>
       {pokemons.map(p => (
         <li key={p.name}>
           <Card pokemon={p} />
