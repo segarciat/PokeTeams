@@ -1,31 +1,27 @@
 'use client'
-import { type PokeSearchParamAction } from '@/app/lib/definitions'
+import QueryParamContext from '@/app/context/query-param'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import React, { useState, type FormEvent, type ReactElement } from 'react'
+import React, { useState, type FormEvent, type ReactElement, useContext } from 'react'
 
 export interface SearchProps {
   placeholder: string
-  defaultQuery: string
-  onSubmit: (action: PokeSearchParamAction) => void
 }
 
-export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchProps): ReactElement {
-  const [query, setQuery] = useState(defaultQuery)
+export default function Search ({ placeholder }: SearchProps): ReactElement {
+  const { query, setQuery } = useContext(QueryParamContext)
+  const [searchInputValue, setSearchInputValue] = useState(query)
 
   function handleChange (e: React.ChangeEvent<HTMLInputElement>): void {
-    setQuery(e.currentTarget.value)
+    setSearchInputValue(e.currentTarget.value)
   }
 
   function handleClearInput (): void {
-    setQuery('')
+    setSearchInputValue('')
   }
 
   function handleSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
-    onSubmit({
-      action: 'SUBMIT_QUERY',
-      query
-    })
+    setQuery(searchInputValue)
   }
 
   return (
@@ -33,7 +29,7 @@ export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchP
       <form role='search' aria-label='pokesearch form' onSubmit={handleSubmit}
       className='relative flex flex-1 flex-row gap-2'>
         <div className='relative w-full'>
-          {query.length !== 0 && (
+          {searchInputValue.length !== 0 && (
             <button aria-label='clear input' type='button' className='absolute left-3 top-4 text-gray-400' onClick={handleClearInput}>
               <XMarkIcon height={20} width={20} />
             </button>
@@ -45,7 +41,7 @@ export default function Search ({ placeholder, defaultQuery, onSubmit }: SearchP
             dark:bg-gray-700
         border-gray-600 w-full py-3 text-base pl-8 placeholder:text-gray-'
             placeholder={placeholder}
-            value={query}
+            value={searchInputValue}
             onChange={handleChange}
           />
           <label htmlFor="query" className='absolute left-8 top-[1px] text-xs text-gray-400

@@ -2,12 +2,12 @@ import { fireEvent, render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import Search from '../search'
 import userEvent from '@testing-library/user-event'
-import { type PokeSearchParamAction } from '@/app/lib/definitions'
+import { type ReactElement } from 'react'
+import QueryParamContext, { type QueryParamsContextValue } from '@/app/context/query-param'
 
 describe('search form', () => {
   it('should display form with labeled search input', async () => {
-    const mockSubmit = vi.fn()
-    render(<Search placeholder='pokesearch input' defaultQuery='' onSubmit={mockSubmit}/>)
+    render(<Search placeholder='pokesearch input'/>)
 
     const search = screen.getByRole('search')
     expect(search).toBeInTheDocument()
@@ -20,8 +20,11 @@ describe('search form', () => {
   })
 
   it('should clear input value when clear button is clicked', async () => {
-    const mockSubmit = vi.fn()
-    render(<Search placeholder='pokesearch input' defaultQuery='default test input' onSubmit={mockSubmit}/>)
+    const contextValue: QueryParamsContextValue = {
+      query: 'default test input',
+      setQuery: vi.fn()
+    }
+    customRender(<Search placeholder='pokesearch input' />, { contextValue })
 
     const search = screen.getByRole('search')
     expect(search).toBeInTheDocument()
@@ -38,31 +41,39 @@ describe('search form', () => {
   })
 
   it('should set page parameter to 1 and query parameter to the input value', async () => {
-    const mockSubmit = vi.fn()
-    render(<Search placeholder='pokesearch input' defaultQuery='' onSubmit={mockSubmit}/>)
+    const mockSetQuery = vi.fn()
+    const contextValue: QueryParamsContextValue = {
+      query: '',
+      setQuery: mockSetQuery
+    }
+    customRender(<Search placeholder='pokesearch input' />, { contextValue })
 
     await userEvent.type(screen.getByLabelText(/pokesearch input/i), 'hello')
     fireEvent.submit(screen.getByRole('search'))
 
-    expect(mockSubmit).toHaveBeenCalledTimes(1)
-    const expectedArg: PokeSearchParamAction = {
-      action: 'SUBMIT_QUERY',
-      query: 'hello'
-    }
-    expect(mockSubmit.mock.calls[0][0]).toEqual(expectedArg)
+    expect(mockSetQuery).toHaveBeenCalledTimes(1)
+    expect(mockSetQuery.mock.calls[0][0]).toEqual('hello')
   })
 
   it('should not have a query parameter when search input is empty', async () => {
-    const mockSubmit = vi.fn()
-    render(<Search placeholder='pokesearch input' defaultQuery='' onSubmit={mockSubmit}/>)
+    const mockSetQuery = vi.fn()
+    const contextValue: QueryParamsContextValue = {
+      query: '',
+      setQuery: mockSetQuery
+    }
+    customRender(<Search placeholder='pokesearch input' />, { contextValue })
 
     fireEvent.submit(screen.getByRole('search'))
 
-    const expectedArg: PokeSearchParamAction = {
-      action: 'SUBMIT_QUERY',
-      query: ''
-    }
-    expect(mockSubmit).toHaveBeenCalledTimes(1)
-    expect(mockSubmit.mock.calls[0][0]).toEqual(expectedArg)
+    expect(mockSetQuery).toHaveBeenCalledTimes(1)
+    expect(mockSetQuery.mock.calls[0][0]).toEqual('')
   })
 })
+
+type RenderParameters = Parameters<typeof render>
+const customRender = (ui: ReactElement, { contextValue, renderOptions }: { contextValue: QueryParamsContextValue, renderOptions?: RenderParameters[1] }): ReturnType<typeof render> => {
+  return render(
+    <QueryParamContext.Provider value={{ ...contextValue }}>{ui}</QueryParamContext.Provider>,
+    renderOptions
+  )
+}

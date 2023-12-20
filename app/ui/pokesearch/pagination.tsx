@@ -3,22 +3,18 @@ import { getPaginationNumbers } from '@/app/lib/utils'
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { type FormEvent, type ReactElement } from 'react'
-import { type PokeSearchParamAction } from '@/app/lib/definitions'
 
 export const MAX_LINKS = 3
 
 export interface PaginationProps {
-  totalPages: number
   page: number
-  onPageClick: (action: PokeSearchParamAction) => void
+  totalPages: number
+  onNewPage: (newPage: number) => void
 }
 
-export default function Pagination ({ totalPages, page, onPageClick }: PaginationProps): ReactElement {
-  function handleLinkClick (page: number): void {
-    onPageClick?.({
-      action: 'NEW_PAGE',
-      page
-    })
+export default function Pagination ({ totalPages, page, onNewPage }: PaginationProps): ReactElement {
+  function handleLinkClick (newPage: number): void {
+    onNewPage(newPage)
   }
 
   function handlePageSubmit (e: FormEvent<HTMLFormElement>): void {

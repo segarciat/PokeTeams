@@ -1,40 +1,53 @@
-import { type ReactElement } from 'react'
+'use client'
+import { useContext, type ReactElement } from 'react'
 import NoResults from './no-results'
 import CardList from './card-list'
 import Pagination from './pagination'
-import { type PokemonSummary, type PokeSearchParamAction } from '@/app/lib/definitions'
-import { getTotalPageCount } from '@/app/lib/utils'
+import { type PokemonSummary } from '@/app/lib/definitions'
+import { filterByName, filterByType, getTotalPageCount } from '@/app/lib/utils'
 import { POKE_TYPE_BG_CLASS, type PokeType } from '@/app/lib/constants'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import PokeTypeTag from '../poke-type-tags'
+import PageParamContext from '@/app/context/page-param'
+import { notFound } from 'next/navigation'
+import TypesParamContext from '@/app/context/poke-types-param'
+import QueryParamContext from '@/app/context/query-param'
 
 export const RESULTS_PER_PAGE = 20
 
 export interface ResultsProps {
-  matches: PokemonSummary[]
-  query: string
-  filters: Set<PokeType>
-  page: number
-  onParamsAction: (action: PokeSearchParamAction) => void
+  allPokemon: PokemonSummary[]
 }
 
-export default function Results ({ matches, query, filters, page, onParamsAction }: ResultsProps): ReactElement {
+export default function Results ({ allPokemon }: ResultsProps): ReactElement {
+  const { query } = useContext(QueryParamContext)
+  const { page, setPage } = useContext(PageParamContext)
+  const { types, setTypes } = useContext(TypesParamContext)
+
+  let matches = allPokemon
+  if (query.length > 0) {
+    matches = filterByName(matches, query)
+  }
+  if (types.size > 0) {
+    matches = filterByType(matches, types)
+  }
   const totalPages = getTotalPageCount(matches.length, RESULTS_PER_PAGE)
 
+  if (matches.length !== 0 && page > totalPages) {
+    notFound() // or setPage to 1?
+  }
+
   function handleTypeClick (type: PokeType): void {
-    const newFilters = new Set(filters)
+    const newFilters = new Set(types)
     newFilters.delete(type)
-    onParamsAction({
-      action: 'FILTER',
-      types: newFilters
-    })
+    setTypes(newFilters)
   }
 
   return (
     <section aria-label="Search results" className='my-4'>
       <h3 className='my-4 text-2xl font-bold'>Results</h3>
-      <ul className='flex flex-row flex-wrap gap-2 items-center my-2'>
-        {filters.size > 0 && <ActiveTypeFilters filters={filters} onTypeClick={handleTypeClick}/>}
+      <ul aria-label='activeFilters' className='flex flex-row flex-wrap gap-2 items-center my-2'>
+        {types.size > 0 && <ActiveTypeFilters filters={types} onTypeClick={handleTypeClick}/>}
       </ul>
       <div className='flex flex-col items-center gap-3'>
         {matches.length === 0
@@ -43,7 +56,7 @@ export default function Results ({ matches, query, filters, page, onParamsAction
             <>
               <CardList key={page + query} matches={matches} page={page} max={RESULTS_PER_PAGE} />
               {totalPages > 1 && page <= totalPages && (
-                <Pagination totalPages={totalPages} page={page} onPageClick={onParamsAction} />
+                <Pagination totalPages={totalPages} page={page} onNewPage={setPage} />
               )}
             </>
             )}
@@ -54,7 +67,7 @@ export default function Results ({ matches, query, filters, page, onParamsAction
 
 function ActiveTypeFilters ({ filters, onTypeClick }: { filters: Set<PokeType>, onTypeClick: (type: PokeType) => void }): ReactElement {
   return (
-    <ul aria-label='activeFilters'>
+    <>
       {
         Array.from(filters).map(type => (
           <button key={type} onClick={onTypeClick.bind(null, type)} type='button'
@@ -66,6 +79,6 @@ function ActiveTypeFilters ({ filters, onTypeClick }: { filters: Set<PokeType>, 
           </button>
         ))
       }
-    </ul>
+    </>
   )
 }
