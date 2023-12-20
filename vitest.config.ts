@@ -14,7 +14,7 @@ export default defineConfig({
     include: ['app/**/*.{test,spec}.?(c|m)[jt]s?(x)', 'scripts/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     coverage: {
       include: ['app/**/*'],
-      exclude: ['app/lib/definitions.ts', 'app/**/*skeleton*', 'app/**/*page*', 'app/ui/fonts.ts']
+      exclude: ['app/lib/definitions.ts', 'app/**/*skeleton*', 'app/**/page.tsx', 'app/ui/fonts.ts']
     }
   }
 })
