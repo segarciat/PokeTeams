@@ -1,12 +1,11 @@
 import { useState, type ReactElement, type FormEvent } from 'react'
 import { POKE_TYPES, POKE_TYPE_BG_CLASS } from '@/app/lib/constants'
-import { capitalize } from '@/app/lib/utils'
-import PokeTypeIcon from '../type-icons'
 import { type PokeSearchParamAction } from '@/app/lib/definitions'
 import { type PokeType } from '@/app/lib/constants'
-import clsx from 'clsx'
 import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
+import PokeTypeTag from '../poke-type-tags'
+import clsx from 'clsx'
 
 export interface FilterProps {
   defaultEnabledTypes: Set<PokeType>
@@ -19,6 +18,7 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
 
   function handleShowForm (): void {
     setShowForm(show => !show)
+    setEnabledTypes(defaultEnabledTypes)
     document.body.classList.toggle('overflow-y-hidden')
   }
 
@@ -56,14 +56,14 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
       <button aria-label="openFilters" type='button' onClick={handleShowForm}
         className={`text-gray-600 bg-gray-100 border border-gray-300
           dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400
-          shadow-sm p-1 rounded-lg flex flex-col items-center justify-center gap-0`}>
+          shadow-sm p-1 rounded-lg flex flex-col items-center justify-center gap-0 w-full`}>
         <AdjustmentsHorizontalIcon height={20} width={20} />
         <span className='text-xs'>Filter</span>
       </button>
       {showForm && (
-        <div className='fixed z-50 inset-0 overflow-y-scroll w-full max-h-screen flex justify-center items-center'>
+        <div className='fixed z-50 inset-0 w-full flex justify-center items-center'>
           <div className='fixed inset-0 -z-10 bg-black opacity-75' />
-          <form aria-label='filters' onSubmit={handleSubmit} className={'flex flex-col gap-2 p-4 z-50 bg-white dark:bg-primary-900 w-5/6 lg:max-w-2xl'}>
+          <form aria-label='filters' onSubmit={handleSubmit} className={'flex flex-col gap-2 p-4 z-50 overflow-y-scroll bg-white dark:bg-primary-900 w-5/6 lg:max-w-2xl max-h-screen'}>
             <header className='flex flex-row justify-between border-b border-b-gray-200'>
               <button type='button' aria-label='closeFilters' onClick={handleClose}><XMarkIcon height={20} width={20} /></button>
               <h2 className='text-3xl font-bold text-center'>Filters</h2>
@@ -72,7 +72,7 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
             <h3 className='text-lg font-bold'>Types</h3>
             <fieldset className='flex flex-row justify-center flex-wrap gap-2'>
               {POKE_TYPES.map(type => (
-                <PokeFilterBtn key={type} type={type} isEnabled={enabledTypes.has(type)} onClick={handleTypeToggle.bind(null, type)} />
+                <PokeTypeButton key={type} type={type} isEnabled={enabledTypes.has(type)} onClick={handleTypeToggle.bind(null, type)} />
               )
               )}
             </fieldset>
@@ -89,17 +89,14 @@ export default function Filter ({ defaultEnabledTypes, onSubmit }: FilterProps):
   )
 }
 
-function PokeFilterBtn ({ type, isEnabled, onClick }: { type: PokeType, isEnabled: boolean, onClick: () => void }): ReactElement {
+function PokeTypeButton ({ type, isEnabled, onClick }: { type: PokeType, isEnabled: boolean, onClick: () => void }): ReactElement {
   return (
     <button type='button' onClick={onClick} aria-pressed={isEnabled}
-      className={clsx('px-2 py-2 rounded-full text-xs w-24 transition-colors duration-500', {
+      className={clsx('text-sm p-2 rounded-full w-28 transition-colors duration-500', {
         [`text-white ${POKE_TYPE_BG_CLASS[type]}`]: isEnabled,
         'text-gray-700 bg-gray-200 dark:bg-gray-600 dark:text-white': !isEnabled
       })}>
-      <span className='flex flex-col'>
-        <PokeTypeIcon pokeType={type} size="xl" />
-        {capitalize(type)
-      }</span>
+      <PokeTypeTag pokeType={type} />
     </button>
   )
 }

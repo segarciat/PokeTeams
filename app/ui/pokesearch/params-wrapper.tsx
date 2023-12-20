@@ -39,7 +39,7 @@ export default function ParamsWrapper ({ allPokemons }: ParamsWrapperProps): Rea
     <>
       <Search placeholder='Search Pokemon' defaultQuery={query} onSubmit={handleParamsAction}/>
       <Filter defaultEnabledTypes={types} onSubmit={handleParamsAction}/>
-      <Results matches={results} page={page} query={query} onParamsAction={handleParamsAction} />
+      <Results matches={results} page={page} query={query} filters={types} onParamsAction={handleParamsAction} />
     </>
   )
 }
