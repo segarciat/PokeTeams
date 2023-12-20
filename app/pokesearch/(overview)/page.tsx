@@ -5,6 +5,7 @@ import PokeSearchParamsProvider from '@/app/providers/poke-search-params'
 import Search from '@/app/ui/pokesearch/search'
 import Filter from '@/app/ui/pokesearch/filter'
 import Results from '@/app/ui/pokesearch/results'
+import ActiveFilters from '@/app/ui/pokesearch/active-filters'
 
 export const metadata: Metadata = {
   title: 'Pokesearch'
@@ -19,7 +20,11 @@ export default async function Page (): Promise<ReactElement> {
       <PokeSearchParamsProvider>
         <Search placeholder='Search Pokemon' />
         <Filter />
-        <Results allPokemon={allPokemons} />
+        <section aria-label="Search results" className='my-4'>
+          <h3 className='my-4 text-2xl font-bold'>Results</h3>
+          <ActiveFilters/>
+          <Results allPokemon={allPokemons} />
+        </section>
       </PokeSearchParamsProvider>
     </div>
   )
