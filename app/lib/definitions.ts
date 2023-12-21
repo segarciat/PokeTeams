@@ -63,7 +63,7 @@ export interface RawPokemonData {
 }
 
 export interface PokeSearchParamAction {
-  action: 'CLEAR_QUERY' | 'SUBMIT_QUERY' | 'NEW_PAGE' | 'FILTER'
+  action: 'SUBMIT_QUERY' | 'NEW_PAGE' | 'FILTER'
   page?: number
   query?: string
   types?: Set<PokeType>

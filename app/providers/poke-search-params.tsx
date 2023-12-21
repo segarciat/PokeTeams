@@ -49,14 +49,13 @@ export default function PokeSearchParamsProvider ({ children }: { children: Reac
 export function computeSearchParams (searchParams: ReadonlyURLSearchParams, { action, page = 1, query = '', types }: PokeSearchParamAction): URLSearchParams {
   const params = new URLSearchParams(searchParams)
   switch (action) {
-    case 'CLEAR_QUERY': {
-      params.set(PAGE_PARAM, '1')
-      params.delete(QUERY_PARAM)
-      break
-    }
     case 'SUBMIT_QUERY': {
       params.set(PAGE_PARAM, '1')
-      params.set(QUERY_PARAM, query)
+      if (query.length === 0) {
+        params.delete(QUERY_PARAM)
+      } else {
+        params.set(QUERY_PARAM, query)
+      }
       break
     }
     case 'NEW_PAGE': {
