@@ -1,38 +1,70 @@
-import { describe, expect, vi, beforeAll, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, expect, vi, it } from 'vitest'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import Navbar, { MOBILE_THRESHOLD } from '../navbar'
+import userEvent from '@testing-library/user-event'
 
-const usePathnameMock = vi.fn()
-vi.mock('next/navigation', () => ({
-  usePathname: usePathnameMock
-}))
-
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-let Navbar: typeof import('../navbar').default
-beforeAll(async () => {
-  Navbar = (await import('../navbar')).default
-})
+const TITLE = 'poketeams'
 
 describe('Navbar', () => {
-  it('should display navigation links, site actions, and logo', () => {
-    const mockShowSideMenu = vi.fn()
-    render(<Navbar title='test title'showSideMenu={false} setShowSideMenu={mockShowSideMenu} />)
-    expect(screen.queryByRole('heading', { level: 1, name: /test title/i })).toBeInTheDocument()
-    expect(screen.queryByRole('navigation', { name: /site navigation/i })).toBeInTheDocument()
-    expect(screen.queryByRole('list', { name: /site actions/i })).toBeInTheDocument()
+  it('should display logo, navigation links, correct buttons, and theme menu', () => {
+    render(<Navbar title={TITLE} />)
+
+    expect(screen.getByRole('heading', { name: new RegExp(TITLE, 'i') })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /open nav/i })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /close nav/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('navigation', { name: /site/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /theme/i })).toBeInTheDocument()
   })
 
-  it('pathname changes the current navigation link', () => {
-    const mockIsSideNavOpen = vi.fn()
-    usePathnameMock
-      .mockReturnValueOnce('/')
-      .mockReturnValueOnce('/pokesearch')
+  it('should swap open and close button when either is clicked', async () => {
+    render(<Navbar title={TITLE} />)
 
-    const { rerender } = render(<Navbar title='test title'showSideMenu={true} setShowSideMenu={mockIsSideNavOpen} />)
-    expect(screen.queryByRole('link', { name: /home/i, current: 'page' })).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /pokesearch/i, current: false })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /close nav/i })).not.toBeInTheDocument()
 
-    rerender(<Navbar title='test title'showSideMenu={true} setShowSideMenu={mockIsSideNavOpen} />)
-    expect(screen.queryByRole('link', { name: /home/i, current: false })).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /pokesearch/i, current: 'page' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: /open nav/i }))
+    expect(screen.queryByRole('button', { name: /open nav/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /close nav/i })).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: /close nav/i }))
+    expect(screen.queryByRole('button', { name: /close nav/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /open nav/i })).toBeInTheDocument()
+  })
+
+  it('should hide close button and show open button when screen is resized to desktop size', async () => {
+    render(<Navbar title={TITLE} />)
+
+    expect(screen.queryByRole('button', { name: /close nav/i })).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: /open nav/i }))
+    expect(screen.queryByRole('button', { name: /open nav/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /close nav/i })).toBeInTheDocument()
+
+    // See: https://vitest.dev/guide/migration.html#timer-mocks-3925
+    vi.useFakeTimers({ toFake: ['nextTick'] })
+
+    act(() => {
+      global.innerWidth = MOBILE_THRESHOLD + 1
+      fireEvent.resize(window)
+      vi.advanceTimersByTime(1000)
+    })
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /close nav/i })).not.toBeInTheDocument()
+    })
+    vi.useRealTimers()
+
+    // See: https://vitest.dev/guide/migration.html#timer-mocks-3925
+    vi.useFakeTimers({ toFake: ['nextTick'] })
+
+    act(() => {
+      global.innerWidth = MOBILE_THRESHOLD - 1
+      fireEvent.resize(window)
+      vi.advanceTimersByTime(1000)
+    })
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /close nav/i })).not.toBeInTheDocument()
+    })
+    vi.useRealTimers()
   })
 })
