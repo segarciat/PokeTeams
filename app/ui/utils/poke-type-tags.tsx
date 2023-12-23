@@ -1,8 +1,8 @@
 import { type ReactElement } from 'react'
-import { type PokeType } from '../lib/constants'
+import { type PokeType } from '../../lib/constants'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { type IconDefinition, faBiohazard, faBolt, faBug, faCube, faDove, faDragon, faDroplet, faFire, faGhost, faHandFist, faHatWizard, faLeaf, faMoon, faMound, faMountain, faSnowflake, faSquare, faStar } from '@fortawesome/free-solid-svg-icons'
-import { capitalize } from '../lib/utils'
+import { capitalize } from '../../lib/utils'
 
 export default function PokeTypeTag ({ pokeType }: { pokeType: PokeType }): ReactElement {
   let icon: IconDefinition

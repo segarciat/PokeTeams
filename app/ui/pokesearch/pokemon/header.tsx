@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react'
-import Logo from '../../logo'
+import Logo from '../../utils/logo'
 
 export default function Header ({ id }: { id: number }): ReactElement {
   return (

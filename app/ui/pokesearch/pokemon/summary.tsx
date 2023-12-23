@@ -1,7 +1,7 @@
 import { useContext, type ReactElement } from 'react'
 import { type Pokemon } from '@/app/lib/definitions'
 import { capitalize } from '@/app/lib/utils'
-import PokeTypeTag from '../../poke-type-tags'
+import PokeTypeTag from '../../utils/poke-type-tags'
 import { POKE_TYPE_BG_CLASS, type PokeType } from '@/app/lib/constants'
 import TypesParamContext from '@/app/context/poke-types-param'
 

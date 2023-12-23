@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import React, { type ReactElement } from 'react'
 import { prompt } from './ui/fonts'
 import { ToastContainer } from 'react-toastify'
-import Navbar from './ui/navbar'
+import Navbar from './ui/header/navbar'
 
 const PAGE_TITLE = 'PokeTeams'
 export const metadata: Metadata = {
