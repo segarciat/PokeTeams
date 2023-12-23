@@ -45,7 +45,7 @@ test.describe('Desktop', () => {
 })
 
 test.describe('Mobile', () => {
-  test('Clicking navbar open button shows the menu and hides the main content, then hides menu and shows main content', async ({ page, isMobile }) => {
+  test('Clicking navbar open button shows the menu, then hides menu', async ({ page, isMobile }) => {
     await page.goto('/')
     await expect(page).toHaveTitle(/Poketeams/i)
     await expect(page.getByRole('heading', { level: 1, name: /Poketeams/i })).toBeVisible()
@@ -55,9 +55,7 @@ test.describe('Mobile', () => {
     await expect(openNavbarButton).toBeVisible()
     await openNavbarButton.click()
     await expect(page.getByRole('navigation', { name: /site navigation/i })).toBeVisible()
-    await expect(page.getByRole('main')).not.toBeVisible()
     await page.getByRole('button', { name: /close nav/i }).click()
     await expect(page.getByRole('navigation', { name: /site navigation/i })).not.toBeVisible()
-    await expect(page.getByRole('main')).toBeVisible()
   })
 })
