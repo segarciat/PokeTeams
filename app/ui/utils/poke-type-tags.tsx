@@ -1,7 +1,7 @@
 import { type ReactElement } from 'react'
 import { type PokeType } from '../../lib/constants'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { type IconDefinition, faBiohazard, faBolt, faBug, faCube, faDove, faDragon, faDroplet, faFire, faGhost, faHandFist, faHatWizard, faLeaf, faMoon, faMound, faMountain, faSnowflake, faSquare, faStar } from '@fortawesome/free-solid-svg-icons'
+import { type IconDefinition, faBiohazard, faBolt, faBug, faCube, faDove, faDragon, faDroplet, faFire, faGhost, faHandFist, faHatWizard, faLeaf, faMoon, faMound, faMountain, faSnowflake, faSquare, faStar, faQuestion } from '@fortawesome/free-solid-svg-icons'
 import { capitalize } from '../../lib/utils'
 
 export default function PokeTypeTag ({ pokeType }: { pokeType: PokeType }): ReactElement {
@@ -61,8 +61,6 @@ export default function PokeTypeTag ({ pokeType }: { pokeType: PokeType }): Reac
     case 'steel':
       icon = faCube
       break
-    default:
-      throw new Error(`Invalid type: ${pokeType as any}`)
   }
   return (
     <span className='flex gap-2 items-center justify-center flex-row'>
