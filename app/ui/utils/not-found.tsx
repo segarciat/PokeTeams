@@ -8,7 +8,7 @@ export default function NotFound (): ReactElement {
     <div className='p-4 flex flex-col items-center gap-2'>
       <Image
         src="/404-not-found.svg"
-        alt="No results image"
+        alt="Not found image"
         height={300}
         width={300}
       />
