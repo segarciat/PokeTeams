@@ -2,7 +2,7 @@
 import TypesParamContext from '@/app/context/poke-types-param'
 import { POKE_TYPE_BG_CLASS, type PokeType } from '@/app/lib/constants'
 import { useContext, type ReactElement } from 'react'
-import PokeTypeTag from '../poke-type-tags'
+import PokeTypeTag from '../utils/poke-type-tags'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import QueryParamContext from '@/app/context/query-param'
 

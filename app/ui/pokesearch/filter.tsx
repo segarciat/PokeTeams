@@ -5,7 +5,7 @@ import { type PokeSearchParamAction } from '@/app/lib/definitions'
 import { type PokeType } from '@/app/lib/constants'
 import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
-import PokeTypeTag from '../poke-type-tags'
+import PokeTypeTag from '../utils/poke-type-tags'
 import clsx from 'clsx'
 import TypesParamContext from '@/app/context/poke-types-param'
 

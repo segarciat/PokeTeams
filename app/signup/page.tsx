@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react'
-import UnderConstruction from '../ui/under-construction'
+import UnderConstruction from '../ui/utils/under-construction'
 
 export default function Page (): ReactElement {
   return (

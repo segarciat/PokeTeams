@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react'
-import Logo from '../logo'
+import Logo from '../utils/logo'
 import Link from 'next/link'
 
 export default function HeroSection (): ReactElement {

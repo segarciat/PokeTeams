@@ -1,5 +1,5 @@
 import { capitalize } from '@/app/lib/utils'
-import UnderConstruction from '@/app/ui/under-construction'
+import UnderConstruction from '@/app/ui/utils/under-construction'
 import { type ReactElement } from 'react'
 
 export interface PageProps {

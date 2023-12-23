@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import { type ReactElement, useRef, useState, type MouseEvent, useEffect } from 'react'
-import { capitalize } from '../lib/utils'
+import { capitalize } from '../../lib/utils'
 import ThemeIcon, { THEMES, type Theme } from './theme-icon'
-import Modal from './utils/modal'
+import Modal from '../utils/modal'
 
 export const LS_THEME_KEY = 'theme'
 
