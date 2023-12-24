@@ -12,6 +12,7 @@ import React, { type ReactElement } from 'react'
 import { prompt } from './ui/fonts'
 import { ToastContainer } from 'react-toastify'
 import Navbar from './ui/header/navbar'
+import ScrollToTopBtn from './ui/utils/scroll-top-btn'
 
 const PAGE_TITLE = 'PokeTeams'
 export const metadata: Metadata = {
@@ -34,6 +35,7 @@ export default function RootLayout ({ children }: RootLayoutProps): ReactElement
         <Navbar title={PAGE_TITLE} />
         <main>
           {children}
+          <ScrollToTopBtn />
         </main>
       </body>
     </html>
