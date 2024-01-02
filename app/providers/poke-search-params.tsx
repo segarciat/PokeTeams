@@ -1,75 +1,84 @@
 'use client'
-import React, { type ReactElement } from 'react'
-import { type ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { type PokeSearchParamAction } from '../lib/definitions'
-import { validatePageParam, validateQueryParam, validateTypeParam } from '../lib/utils'
-import PageParamContext, { PAGE_PARAM } from '../context/page-param'
-import QueryParamContext, { QUERY_PARAM } from '../context/query-param'
-import TypesParamContext, { TYPES_PARAM } from '../context/poke-types-param'
-import { type PokeType } from '../lib/constants'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { type ReactElement } from 'react'
+import React from 'react'
+import PokeSearchParamsContext, { DEFAULT_POKE_SEARCH_PARAMS, type PokeSearchParams, type PokeSearchParamsAction } from '../context/poke-search-params'
+import { POKE_SEARCH_SORT_KEYS, POKE_TYPES, type PokeSearchSortKey, type PokeType } from '../lib/constants'
+
+export const QUERY_PARAM = 'query'
+export const PAGE_PARAM = 'page'
+export const TYPES_PARAM = 'types'
+export const SORT_PARAM = 'sort'
 
 export default function PokeSearchParamsProvider ({ children }: { children: React.ReactNode }): ReactElement {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const query = validateQueryParam(searchParams.get(QUERY_PARAM) ?? undefined)
-  const page = validatePageParam(searchParams.get(PAGE_PARAM) ?? undefined)
-  const types = validateTypeParam(searchParams.getAll(TYPES_PARAM))
+  function parseQueryParam (): string {
+    const query = searchParams.get(QUERY_PARAM)
+    return query ?? DEFAULT_POKE_SEARCH_PARAMS.query
+  }
 
-  function handleParamsAction (action: PokeSearchParamAction): void {
-    const params = computeSearchParams(searchParams, action)
+  function parsePageParam (): number {
+    const page = Number(searchParams.get(PAGE_PARAM))
+    return isNaN(page) || page < 1 ? DEFAULT_POKE_SEARCH_PARAMS.page : Math.floor(page)
+  }
+
+  function parseTypesParam (): Set<PokeType> {
+    const types = searchParams.getAll(TYPES_PARAM)
+    return new Set(
+      types.filter(type => POKE_TYPES.includes(type as any)) as PokeType[]
+    )
+  }
+
+  function parseSortParam (): PokeSearchSortKey {
+    const sort = searchParams.get(SORT_PARAM)?.toLowerCase()
+    if (POKE_SEARCH_SORT_KEYS.map(k => k.toLowerCase()).includes(sort as PokeSearchSortKey)) {
+      return sort as PokeSearchSortKey
+    } else {
+      return DEFAULT_POKE_SEARCH_PARAMS.sort
+    }
+  }
+
+  function handleDispatch (actionType: PokeSearchParamsAction, { query, page, types, sort }: Partial<PokeSearchParams>): void {
+    const params = new URLSearchParams(searchParams)
+    switch (actionType) {
+      case 'SUBMIT_QUERY': {
+        params.set(PAGE_PARAM, DEFAULT_POKE_SEARCH_PARAMS.page.toString())
+        if (query?.length === 0) {
+          params.delete(QUERY_PARAM)
+        } else {
+          params.set(QUERY_PARAM, query ?? DEFAULT_POKE_SEARCH_PARAMS.query)
+        }
+        break
+      }
+      case 'NEW_PAGE': {
+        params.set(PAGE_PARAM, page?.toString() ?? DEFAULT_POKE_SEARCH_PARAMS.page.toString())
+        break
+      }
+      case 'FILTER': {
+        params.set(PAGE_PARAM, DEFAULT_POKE_SEARCH_PARAMS.page.toString())
+        if (sort !== undefined) {
+          params.set(SORT_PARAM, sort)
+        }
+        params.delete(TYPES_PARAM)
+        types?.forEach(type => { params.append(TYPES_PARAM, type) })
+        break
+      }
+    }
     router.replace(`${pathname}?${params.toString()}`)
   }
 
-  function handleSetPage (page: number): void {
-    handleParamsAction({ action: 'NEW_PAGE', page })
-  }
-
-  function handleSetQuery (query: string): void {
-    handleParamsAction({ action: 'SUBMIT_QUERY', query })
-  }
-
-  function handleSetTypes (types: Set<PokeType>): void {
-    handleParamsAction({ action: 'FILTER', types })
-  }
-
   return (
-    <PageParamContext.Provider value={ { page, setPage: handleSetPage }}>
-      <QueryParamContext.Provider value={{ query, setQuery: handleSetQuery }}>
-        <TypesParamContext.Provider value={{ types, setTypes: handleSetTypes }}>
-          {children}
-        </TypesParamContext.Provider>
-      </QueryParamContext.Provider>
-    </PageParamContext.Provider>
-
+    <PokeSearchParamsContext.Provider value={{
+      query: parseQueryParam(),
+      page: parsePageParam(),
+      types: parseTypesParam(),
+      sort: parseSortParam(),
+      dispatch: handleDispatch
+    }}>
+      {children}
+    </PokeSearchParamsContext.Provider>
   )
-}
-
-export function computeSearchParams (searchParams: ReadonlyURLSearchParams, { action, page = 1, query = '', types }: PokeSearchParamAction): URLSearchParams {
-  const params = new URLSearchParams(searchParams)
-  switch (action) {
-    case 'SUBMIT_QUERY': {
-      params.set(PAGE_PARAM, '1')
-      if (query.length === 0) {
-        params.delete(QUERY_PARAM)
-      } else {
-        params.set(QUERY_PARAM, query)
-      }
-      break
-    }
-    case 'NEW_PAGE': {
-      params.set(PAGE_PARAM, (page).toString())
-      break
-    }
-    case 'FILTER': {
-      params.set(PAGE_PARAM, '1')
-      params.delete(TYPES_PARAM)
-      types?.forEach(type => { params.append(TYPES_PARAM, type) })
-      break
-    }
-    default:
-      throw new Error(`Invalid action: ${action as any}`)
-  }
-  return params
 }

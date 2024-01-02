@@ -7,7 +7,7 @@ import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outlin
 import { toast } from 'react-toastify'
 import PokeTypeTag from '../utils/poke-type-tags'
 import clsx from 'clsx'
-import TypesParamContext from '@/app/context/poke-types-param'
+import PokeSearchParamsContext from '@/app/context/poke-search-params'
 
 export interface FilterProps {
   defaultEnabledTypes: Set<PokeType>
@@ -15,7 +15,7 @@ export interface FilterProps {
 }
 
 export default function Filter (): ReactElement {
-  const { types, setTypes } = useContext(TypesParamContext)
+  const { types, dispatch } = useContext(PokeSearchParamsContext)
   const [enabledTypes, setEnabledTypes] = useState(types)
   const [showForm, setShowForm] = useState(false)
 
@@ -37,7 +37,7 @@ export default function Filter (): ReactElement {
 
   function handleSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
-    setTypes(enabledTypes)
+    dispatch?.('FILTER', { types: enabledTypes })
     handleShowForm()
     toast.success('Filters applied!')
   }

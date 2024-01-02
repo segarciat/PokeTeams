@@ -27,3 +27,6 @@ export const POKE_TYPE_BG_CLASS: Record<PokeType, string> = {
   steel: 'bg-steel',
   water: 'bg-water'
 }
+
+export const POKE_SEARCH_SORT_KEYS = ['pokedexId', 'name'] as const
+export type PokeSearchSortKey = typeof POKE_SEARCH_SORT_KEYS[number]

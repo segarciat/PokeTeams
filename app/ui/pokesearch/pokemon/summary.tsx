@@ -3,7 +3,7 @@ import { type Pokemon } from '@/app/lib/definitions'
 import { capitalize } from '@/app/lib/utils'
 import PokeTypeTag from '../../utils/poke-type-tags'
 import { POKE_TYPE_BG_CLASS, type PokeType } from '@/app/lib/constants'
-import TypesParamContext from '@/app/context/poke-types-param'
+import PokeSearchParamsContext from '@/app/context/poke-search-params'
 
 interface SummaryProps {
   types: Pokemon['types']
@@ -13,10 +13,10 @@ interface SummaryProps {
 const attributeTitleClass = 'text-sm text-gray-300 font-bold'
 
 export default function Summary ({ types, name }: SummaryProps): ReactElement {
-  const { setTypes } = useContext(TypesParamContext)
+  const { dispatch } = useContext(PokeSearchParamsContext)
 
   function handleTypeClick (type: PokeType): void {
-    setTypes(new Set<PokeType>([type]))
+    dispatch?.('FILTER', { types: new Set<PokeType>([type]) })
   }
 
   return (
