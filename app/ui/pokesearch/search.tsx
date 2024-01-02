@@ -1,5 +1,5 @@
 'use client'
-import QueryParamContext from '@/app/context/query-param'
+import PokeSearchParamsContext from '@/app/context/poke-search-params'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React, { useState, type FormEvent, type ReactElement, useContext } from 'react'
 
@@ -8,7 +8,7 @@ export interface SearchProps {
 }
 
 export default function Search ({ placeholder }: SearchProps): ReactElement {
-  const { query, setQuery } = useContext(QueryParamContext)
+  const { query, dispatch } = useContext(PokeSearchParamsContext)
   const [searchInputValue, setSearchInputValue] = useState(query)
 
   function handleChange (e: React.ChangeEvent<HTMLInputElement>): void {
@@ -21,7 +21,7 @@ export default function Search ({ placeholder }: SearchProps): ReactElement {
 
   function handleSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
-    setQuery(searchInputValue)
+    dispatch?.('SUBMIT_QUERY', { query: searchInputValue })
   }
 
   return (

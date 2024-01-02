@@ -4,12 +4,10 @@ import NoResults from './no-results'
 import Pagination from './pagination'
 import { type PokemonSummary } from '@/app/lib/definitions'
 import { filterByName, filterByType, getArrayPage, getTotalPageCount } from '@/app/lib/utils'
-import PageParamContext from '@/app/context/page-param'
 import { notFound } from 'next/navigation'
-import TypesParamContext from '@/app/context/poke-types-param'
-import QueryParamContext from '@/app/context/query-param'
 import Card from './pokemon/card'
 import { type PokeType } from '@/app/lib/constants'
+import PokeSearchParamsContext from '@/app/context/poke-search-params'
 
 export const RESULTS_PER_PAGE = 20
 
@@ -18,9 +16,7 @@ export interface ResultsProps {
 }
 
 export default function Results ({ allPokemon }: ResultsProps): ReactElement {
-  const { query } = useContext(QueryParamContext)
-  const { page, setPage } = useContext(PageParamContext)
-  const { types } = useContext(TypesParamContext)
+  const { query, page, types, dispatch } = useContext(PokeSearchParamsContext)
 
   const matches = applyFilters(allPokemon, query, types)
   const totalPages = getTotalPageCount(matches.length, RESULTS_PER_PAGE)
@@ -29,6 +25,10 @@ export default function Results ({ allPokemon }: ResultsProps): ReactElement {
     notFound() // or setPage to 1?
   }
   const pokemons = getArrayPage(matches, page, RESULTS_PER_PAGE)
+
+  function handleNewPage (page: number): void {
+    dispatch?.('NEW_PAGE', { page })
+  }
 
   return (
     <div className='flex flex-col items-center gap-3'>
@@ -39,7 +39,7 @@ export default function Results ({ allPokemon }: ResultsProps): ReactElement {
             <ol aria-label='pokemonCards' className='flex flex-col gap-3'>
               {pokemons.map(p => (<li key={p.name}><Card pokemon={p} /></li>))}
             </ol>
-            {totalPages > 1 && (<Pagination totalPages={totalPages} page={page} onNewPage={setPage} />)}
+            {totalPages > 1 && (<Pagination totalPages={totalPages} page={page} onNewPage={handleNewPage} />)}
           </>
           )}
     </div>

@@ -1,23 +1,21 @@
 'use client'
-import TypesParamContext from '@/app/context/poke-types-param'
 import { POKE_TYPE_BG_CLASS, type PokeType } from '@/app/lib/constants'
 import { useContext, type ReactElement } from 'react'
 import PokeTypeTag from '../utils/poke-type-tags'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import QueryParamContext from '@/app/context/query-param'
+import PokeSearchParamsContext from '@/app/context/poke-search-params'
 
 export default function ActiveFilters (): ReactElement {
-  const { types, setTypes } = useContext(TypesParamContext)
-  const { query, setQuery } = useContext(QueryParamContext)
+  const { query, types, dispatch } = useContext(PokeSearchParamsContext)
 
   function handleTypeClick (type: PokeType): void {
-    const newFilters = new Set(types)
-    newFilters.delete(type)
-    setTypes(newFilters)
+    const newTypes = new Set(types)
+    newTypes.delete(type)
+    dispatch?.('FILTER', { types: newTypes })
   }
 
   function handleQueryClick (): void {
-    setQuery('')
+    dispatch?.('SUBMIT_QUERY', { query: '' })
   }
 
   return (
