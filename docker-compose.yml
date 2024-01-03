@@ -2,7 +2,7 @@
 version: '3.1'
 
 services:
-  mongo:
+  mongo-test:
     image: mongo
     restart: always
     environment:
@@ -10,3 +10,15 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     ports:
       - "27017:27017"
+    volumes:
+      - ./data/test-db:/data/db
+  mongo-dev:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: devuser
+      MONGO_INITDB_ROOT_PASSWORD: devpassword
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./data/dev-db:/data/db
