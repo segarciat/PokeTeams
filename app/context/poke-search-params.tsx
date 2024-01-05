@@ -19,7 +19,7 @@ export const DEFAULT_POKE_SEARCH_PARAMS: PokeSearchParams = Object.freeze({
   query: '',
   page: 1,
   types: new Set<PokeType>(),
-  sort: 'pokedexId'
+  sort: 'id'
 })
 
 const PokeSearchParamsContext = createContext<PokeSearchParamsContextValue>({

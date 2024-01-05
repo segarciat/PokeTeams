@@ -25,7 +25,7 @@ export default function Card ({ pokemon }: CardProps): ReactElement {
   }
 
   return (
-    <article className='bg-white shadow-md dark:bg-primary-800 rounded-2xl w-[280px] p-3 flex flex-col relative'>
+    <article aria-label={`${pokemon.name} card`} className='bg-white shadow-md dark:bg-primary-800 rounded-2xl w-[280px] p-3 flex flex-col relative'>
       <Header id={pokemon.id}/>
       <div className='self-center'>
         <Sprite isFlipped={isFlipped} isShiny={isShiny} pokemonName={pokemon.name} sprites={pokemon.spriteSrcs} />
