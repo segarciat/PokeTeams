@@ -1,13 +1,13 @@
 'use client'
 import { useState, type ReactElement, type FormEvent, useContext } from 'react'
-import { POKE_TYPES, POKE_TYPE_BG_CLASS } from '@/app/lib/constants'
+import { POKE_SEARCH_SORT_KEYS, POKE_TYPES, POKE_TYPE_BG_CLASS, type PokeSearchSortKey, type PokeType } from '@/app/lib/constants'
 import { type PokeSearchParamAction } from '@/app/lib/definitions'
-import { type PokeType } from '@/app/lib/constants'
 import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify'
 import PokeTypeTag from '../utils/poke-type-tags'
 import clsx from 'clsx'
-import PokeSearchParamsContext from '@/app/context/poke-search-params'
+import PokeSearchParamsContext, { DEFAULT_POKE_SEARCH_PARAMS } from '@/app/context/poke-search-params'
+import { capitalize } from '@/app/lib/utils'
 
 export interface FilterProps {
   defaultEnabledTypes: Set<PokeType>
@@ -15,8 +15,9 @@ export interface FilterProps {
 }
 
 export default function Filter (): ReactElement {
-  const { types, dispatch } = useContext(PokeSearchParamsContext)
+  const { types, sort: defaultSort, dispatch } = useContext(PokeSearchParamsContext)
   const [enabledTypes, setEnabledTypes] = useState(types)
+  const [sortBy, setSortBy] = useState(defaultSort ?? DEFAULT_POKE_SEARCH_PARAMS.sort)
   const [showForm, setShowForm] = useState(false)
 
   function handleShowForm (): void {
@@ -37,17 +38,19 @@ export default function Filter (): ReactElement {
 
   function handleSubmit (e: FormEvent<HTMLFormElement>): void {
     e.preventDefault()
-    dispatch?.('FILTER', { types: enabledTypes })
+    dispatch?.('FILTER', { types: enabledTypes, sort: sortBy })
     handleShowForm()
     toast.success('Filters applied!')
   }
 
   function handleReset (): void {
-    setEnabledTypes(new Set())
+    setEnabledTypes(DEFAULT_POKE_SEARCH_PARAMS.types)
+    setSortBy(DEFAULT_POKE_SEARCH_PARAMS.sort)
   }
 
   function handleClose (): void {
     setEnabledTypes(types)
+    setSortBy(defaultSort)
     handleShowForm()
   }
 
@@ -76,6 +79,8 @@ export default function Filter (): ReactElement {
               )
               )}
             </fieldset>
+            <span className='text-lg font-bold'>Sort By</span>
+            <PokeSortFields sort={sortBy} handleSortChange={setSortBy} />
             <button type='submit' className=' border-2 border-gray-300 bg-primary-400 text-white rounded-xl w-full px-2 py-4'>
               Apply
             </button>
@@ -98,5 +103,20 @@ function PokeTypeButton ({ type, isEnabled, onClick }: { type: PokeType, isEnabl
       })}>
       <PokeTypeTag pokeType={type} />
     </button>
+  )
+}
+
+function PokeSortFields ({ sort, handleSortChange }: { sort: PokeSearchSortKey, handleSortChange: (key: PokeSearchSortKey) => void }): ReactElement {
+  return (
+    <fieldset aria-label='sortFields'>
+      {POKE_SEARCH_SORT_KEYS.map(sortKey => (
+        <label key={sortKey + sort} id={`sortBy${sortKey}`} className='flex flex-row items-center gap-1 mx-3'>
+          <input type="radio" aria-labelledby={`sortBy${sortKey}`} name='sort' checked={sort === sortKey} value={sortKey} onChange={handleSortChange.bind(null, sortKey)}
+            className='accent-primary'
+          />
+          {capitalize(sortKey)}
+        </label>
+      ))}
+    </fieldset>
   )
 }

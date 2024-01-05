@@ -6,7 +6,7 @@ import { type PokemonSummary } from '@/app/lib/definitions'
 import { filterByName, filterByType, getArrayPage, getTotalPageCount } from '@/app/lib/utils'
 import { notFound } from 'next/navigation'
 import Card from './pokemon/card'
-import { type PokeType } from '@/app/lib/constants'
+import { type PokeSearchSortKey, type PokeType } from '@/app/lib/constants'
 import PokeSearchParamsContext from '@/app/context/poke-search-params'
 
 export const RESULTS_PER_PAGE = 20
@@ -16,9 +16,9 @@ export interface ResultsProps {
 }
 
 export default function Results ({ allPokemon }: ResultsProps): ReactElement {
-  const { query, page, types, dispatch } = useContext(PokeSearchParamsContext)
+  const { query, page, sort, types, dispatch } = useContext(PokeSearchParamsContext)
 
-  const matches = applyFilters(allPokemon, query, types)
+  const matches = applyFilters(allPokemon, query, sort, types)
   const totalPages = getTotalPageCount(matches.length, RESULTS_PER_PAGE)
 
   if (matches.length !== 0 && page > totalPages) {
@@ -46,7 +46,7 @@ export default function Results ({ allPokemon }: ResultsProps): ReactElement {
   )
 }
 
-function applyFilters (allPokemon: PokemonSummary[], query: string, types: Set<PokeType>): PokemonSummary[] {
+function applyFilters (allPokemon: PokemonSummary[], query: string, sort: PokeSearchSortKey, types: Set<PokeType>): PokemonSummary[] {
   let matches = allPokemon
   if (query.length > 0) {
     matches = filterByName(matches, query)
@@ -54,5 +54,13 @@ function applyFilters (allPokemon: PokemonSummary[], query: string, types: Set<P
   if (types.size > 0) {
     matches = filterByType(matches, types)
   }
-  return matches
+  switch (sort) {
+    case 'name': {
+      return matches.sort((p1, p2) => p1.name.localeCompare(p2.name))
+    }
+    case 'id':
+    default: {
+      return matches.sort((p1, p2) => p1.id - p2.id)
+    }
+  }
 }

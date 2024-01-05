@@ -11,7 +11,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data/test-db:/data/db
+      - pteams-test:/data/db
   mongo-dev:
     image: mongo
     restart: always
@@ -21,4 +21,8 @@ services:
     ports:
       - "27018:27017"
     volumes:
-      - ./data/dev-db:/data/db
+      - pteams-dev:/data/db
+
+volumes:
+  pteams-dev:
+  pteams-test:
